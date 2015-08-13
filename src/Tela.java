@@ -671,5 +671,5 @@ public class Tela {
 		frame.getContentPane().add(btnStop);
 	}
 	
-//	teste git
+//	teste1 git
 }

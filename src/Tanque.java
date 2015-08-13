@@ -147,7 +147,7 @@ public class Tanque extends Thread {
         }
         
         if(quanserclient != null)
-        	System.out.println("Conexão realizada!");
+        	System.out.println("Conexão não realizada!");
         
         return quanserclient;
     }

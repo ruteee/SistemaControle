@@ -670,6 +670,4 @@ public class Tela {
 		btnStop.setBounds(608, 450, 101, 23);
 		frame.getContentPane().add(btnStop);
 	}
-	
-//	teste1 git
 }

@@ -105,38 +105,6 @@ public class Tela {
 		panelGrafico1.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panelGrafico1.setLayout(null);
 		
-		/*final JPanel panelGrafico2 = new JPanel();
-		panelGrafico2.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panelGrafico2.setLayout(null);*/
-		
-		
-		final JPanel panelExibirSinalGraf1 = new JPanel();
-		panelExibirSinalGraf1.setBackground(new Color(0,0,0,0));
-		panelExibirSinalGraf1.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Exibir Sinal", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
-		
-		final JCheckBox chckbxTensCalc = new JCheckBox("Tens\u00E3o Calc.");
-		chckbxTensCalc.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				dados.setTensao(chckbxTensCalc.isSelected());	}
-		});
-		chckbxTensCalc.setEnabled(false);
-		chckbxTensCalc.setFont(new Font("Tahoma", Font.PLAIN, 9));
-		chckbxTensCalc.setForeground(new Color(0, 0, 205));
-		panelExibirSinalGraf1.add(chckbxTensCalc);
-		chckbxTensCalc.setToolTipText("Sinal da Tens\u00E3o Calculada");
-		
-		final JCheckBox chckbxTensaoSat = new JCheckBox("Tens\u00E3o Sat. ");
-		chckbxTensaoSat.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				dados.setTensaoSat(chckbxTensaoSat.isSelected());
-			}
-		});
-		chckbxTensaoSat.setEnabled(false);
-		chckbxTensaoSat.setFont(new Font("Tahoma", Font.PLAIN, 9));
-		chckbxTensaoSat.setForeground(new Color(255, 0, 0));
-		panelExibirSinalGraf1.add(chckbxTensaoSat);
-		chckbxTensaoSat.setToolTipText("Sinal da Tens\u00E3o Saturada");
-		
 		final JPanel panelExibirSinalGraf2 = new JPanel();
 		panelExibirSinalGraf2.setBorder(new TitledBorder(null, "Exibir Sinal", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panelExibirSinalGraf2.setLayout(null);
@@ -197,12 +165,9 @@ public class Tela {
 			gl_panelGraficos.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panelGraficos.createSequentialGroup()
 					.addGap(2)
-					.addGroup(gl_panelGraficos.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_panelGraficos.createSequentialGroup()
-							.addComponent(panelGrafico1, GroupLayout.DEFAULT_SIZE, 410, Short.MAX_VALUE)
-							.addGap(2)
-							.addComponent(panelExibirSinalGraf1, GroupLayout.PREFERRED_SIZE, 111, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_panelGraficos.createSequentialGroup()
+					.addGroup(gl_panelGraficos.createParallelGroup(Alignment.TRAILING, false)
+						.addComponent(panelGrafico1, Alignment.LEADING)
+						.addGroup(Alignment.LEADING, gl_panelGraficos.createSequentialGroup()
 							.addComponent(panelGrafico2, GroupLayout.PREFERRED_SIZE, 410, GroupLayout.PREFERRED_SIZE)
 							.addGap(2)
 							.addComponent(panelExibirSinalGraf2, GroupLayout.PREFERRED_SIZE, 111, GroupLayout.PREFERRED_SIZE)))
@@ -210,11 +175,9 @@ public class Tela {
 		);
 		gl_panelGraficos.setVerticalGroup(
 			gl_panelGraficos.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_panelGraficos.createSequentialGroup()
+				.addGroup(Alignment.TRAILING, gl_panelGraficos.createSequentialGroup()
 					.addGap(2)
-					.addGroup(gl_panelGraficos.createParallelGroup(Alignment.LEADING)
-						.addComponent(panelGrafico1, GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
-						.addComponent(panelExibirSinalGraf1, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE))
+					.addComponent(panelGrafico1, GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
 					.addGap(7)
 					.addGroup(gl_panelGraficos.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_panelGraficos.createSequentialGroup()
@@ -222,6 +185,37 @@ public class Tela {
 							.addComponent(panelGrafico2, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE))
 						.addComponent(panelExibirSinalGraf2, GroupLayout.PREFERRED_SIZE, 205, GroupLayout.PREFERRED_SIZE)))
 		);
+		
+		final JPanel panelExibirSinalGraf1 = new JPanel();
+		panelExibirSinalGraf1.setBounds(422, 0, 101, 86);
+		panelGrafico1.add(panelExibirSinalGraf1);
+		panelExibirSinalGraf1.setBackground(new Color(0,0,0,0));
+		
+		final JCheckBox chckbxTensCalc = new JCheckBox("Tens\u00E3o Calc.");
+		chckbxTensCalc.setBounds(11, 31, 79, 21);
+		chckbxTensCalc.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				dados.setTensao(chckbxTensCalc.isSelected());	}
+		});
+		panelExibirSinalGraf1.setLayout(null);
+		chckbxTensCalc.setEnabled(false);
+		chckbxTensCalc.setFont(new Font("Tahoma", Font.PLAIN, 9));
+		chckbxTensCalc.setForeground(new Color(0, 0, 205));
+		panelExibirSinalGraf1.add(chckbxTensCalc);
+		chckbxTensCalc.setToolTipText("Sinal da Tens\u00E3o Calculada");
+		
+		final JCheckBox chckbxTensaoSat = new JCheckBox("Tens\u00E3o Sat. ");
+		chckbxTensaoSat.setBounds(11, 57, 79, 21);
+		chckbxTensaoSat.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dados.setTensaoSat(chckbxTensaoSat.isSelected());
+			}
+		});
+		chckbxTensaoSat.setEnabled(false);
+		chckbxTensaoSat.setFont(new Font("Tahoma", Font.PLAIN, 9));
+		chckbxTensaoSat.setForeground(new Color(255, 0, 0));
+		panelExibirSinalGraf1.add(chckbxTensaoSat);
+		chckbxTensaoSat.setToolTipText("Sinal da Tens\u00E3o Saturada");
 		panelGraficos.setLayout(gl_panelGraficos);
 
 		//Método usado para expandir o frame de panelGrafico1	
@@ -254,12 +248,12 @@ public class Tela {
 		
 		JPanel panelAbas = new JPanel();
 		panelAbas.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panelAbas.setBounds(10, 86, 313, 387);
+		panelAbas.setBounds(10, 86, 320, 387);
 		frame.getContentPane().add(panelAbas);
 		panelAbas.setLayout(null);
 		
 		JTabbedPane abas = new JTabbedPane(JTabbedPane.TOP);
-		abas.setBounds(4, 5, 307, 377);
+		abas.setBounds(4, 5, 312, 377);
 		panelAbas.add(abas);
 		
 		JPanel panelOpcoesMalha = new JPanel();
@@ -268,35 +262,35 @@ public class Tela {
 		
 		JPanel panelDadosSinal = new JPanel();
 		panelDadosSinal.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Dados do Sinal", TitledBorder.RIGHT, TitledBorder.TOP, null, new Color(0, 0, 0)));
-		panelDadosSinal.setBounds(156, 5, 142, 198);
+		panelDadosSinal.setBounds(156, 5, 148, 198);
 		panelOpcoesMalha.add(panelDadosSinal);
 		
 		final JSpinner amplitude = new JSpinner();
 		amplitude.setEnabled(false);
-		amplitude.setBounds(87, 23, 49, 20);
+		amplitude.setBounds(92, 23, 49, 20);
 		//amplitude.setModel(new SpinnerNumberModel(0.0, -4.0, 4.0, 0.0));
 		amplitude.setModel(new SpinnerNumberModel(new Double(0), null, null, new Double(1)));
 		
-		JLabel lblTensao = new JLabel("Amplitude:");
-		lblTensao.setBounds(6, 23, 79, 20);
+		final JLabel lblAmplitude = new JLabel("Amplitude:");
+		lblAmplitude.setBounds(6, 23, 85, 20);
 		
-		JLabel lblPeriodo = new JLabel("Per\u00EDodo:");
-		lblPeriodo.setBounds(6, 95, 79, 20);
+		final JLabel lblPeriodo = new JLabel("Per\u00EDodo:");
+		lblPeriodo.setBounds(6, 95, 85, 20);
 		
 		final JSpinner periodo = new JSpinner();
 		periodo.setEnabled(false);
 		periodo.setModel(new SpinnerNumberModel(new Double(0), new Double(0), null, new Double(1)));
-		periodo.setBounds(87, 95, 49, 20);
+		periodo.setBounds(92, 95, 49, 20);
 		
 		JLabel lblAmplitudeMin = new JLabel("Amplitude (M\u00EDn):");
-		lblAmplitudeMin.setBounds(6, 59, 79, 20);
+		lblAmplitudeMin.setBounds(6, 59, 85, 20);
 		
 		final JSpinner amplitudeMin = new JSpinner();
 		amplitudeMin.setEnabled(false);
 		amplitudeMin.setModel(new SpinnerNumberModel(new Double(0), null, null, new Double(1)));
-		amplitudeMin.setBounds(86, 59, 51, 20);
+		amplitudeMin.setBounds(91, 59, 51, 20);
 		panelDadosSinal.setLayout(null);
-		panelDadosSinal.add(lblTensao);
+		panelDadosSinal.add(lblAmplitude);
 		panelDadosSinal.add(amplitude);
 		panelDadosSinal.add(lblPeriodo);
 		panelDadosSinal.add(periodo);
@@ -304,21 +298,21 @@ public class Tela {
 		panelDadosSinal.add(amplitudeMin);
 		
 		JLabel lblPeriodoMin = new JLabel("Per\u00EDodo (M\u00EDn):");
-		lblPeriodoMin.setBounds(6, 131, 79, 20);
+		lblPeriodoMin.setBounds(6, 131, 85, 20);
 		panelDadosSinal.add(lblPeriodoMin);
 		
 		final JSpinner periodoMin = new JSpinner();
 		periodoMin.setModel(new SpinnerNumberModel(new Double(0), null, null, new Double(1)));
 		periodoMin.setEnabled(false);
-		periodoMin.setBounds(87, 131, 49, 20);
+		periodoMin.setBounds(92, 131, 49, 20);
 		panelDadosSinal.add(periodoMin);
 		
 		JLabel lblOffSet = new JLabel("Off-Set:");
-		lblOffSet.setBounds(6, 167, 79, 20);
+		lblOffSet.setBounds(6, 167, 85, 20);
 		panelDadosSinal.add(lblOffSet);
 		
 		final JSpinner offSet = new JSpinner();
-		offSet.setBounds(87, 167, 49, 20);
+		offSet.setBounds(92, 167, 49, 20);
 		panelDadosSinal.add(offSet);
 		offSet.setEnabled(false);
 		offSet.setModel(new SpinnerNumberModel(new Double(0), null, null, new Double(1)));
@@ -393,7 +387,7 @@ public class Tela {
 		panelIO.add(lblEscrita);
 		
 		final JPanel panelTipoSinal = new JPanel();
-		panelTipoSinal.setBounds(3, 205, 295, 140);
+		panelTipoSinal.setBounds(3, 205, 301, 140);
 		panelOpcoesMalha.add(panelTipoSinal);
 		panelTipoSinal.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Tipo de Sinal", TitledBorder.RIGHT, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		panelTipoSinal.setLayout(null);
@@ -440,6 +434,15 @@ public class Tela {
 				rdbtnQuadrada.setSelected(false);
 				rdbtnDenteSerra.setSelected(false);
 				rdbtnAleatorio.setSelected(false);
+
+				lblAmplitude.setText("Amplitude:");	
+				amplitude.setEnabled(true);
+				amplitudeMin.setEnabled(false);
+				lblPeriodo.setText("Período:");
+				periodo.setEnabled(false);
+				periodoMin.setEnabled(false);
+				offSet.setEnabled(false);
+				
 				tipoSinal = "Degrau";
 			}
 		});
@@ -452,6 +455,15 @@ public class Tela {
 				rdbtnQuadrada.setSelected(false);
 				rdbtnDenteSerra.setSelected(false);
 				rdbtnAleatorio.setSelected(false);
+
+				lblAmplitude.setText("Amplitude:");	
+				amplitude.setEnabled(true);
+				amplitudeMin.setEnabled(false);
+				lblPeriodo.setText("Período:");
+				periodo.setEnabled(true);
+				periodoMin.setEnabled(false);
+				offSet.setEnabled(true);
+				
 				tipoSinal = "Senoidal";
 			}
 		});
@@ -464,6 +476,15 @@ public class Tela {
 				rdbtnSenoidal.setSelected(false);
 				rdbtnDenteSerra.setSelected(false);
 				rdbtnAleatorio.setSelected(false);
+				
+				lblAmplitude.setText("Amplitude:");
+				amplitude.setEnabled(true);
+				amplitudeMin.setEnabled(false);
+				lblPeriodo.setText("Período:");
+				periodo.setEnabled(true);
+				periodoMin.setEnabled(false);
+				offSet.setEnabled(true);
+				
 				tipoSinal = "Quadrada";
 			}
 		});
@@ -477,6 +498,15 @@ public class Tela {
 				rdbtnSenoidal.setSelected(false);
 				rdbtnQuadrada.setSelected(false);
 				rdbtnAleatorio.setSelected(false);
+				
+				lblAmplitude.setText("Amplitude:");
+				amplitude.setEnabled(true);
+				amplitudeMin.setEnabled(false);
+				lblPeriodo.setText("Período:");
+				periodo.setEnabled(true);
+				periodoMin.setEnabled(false);
+				offSet.setEnabled(true);
+				
 				tipoSinal = "Dente de serra";
 			}
 		});
@@ -489,6 +519,15 @@ public class Tela {
 				rdbtnSenoidal.setSelected(false);
 				rdbtnQuadrada.setSelected(false);
 				rdbtnDenteSerra.setSelected(false);
+								
+				lblAmplitude.setText("Amplitude (Máx):");
+				amplitude.setEnabled(true);
+				amplitudeMin.setEnabled(true);
+				lblPeriodo.setText("Período (Máx):");
+				periodo.setEnabled(true);
+				periodoMin.setEnabled(true);
+				offSet.setEnabled(false);
+								
 				tipoSinal = "Aleatoria";
 			}
 		});
@@ -497,7 +536,7 @@ public class Tela {
 		
 		JPanel panelDadosServidor = new JPanel();
 		panelDadosServidor.setBorder(new TitledBorder(null, "Dados do Servidor", TitledBorder.CENTER, TitledBorder.TOP, null, null));
-		panelDadosServidor.setBounds(8, 11, 317, 73);
+		panelDadosServidor.setBounds(8, 11, 324, 73);
 		frame.getContentPane().add(panelDadosServidor);
 		panelDadosServidor.setLayout(null);
 		
@@ -511,11 +550,11 @@ public class Tela {
 				
 		IPServidor = new JTextField();
 		IPServidor.setColumns(10);
-		IPServidor.setBounds(95, 17, 96, 20);
+		IPServidor.setBounds(87, 17, 112, 20);
 		panelDadosServidor.add(IPServidor);
 		
 		Porta = new JTextField();
-		Porta.setBounds(95, 42, 96, 20);
+		Porta.setBounds(87, 42, 112, 20);
 		panelDadosServidor.add(Porta);
 		Porta.setColumns(10);
 		
@@ -541,11 +580,9 @@ public class Tela {
 					//Muda nome (conectar ou desconectar) e cor (verde ou vermelho) do botão.
 					//Também desabilita alguns componentes da tela.			
 					if(btnConectarDesconectar.getText().equals("Conectar")){
-						amplitude.setEnabled(true);
-						amplitudeMin.setEnabled(true);
-						periodo.setEnabled(true);
-						periodoMin.setEnabled(true);
-						offSet.setEnabled(true);
+												
+						IPServidor.setEditable(false);
+						Porta.setEditable(false);
 						
 						rdbtnAberta.setEnabled(true);
 						rdbtnFechada.setEnabled(true);
@@ -573,7 +610,11 @@ public class Tela {
 						btnConectarDesconectar.setBackground(Color.RED);
 						btnConectarDesconectar.setText("Desconectar");
 						btnConectarDesconectar.setIcon(new ImageIcon(Tela.class.getResource("/Icons/1439269745_gtk-dialog-error.png")));
-					}else{					
+					}else{
+						
+						IPServidor.setEditable(true);
+						Porta.setEditable(true);
+						
 						amplitude.setEnabled(false);
 						amplitudeMin.setEnabled(false);
 						periodo.setEnabled(false);
@@ -581,6 +622,7 @@ public class Tela {
 						offSet.setEnabled(false);
 						
 						rdbtnAberta.setEnabled(false);
+						
 						rdbtnFechada.setEnabled(false);
 						rdbtnAleatorio.setEnabled(false);
 						rdbtnDegrau.setEnabled(false);
@@ -602,6 +644,9 @@ public class Tela {
 						chckbxSetPoint.setEnabled(false);
 						chckbxErro.setEnabled(false);
 						
+						lblAmplitude.setText("Amplitude:");
+						lblPeriodo.setText("Período:");
+						
 						btnConectarDesconectar.setForeground(new Color(0, 128, 0));
 						btnConectarDesconectar.setBackground(new Color(0, 128, 0));
 						btnConectarDesconectar.setText("Conectar");
@@ -610,7 +655,7 @@ public class Tela {
 				}
 			}
 		});
-		btnConectarDesconectar.setBounds(195, 16, 112, 46);
+		btnConectarDesconectar.setBounds(203, 16, 112, 46);
 		panelDadosServidor.add(btnConectarDesconectar);
 				
 		botaoAtualizar.setEnabled(false);

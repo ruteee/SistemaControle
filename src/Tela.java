@@ -93,6 +93,12 @@ public class Tela {
 	private JTextFieldAlterado textFieldTali;
 	private JTextFieldAlterado textFieldKd;
 	private JTextFieldAlterado textFieldTald;
+
+	private String textFieldKpSelecionado;
+	private String textFieldKiSelecionado;
+	private String textFieldTaliSelecionado;
+	private String textFieldKdSelecionado;
+	private String textFieldTaldSelecionado;
 	
 	private JRadioButton rdbtnControladorP;
 	private JRadioButton rdbtnControladorPI;
@@ -494,6 +500,8 @@ public class Tela {
 			public void actionPerformed(ActionEvent arg0) {
 				rdbtnFechada.setSelected(false);
 				
+				desabilitarPainelTiposControle();
+				
 				tipoMalha = "Malha Aberta";
 			}
 		});
@@ -503,6 +511,12 @@ public class Tela {
 		rdbtnFechada.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				rdbtnAberta.setSelected(false);
+				
+				rdbtnControladorP.setEnabled(true);
+				rdbtnControladorPI.setEnabled(true);
+				rdbtnControladorPD.setEnabled(true);
+				rdbtnControladorPID.setEnabled(true);
+				rdbtnControladorPITracoD.setEnabled(true);
 				
 				tipoMalha = "Malha Fechada";
 			}
@@ -749,12 +763,33 @@ public class Tela {
 		textFieldKp = new JTextFieldAlterado();
 		textFieldKp.addCaretListener(new CaretListener() {
 			public void caretUpdate(CaretEvent arg0) {
-				if(!textFieldTali.getText().equals("")){
-					textFieldKi.setText("" + Double.parseDouble(textFieldKp.getText())
+				
+				if(!textFieldKp.getText().equals("")){
+					
+					if(!textFieldKi.getText().equals("")){
+						
+						textFieldTali.setText("" + Double.parseDouble(textFieldKp.getText())
+							/Double.parseDouble(textFieldKi.getText()));
+					}
+
+					if(!textFieldTali.getText().equals("")){
+
+						textFieldKi.setText("" + Double.parseDouble(textFieldKp.getText())
 							/Double.parseDouble(textFieldTali.getText()));
+					}
+					
+					if(!textFieldKd.getText().equals("")){
+						
+						textFieldTald.setText("" + Double.parseDouble(textFieldKp.getText())
+							/Double.parseDouble(textFieldKd.getText()));
+					}
+					
+					if(!textFieldTald.getText().equals("")){
+
+						textFieldKd.setText("" + Double.parseDouble(textFieldKp.getText())
+							/Double.parseDouble(textFieldTald.getText()));
+					}
 				}
-				textFieldKd.setText("" + Double.parseDouble(textFieldKp.getText())
-						/Double.parseDouble(textFieldTald.getText()));
 			}
 		});
 		textFieldKp.setEnabled(false);
@@ -769,6 +804,10 @@ public class Tela {
 		textFieldKi = new JTextFieldAlterado();
 		textFieldKi.addCaretListener(new CaretListener() {
 			public void caretUpdate(CaretEvent arg0) {
+				if(!textFieldKp.getText().equals("") && !textFieldKi.getText().equals("")){
+					textFieldTali.setText("" + Double.parseDouble(textFieldKp.getText())
+							/Double.parseDouble(textFieldKi.getText()));
+				}
 			}
 		});
 		textFieldKi.setEnabled(false);
@@ -784,6 +823,10 @@ public class Tela {
 		textFieldTali = new JTextFieldAlterado();
 		textFieldTali.addCaretListener(new CaretListener() {
 			public void caretUpdate(CaretEvent arg0) {
+				if(!textFieldKp.getText().equals("") && !textFieldTali.getText().equals("")){
+					textFieldKi.setText("" + Double.parseDouble(textFieldKp.getText())
+							/Double.parseDouble(textFieldTali.getText()));
+				}
 			}
 		});
 		textFieldTali.setEnabled(false);
@@ -798,6 +841,10 @@ public class Tela {
 		textFieldKd = new JTextFieldAlterado();
 		textFieldKd.addCaretListener(new CaretListener() {
 			public void caretUpdate(CaretEvent arg0) {
+				if(!textFieldKp.getText().equals("") && !textFieldKd.getText().equals("")){
+					textFieldTald.setText("" + Double.parseDouble(textFieldKp.getText())
+							/Double.parseDouble(textFieldKd.getText()));
+				}
 			}
 		});
 		textFieldKd.setEnabled(false);
@@ -813,12 +860,20 @@ public class Tela {
 		textFieldTald = new JTextFieldAlterado();
 		textFieldTald.addCaretListener(new CaretListener() {
 			public void caretUpdate(CaretEvent arg0) {
+				if(!textFieldKp.getText().equals("") && !textFieldTald.getText().equals("")){
+					textFieldKd.setText("" + Double.parseDouble(textFieldKp.getText())
+							/Double.parseDouble(textFieldTald.getText()));
+				}
 			}
 		});
 		textFieldTald.setEnabled(false);
 		textFieldTald.setColumns(10);
 		textFieldTald.setBounds(195, 81, 66, 20);
 		panelParamsControlador.add(textFieldTald);
+		
+		JCheckBox chckbxNewCheckBox = new JCheckBox("Acionar Wind Up");
+		chckbxNewCheckBox.setBounds(10, 190, 113, 23);
+		panelControlPID.add(chckbxNewCheckBox);
 		
 		JPanel panelDadosServidor = new JPanel();
 		panelDadosServidor.setBounds(8, 11, 324, 73);
@@ -940,18 +995,6 @@ public class Tela {
 		frame.getContentPane().add(btnStop);
 	}
 	
-//	public void mudarValoresTal(String acao){
-//		
-//		if(){
-//			
-//		}else if(){
-//			
-//		}else{
-//			
-//		}
-//		
-//	}
-	
 	public void mudarPropriedadesBotoes(String acao){
 		if(acao.equals("Conectar")){
 			IPServidor.setEditable(false);
@@ -978,19 +1021,6 @@ public class Tela {
 			chckbxNivTanque2.setEnabled(true);
 			chckbxSetPoint.setEnabled(true);
 			chckbxErro.setEnabled(true);
-			
-			rdbtnControladorP.setEnabled(true);
-			rdbtnControladorPI.setEnabled(true);
-			rdbtnControladorPD.setEnabled(true);
-			rdbtnControladorPID.setEnabled(true);
-			rdbtnControladorPITracoD.setEnabled(true);
-			
-			textFieldKp.setEnabled(true);
-			textFieldKi.setEnabled(true);
-			textFieldKd.setEnabled(true);
-			textFieldTali.setEnabled(true);
-			textFieldTald.setEnabled(true);
-			
 		}else{
 			IPServidor.setEditable(true);
 			Porta.setEditable(true);
@@ -1046,29 +1076,34 @@ public class Tela {
 			leitura1.setSelectedItem("Selecione");
 			leitura2.setSelectedItem("Selecione");
 			
-			rdbtnControladorP.setEnabled(false);
-			rdbtnControladorPI.setEnabled(false);
-			rdbtnControladorPD.setEnabled(false);
-			rdbtnControladorPID.setEnabled(false);
-			rdbtnControladorPITracoD.setEnabled(false);
-			
-			rdbtnControladorP.setSelected(false);
-			rdbtnControladorPI.setSelected(false);
-			rdbtnControladorPD.setSelected(false);
-			rdbtnControladorPID.setSelected(false);
-			rdbtnControladorPITracoD.setSelected(false);
-			
-			textFieldKp.setText("");
-			textFieldKi.setText("");
-			textFieldKd.setText("");
-			textFieldTali.setText("");
-			textFieldTald.setText("");
-			
-			textFieldKp.setEnabled(false);
-			textFieldKi.setEnabled(false);
-			textFieldKd.setEnabled(false);
-			textFieldTali.setEnabled(false);
-			textFieldTald.setEnabled(false);			
+			desabilitarPainelTiposControle();
+						
 		}
+	}
+	
+	public void desabilitarPainelTiposControle(){
+		rdbtnControladorP.setEnabled(false);
+		rdbtnControladorPI.setEnabled(false);
+		rdbtnControladorPD.setEnabled(false);
+		rdbtnControladorPID.setEnabled(false);
+		rdbtnControladorPITracoD.setEnabled(false);
+		
+		rdbtnControladorP.setSelected(false);
+		rdbtnControladorPI.setSelected(false);
+		rdbtnControladorPD.setSelected(false);
+		rdbtnControladorPID.setSelected(false);
+		rdbtnControladorPITracoD.setSelected(false);
+		
+		textFieldKp.setText("");
+		textFieldKi.setText("");
+		textFieldKd.setText("");
+		textFieldTali.setText("");
+		textFieldTald.setText("");
+		
+		textFieldKp.setEnabled(false);
+		textFieldKi.setEnabled(false);
+		textFieldKd.setEnabled(false);
+		textFieldTali.setEnabled(false);
+		textFieldTald.setEnabled(false);
 	}
 }

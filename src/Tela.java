@@ -532,10 +532,14 @@ public class Tela {
 				lblAmplitude.setText("Amplitude:");	
 				amplitude.setEnabled(true);
 				amplitudeMin.setEnabled(false);
+				amplitudeMin.setValue(0);
 				lblPeriodo.setText("Período:");
 				periodo.setEnabled(false);
+				periodo.setValue(0);
 				periodoMin.setEnabled(false);
+				periodoMin.setValue(0);
 				offSet.setEnabled(false);
+				offSet.setValue(0);
 				
 				tipoSinal = "Degrau";
 			}
@@ -553,9 +557,11 @@ public class Tela {
 				lblAmplitude.setText("Amplitude:");	
 				amplitude.setEnabled(true);
 				amplitudeMin.setEnabled(false);
+				amplitudeMin.setValue(0);
 				lblPeriodo.setText("Período:");
 				periodo.setEnabled(true);
 				periodoMin.setEnabled(false);
+				periodoMin.setValue(0);
 				offSet.setEnabled(true);
 				
 				tipoSinal = "Senoidal";
@@ -574,9 +580,11 @@ public class Tela {
 				lblAmplitude.setText("Amplitude:");
 				amplitude.setEnabled(true);
 				amplitudeMin.setEnabled(false);
+				amplitudeMin.setValue(0);
 				lblPeriodo.setText("Período:");
 				periodo.setEnabled(true);
 				periodoMin.setEnabled(false);
+				periodoMin.setValue(0);
 				offSet.setEnabled(true);
 				
 				tipoSinal = "Quadrada";
@@ -596,9 +604,11 @@ public class Tela {
 				lblAmplitude.setText("Amplitude:");
 				amplitude.setEnabled(true);
 				amplitudeMin.setEnabled(false);
+				amplitudeMin.setValue(0);
 				lblPeriodo.setText("Período:");
 				periodo.setEnabled(true);
 				periodoMin.setEnabled(false);
+				periodoMin.setValue(0);
 				offSet.setEnabled(true);
 				
 				tipoSinal = "Dente de serra";
@@ -621,6 +631,7 @@ public class Tela {
 				periodo.setEnabled(true);
 				periodoMin.setEnabled(true);
 				offSet.setEnabled(false);
+				offSet.setValue(0);
 								
 				tipoSinal = "Aleatoria";
 			}

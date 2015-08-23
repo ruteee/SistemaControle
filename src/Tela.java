@@ -661,9 +661,13 @@ public class Tela {
 				
 				textFieldKp.setEnabled(true);
 				textFieldKi.setEnabled(false);
+				textFieldKi.setText("");
 				textFieldKd.setEnabled(false);
+				textFieldKd.setText("");
 				textFieldTali.setEnabled(false);
+				textFieldTali.setText("");
 				textFieldTald.setEnabled(false);
+				textFieldTald.setText("");
 			}
 		});
 		rdbtnControladorP.setEnabled(false);
@@ -684,8 +688,10 @@ public class Tela {
 				textFieldKp.setEnabled(true);
 				textFieldKi.setEnabled(true);
 				textFieldKd.setEnabled(false);
+				textFieldKd.setText("");
 				textFieldTali.setEnabled(true);
 				textFieldTald.setEnabled(false);
+				textFieldTald.setText("");
 			}
 		});
 		rdbtnControladorPI.setEnabled(false);
@@ -705,8 +711,10 @@ public class Tela {
 				
 				textFieldKp.setEnabled(true);
 				textFieldKi.setEnabled(false);
+				textFieldKi.setText("");
 				textFieldKd.setEnabled(true);
 				textFieldTali.setEnabled(false);
+				textFieldTali.setText("");
 				textFieldTald.setEnabled(true);
 			}
 		});

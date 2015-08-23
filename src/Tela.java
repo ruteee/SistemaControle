@@ -93,12 +93,6 @@ public class Tela {
 	private JTextFieldAlterado textFieldTali;
 	private JTextFieldAlterado textFieldKd;
 	private JTextFieldAlterado textFieldTald;
-
-	private String textFieldKpSelecionado;
-	private String textFieldKiSelecionado;
-	private String textFieldTaliSelecionado;
-	private String textFieldKdSelecionado;
-	private String textFieldTaldSelecionado;
 	
 	private JRadioButton rdbtnControladorP;
 	private JRadioButton rdbtnControladorPI;
@@ -109,6 +103,9 @@ public class Tela {
 	private JLabel lblKp;
 	private JLabel lblKi;
 	private JLabel lblKd;
+	private JLabel labelInterrogation;
+	
+	private JCheckBox chckbxWindUp;
 	
 	
 	/**
@@ -517,6 +514,7 @@ public class Tela {
 				rdbtnControladorPD.setEnabled(true);
 				rdbtnControladorPID.setEnabled(true);
 				rdbtnControladorPITracoD.setEnabled(true);
+				chckbxWindUp.setEnabled(false);
 				
 				tipoMalha = "Malha Fechada";
 			}
@@ -761,37 +759,6 @@ public class Tela {
 		panelParamsControlador.add(lblKp);
 		
 		textFieldKp = new JTextFieldAlterado();
-		textFieldKp.addCaretListener(new CaretListener() {
-			public void caretUpdate(CaretEvent arg0) {
-				
-				if(!textFieldKp.getText().equals("")){
-					
-					if(!textFieldKi.getText().equals("")){
-						
-						textFieldTali.setText("" + Double.parseDouble(textFieldKp.getText())
-							/Double.parseDouble(textFieldKi.getText()));
-					}
-
-					if(!textFieldTali.getText().equals("")){
-
-						textFieldKi.setText("" + Double.parseDouble(textFieldKp.getText())
-							/Double.parseDouble(textFieldTali.getText()));
-					}
-					
-					if(!textFieldKd.getText().equals("")){
-						
-						textFieldTald.setText("" + Double.parseDouble(textFieldKp.getText())
-							/Double.parseDouble(textFieldKd.getText()));
-					}
-					
-					if(!textFieldTald.getText().equals("")){
-
-						textFieldKd.setText("" + Double.parseDouble(textFieldKp.getText())
-							/Double.parseDouble(textFieldTald.getText()));
-					}
-				}
-			}
-		});
 		textFieldKp.setEnabled(false);
 		textFieldKp.setBounds(68, 17, 66, 20);
 		panelParamsControlador.add(textFieldKp);
@@ -863,6 +830,8 @@ public class Tela {
 				if(!textFieldKp.getText().equals("") && !textFieldTald.getText().equals("")){
 					textFieldKd.setText("" + Double.parseDouble(textFieldKp.getText())
 							/Double.parseDouble(textFieldTald.getText()));
+				}else{
+					
 				}
 			}
 		});
@@ -871,9 +840,15 @@ public class Tela {
 		textFieldTald.setBounds(195, 81, 66, 20);
 		panelParamsControlador.add(textFieldTald);
 		
-		JCheckBox chckbxNewCheckBox = new JCheckBox("Acionar Wind Up");
-		chckbxNewCheckBox.setBounds(10, 190, 113, 23);
-		panelControlPID.add(chckbxNewCheckBox);
+		labelInterrogation = new JLabel("");
+		labelInterrogation.setToolTipText("Para Atualizar os parametros, basta clicar nos campos.");
+		labelInterrogation.setIcon(new ImageIcon(Tela.class.getResource("/Icons/question-icon.png")));
+		labelInterrogation.setBounds(258, 8, 24, 26);
+		panelParamsControlador.add(labelInterrogation);
+		
+		chckbxWindUp = new JCheckBox("Acionar Wind Up");
+		chckbxWindUp.setBounds(10, 190, 113, 23);
+		panelControlPID.add(chckbxWindUp);
 		
 		JPanel panelDadosServidor = new JPanel();
 		panelDadosServidor.setBounds(8, 11, 324, 73);
@@ -923,6 +898,8 @@ public class Tela {
 					//Muda nome (conectar ou desconectar) e cor (verde ou vermelho) do botão.
 					//Também desabilita alguns componentes da tela.			
 					if(btnConectarDesconectar.getText().equals("Conectar")){
+						
+						JOptionPane.showMessageDialog(frame, "Conexão Realizada com Sucesso!");
 												
 						mudarPropriedadesBotoes("Conectar");
 						
@@ -1105,5 +1082,8 @@ public class Tela {
 		textFieldKd.setEnabled(false);
 		textFieldTali.setEnabled(false);
 		textFieldTald.setEnabled(false);
+		
+		chckbxWindUp.setSelected(false);
+		chckbxWindUp.setEnabled(false);
 	}
 }

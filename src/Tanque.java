@@ -86,11 +86,7 @@ public class Tanque extends Thread {
 					
 					graficoAltura.atualizarFilaDeSetPoint(pontoSet);
 					erro = -volt*6.25 + (graficoAltura.filaDeSetPoint.get(graficoAltura.filaDeSetPoint.size() - 1).getY());
-					
-					Ponto erroP = new Ponto(); 
-					Ponto erroI = new Ponto();
-					Ponto erroD = new Ponto();
-	    			
+				
 					/*//colocar radio button na interface para selcionar 
 					switch (dados.getComControle()){
 					
@@ -124,37 +120,38 @@ public class Tanque extends Thread {
 				/*			break;	
 					}*/
 		
-					/*if(dados.getComControle() == 1){// influencia dos controladores, plot;
-*/						
-			    		erroP.setX(onda.getTempo() - 0.1); 
-			    		//erroP.setY(acaoP(erro));
-			    		erroP.setY(2);
-			    		
-			    		erroI.setX(onda.getTempo() - 0.1); 
-			    		erroI.setY(acaoI(erro));
-			    		
-			    		erroD.setX(onda.getTempo() - 0.1); 
-			    		erroD.setY(acaoD(erro));
-			    		
-			    		graficoAltura.atualizarFilaDeErroP(erroP);
-			    		graficoAltura.atualizarFilaDeErroI(erroI);
-			    		graficoAltura.atualizarFilaDeErroD(erroD);
-			    		
-			    	/*	graficoAltura.atualizarGrafico();
-		    			painelAltura.validate();*/
-					/*}
-					*/
-	    			//fila de Erro - para uso sem controle
-	    			
-		    			Ponto pontoErro = new Ponto();
-			    		pontoErro.setX(onda.getTempo() - 0.1); //nao sei se funciona, rever
-			    		pontoErro.setY(dados.getVP());
-			    		graficoAltura.atualizarFilaDeErro(pontoErro);
-			    		/*graficoAltura.atualizarGrafico();
-		    			painelAltura.validate();*/
-		    			
-		    			graficoAltura.atualizarGrafico();
-		    			painelAltura.validate();
+							// Gráficos dos erros com e sem controlador.
+							
+							Ponto erroP = new Ponto();
+				    		erroP.setX(onda.getTempo() - 0.1); 
+				    		erroP.setY(acaoP(erro));
+				    		//erroP.setY(2);
+
+				    			
+				    		Ponto erroI = new Ponto();
+				    		erroI.setX(onda.getTempo() - 0.1); 
+				    		erroI.setY(acaoI(erro));
+				    		
+				    		Ponto erroD = new Ponto();
+				    		erroD.setX(onda.getTempo() - 0.1); 
+				    		erroD.setY(acaoD(erro));
+				    		
+				    		Ponto pontoErro = new Ponto();
+				    		pontoErro.setX(onda.getTempo() - 0.1); //nao sei se funciona, rever
+				    		//pontoErro.setY(dados.getVP());
+				    		pontoErro.setY(erro);
+				    		
+				    		
+				    		graficoAltura.atualizarFilaDeErroP(new Ponto (erroP));
+				    		graficoAltura.atualizarFilaDeErroI(erroI);
+				    		graficoAltura.atualizarFilaDeErroD(erroD);
+				    		
+				    		System.out.println(dados.getKP());
+				    		System.out.println(acaoP(erro));
+				    		graficoAltura.atualizarFilaDeErro(pontoErro);
+
+			    			graficoAltura.atualizarGrafico();
+			    			painelAltura.validate();
 				
 				}
 	    		

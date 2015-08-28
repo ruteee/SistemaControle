@@ -9,14 +9,21 @@ public class Dados {
 	private double offset;
 	private double amplitudeMinima;
 	private double periodoMinino;
+	private double KP;
+	private double KI;
+	private double KD;
+	
+	
 	
 	private int pinoDeLeitura;
 	private int pinoDeEscrita;
+	private int comControle;
 	
 	private String tipoSinal;
 	private String tipoMalha;
+	private String tipoDeControle;
 	
-	private boolean tensao, tensaoSat, nivel1, nivel2, setPoint, erro;
+	private boolean tensao, tensaoSat, nivel1, nivel2, setPoint, erro, proporcional, integral, derivativo;
 
 	public double getVp() {
 		return vp;
@@ -196,5 +203,71 @@ public class Dados {
 
 	public void setErro(boolean erro) {
 		this.erro = erro;
+	}
+
+	
+	public boolean isProporcional() {
+		return proporcional;
+	}
+
+	public void setProporcional(boolean proporcional) {
+		this.proporcional = proporcional;
+	}
+	
+	
+	public boolean isIntegral() {
+		return integral;
+	}
+
+	public void setIntegral(boolean integral) {
+		this.integral = integral;
+	}
+	
+	public boolean isDerivativo() {
+		return derivativo;
+	}
+
+	public void setDerivativo(boolean derivativo) {
+		this.derivativo = derivativo;
+	}
+	
+	public double getKP() {
+		return KP;
+	}
+
+	public void setKP(double kP) {
+		KP = kP;
+	}
+
+	public double getKI() {
+		return KI;
+	}
+
+	public void setKI(double kI) {
+		KI = kI;
+	}
+
+	public double getKD() {
+		return KD;
+	}
+
+	public void setKD(double kD) {
+		KD = kD;
+	}
+
+	public String getTipoDeControle() {
+		return tipoDeControle;
+	}
+
+	public void setTipoDeControle(String tipoDeControle) {
+		this.tipoDeControle = tipoDeControle;
+	}
+
+	public int getComControle() {
+		return comControle;
+	}
+
+	public void setComControle(int comControle) {
+		this.comControle = comControle;
 	}
 }

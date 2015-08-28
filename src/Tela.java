@@ -45,8 +45,11 @@ public class Tela {
 	
 	private String tipoMalha;
 	private String tipoSinal;
+	private String tipoControle;
 	private Tanque thread;
 	private Dados dados;
+	
+	private double KP;
 	
 	private JTextField IPServidor;
 	private JTextFieldAlterado Porta;
@@ -668,7 +671,10 @@ public class Tela {
 				textFieldTali.setText("");
 				textFieldTald.setEnabled(false);
 				textFieldTald.setText("");
-			}
+				tipoControle = "P";
+				/*KP = Double.parseDouble(textFieldKp.getText());
+				//dados.setKP(KP);
+*/			}
 		});
 		rdbtnControladorP.setEnabled(false);
 		rdbtnControladorP.setToolTipText("Controlador Proporcional");
@@ -953,12 +959,24 @@ public class Tela {
 				//Tipo de Sinal
 				dados.setTipoSinal(tipoSinal);
 				
+				//Tipo de Controle
+				dados.setTipoDeControle(tipoControle);
+				//dados.setKP(KP);
+				
+				if(rdbtnControladorP.isSelected()){
+					KP = Double.parseDouble(textFieldKp.getText());
+					dados.setKP(KP);
+				}
+					
+				
 				//Dados do Sinal
 				dados.setAmplitude((double)amplitude.getValue());
-				dados.setPeriodo((double)periodo.getValue());
-				dados.setPeriodoMinino((double) periodoMin.getValue());
-				dados.setAmplitudeMinima(((double) amplitudeMin.getValue()));
-				dados.setOffset((double)offSet.getValue());
+				if(!dados.getTipoSinal().equals("Degrau")){
+					dados.setPeriodo((double)periodo.getValue());
+					dados.setPeriodoMinino((double) periodoMin.getValue());
+					dados.setAmplitudeMinima(((double) amplitudeMin.getValue()));
+					dados.setOffset((double)offSet.getValue());
+				}
 				
 				//Dados de I/O
 				dados.setPinoDeEscrita((int)((Integer)leitura1.getSelectedItem()));

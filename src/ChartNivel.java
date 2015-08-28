@@ -16,6 +16,9 @@ public class ChartNivel {
 	public LinkedList<Ponto> filaDeNivelUm = new LinkedList<Ponto>();
 	public LinkedList<Ponto> filaDeSetPoint = new LinkedList<Ponto>();
 	public LinkedList<Ponto> filaDeErro = new LinkedList<Ponto>();
+	public LinkedList<Ponto> filaDeErroP = new LinkedList<Ponto>();
+	public LinkedList<Ponto> filaDeErroI = new LinkedList<Ponto>();
+	public LinkedList<Ponto> filaDeErroD = new LinkedList<Ponto>();
 	
 	Ponto ponto = new Ponto();
 	public ChartPanel  painelG2;
@@ -40,7 +43,7 @@ public class ChartNivel {
 		
 			filaDeNivelUm.addLast(ponto);
 			
-			if (filaDeNivelUm.size() > 40) filaDeNivelUm.removeFirst();
+			if (filaDeNivelUm.size() > 600) filaDeNivelUm.removeFirst();
 		
 	}
 	
@@ -48,17 +51,43 @@ public class ChartNivel {
 		
 		filaDeSetPoint.addLast(ponto);
 		
-		if (filaDeSetPoint.size() > 40) filaDeSetPoint.removeFirst();
+		if (filaDeSetPoint.size() > 600) filaDeSetPoint.removeFirst();
 	
-}
+	}
 
 	public void atualizarFilaDeErro(Ponto ponto){
 		
 			filaDeErro.addLast(ponto);
 			
-			if (filaDeErro.size() > 40) filaDeErro.removeFirst();
+			if (filaDeErro.size() > 600) filaDeErro.removeFirst();
 		
 	}
+	
+	public void atualizarFilaDeErroP(Ponto ponto){
+			
+			filaDeErroP.addLast(ponto);
+			
+			if (filaDeErroP.size() > 600) filaDeErroP.removeFirst();
+		
+	}
+
+	public void atualizarFilaDeErroI(Ponto ponto){
+		
+		filaDeErroI.addLast(ponto);
+		
+		if (filaDeErroI.size() > 600) filaDeErroI.removeFirst();
+	
+	}
+	
+	public void atualizarFilaDeErroD(Ponto ponto){
+		
+		filaDeErroD.addLast(ponto);
+		
+		if (filaDeErroD.size() > 600) filaDeErroD.removeFirst();
+	
+	}
+
+
 		
 	public XYDataset criarDataset()
 	{
@@ -66,6 +95,9 @@ public class ChartNivel {
 		XYSeries serieNivelUm = new XYSeries("NivelUm");
 		XYSeries serieSetPoint = new XYSeries("SetPoint");
 		XYSeries serieErro = new XYSeries("Erro");
+		XYSeries serieErroP = new XYSeries("Erro Proporcional");
+		XYSeries serieErroI = new XYSeries("Erro Integral");
+		XYSeries serieErroD = new XYSeries("Erro Derivativo");
 		
 		//isso trava a thread?
 		
@@ -78,10 +110,24 @@ public class ChartNivel {
 		for (int i = 0; i < filaDeErro.size(); i++)
 			serieErro.add(filaDeErro.get(i).getX(), filaDeErro.get(i).getY());
 		
+		for (int i = 0; i < filaDeErroP.size(); i++)
+			serieErroP.add(filaDeErroP.get(i).getX(), filaDeErroP.get(i).getY());
+		
+		for (int i = 0; i < filaDeErroI.size(); i++)
+			serieErroI.add(filaDeErroI.get(i).getX(), filaDeErroI.get(i).getY());
+		
+		for (int i = 0; i < filaDeErroD.size(); i++)
+			serieErroD.add(filaDeErroD.get(i).getX(), filaDeErroD.get(i).getY());
+		
+		
+		
 		XYSeriesCollection dataset= new XYSeriesCollection();
 		dataset.addSeries(serieNivelUm);
 		dataset.addSeries(serieSetPoint);
 		dataset.addSeries(serieErro);
+		dataset.addSeries(serieErroP);
+		dataset.addSeries(serieErroI);
+		dataset.addSeries(serieErroD);
 		
 		
 		return dataset;
@@ -97,20 +143,47 @@ public class ChartNivel {
 		
 		XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
 		
-		//Nivel
+		//Nivel 1
 		renderer.setSeriesShapesVisible(0, false);
-		renderer.setSeriesLinesVisible(0, true);
+		//if(dados.isNivel1())
+			renderer.setSeriesLinesVisible(0, true);
+		//else{renderer.setSeriesLinesVisible(0, false);}
 		renderer.setSeriesPaint(0, Color.BLACK);
 		
 		//SetPoint
 		renderer.setSeriesShapesVisible(1, false);
-		renderer.setSeriesLinesVisible(1, true);
+		//if(dados.isSetPoint())
+			renderer.setSeriesLinesVisible(1, true);
+		//else{renderer.setSeriesLinesVisible(1, false);}
 		renderer.setSeriesPaint(1, Color.RED);
 		
 		//Erro
 		renderer.setSeriesShapesVisible(2, false);
 		renderer.setSeriesLinesVisible(2, true);
-		renderer.setSeriesPaint(2, Color.GREEN);
+		renderer.setSeriesPaint(2, Color.CYAN);
+		
+		//ErroP
+		renderer.setSeriesShapesVisible(3, false);
+		//if(dados.isProporcional())
+			renderer.setSeriesLinesVisible(3, true);
+		//else{renderer.setSeriesLinesVisible(3, false);}
+		renderer.setSeriesPaint(3, Color.GREEN);
+		
+		//ErroI
+		renderer.setSeriesShapesVisible(4, false);
+		//if(dados.isIntegral())
+			renderer.setSeriesLinesVisible(4, true);
+	//	else{renderer.setSeriesLinesVisible(4, false);}
+		renderer.setSeriesPaint(4, Color.MAGENTA);
+		
+		//ERROD
+		
+		renderer.setSeriesShapesVisible(5, false);
+		
+		//if(dados.isDerivativo())
+			renderer.setSeriesLinesVisible(5, true);
+		//else{renderer.setSeriesLinesVisible(5, false);}
+		renderer.setSeriesPaint(5, Color.YELLOW);
 		
         graph.getXYPlot().setRenderer(renderer);
         

@@ -30,7 +30,7 @@ public class Tsunami {
 		this.periodo = periodo;
 		this.periodoMinimo = periodoMinimo;
 		this.offset = offset;
-		this.amplitude = -amplitude;
+		this.amplitude = amplitude;
 		this.amplitudeMinima = amplitudeMinima;		
 		this.randomAmplitude = random.nextInt((int)((amplitude - amplitudeMinima) + 1)) + (int) amplitudeMinima;
 		this.randomPeriodo = random.nextInt((int)(periodo - periodoMinimo + 1)) + (int) periodoMinimo;
@@ -72,9 +72,9 @@ public class Tsunami {
 			case "Quadrada":
 				
 				if (contadorDePeriodo <= periodo/2)
-					ponto.setY(amplitude);
+					ponto.setY(amplitude + offset);
 				else if( contadorDePeriodo >= periodo/2){
-					ponto.setY(-amplitude);
+					ponto.setY(-amplitude + offset);
 					if(contadorDePeriodo > periodo){contadorDePeriodo = 0;}
 				}
 				

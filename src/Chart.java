@@ -11,26 +11,11 @@ import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
-/*public class Chart extends ApplicationFrame{
-	
-	public static LinkedList<Ponto> filaDePontos = new LinkedList<Ponto>();
-	Ponto ponto = new Ponto();
-	ChartPanel  painel;
-	
-	
-	public Chart(String title) {
-		super(title);
-		XYDataset dataset = criarDataset();
-		JFreeChart graph = criarGrafico(dataset);
-		painel = new ChartPanel(graph);
-		painel.setPreferredSize(new Dimension(700, 400));
-		setContentPane(painel);
-				
-	}*/
 public class Chart{
 	
 	public LinkedList<Ponto> filaDePontos = new LinkedList<Ponto>();
 	public LinkedList<Ponto> filaSaturada = new LinkedList<Ponto>();
+	public LinkedList<Ponto> filaDeErroSaturado = new LinkedList<Ponto>();
 	Ponto ponto = new Ponto();
 	public ChartPanel  painel;
 	public Dados dados = new Dados();
@@ -41,18 +26,9 @@ public class Chart{
 	public Chart(Dados dados) {
 		XYDataset dataset = criarDataset();
 		JFreeChart graph = criarGrafico(dataset);
-		this.painel = new ChartPanel(graph);
-		
-		/*painel = new ChartPanel(graph);
-		painel.setPreferredSize(new Dimension(700, 400));
-		setContentPane(painel);*/
-				
+		this.painel = new ChartPanel(graph);			
 	}	
 	
-	/*public void setFila(LinkedList<Ponto> fila){
-		this.filaDePontos = fila;
-	}*/
-
 	public void atualizarGrafico(){
 		painel.setChart(criarGrafico(criarDataset()));
 	}
@@ -61,32 +37,46 @@ public class Chart{
 		
 			filaDePontos.addLast(ponto);
 			
-			if (filaDePontos.size() > 40) filaDePontos.removeFirst();
+			if (filaDePontos.size() > 600) filaDePontos.removeFirst();
 		
 	}
 	public void atualizarSaturada(Ponto ponto){
 		
 		filaSaturada.addLast(ponto);
 		
-		if (filaSaturada.size() > 40) filaSaturada.removeFirst();
+		if (filaSaturada.size() > 600) filaSaturada.removeFirst();
 	
 	}
+	
+	public void atualizarErroSaturado(Ponto ponto){
+		
+		filaDeErroSaturado.addLast(ponto);
+		
+		if (filaDeErroSaturado.size() > 600) filaDeErroSaturado.removeFirst();
+	
+	}
+	
+	
 	public XYDataset criarDataset()
 	{
 
 		XYSeries serieDePlot = new XYSeries("Serie");
 		XYSeries serieSaturada = new XYSeries("Saturada");
-		
-		//isso trava a thread?
+		XYSeries serieErroSaturado = new XYSeries("Erro Saturado");
+	
 		for (int i = 0; i < filaDePontos.size(); i++)
 			serieDePlot.add(filaDePontos.get(i).getX(), filaDePontos.get(i).getY());
 		
 		for (int i = 0; i < filaSaturada.size(); i++)
 			serieSaturada.add(filaSaturada.get(i).getX(), filaSaturada.get(i).getY());
 		
+		for (int i = 0; i < filaDeErroSaturado.size(); i++)
+			serieErroSaturado.add(filaDeErroSaturado.get(i).getX(), filaDeErroSaturado.get(i).getY());
+		
 		XYSeriesCollection dataset= new XYSeriesCollection();
 		dataset.addSeries(serieDePlot);
 		dataset.addSeries(serieSaturada);
+		dataset.addSeries(serieErroSaturado);
 		
 		
 		return dataset;
@@ -103,14 +93,31 @@ public class Chart{
 		XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
 		
 		
+		//tensão calculada;
 		renderer.setSeriesShapesVisible(0, false);
-		renderer.setSeriesLinesVisible(0, true);
+		
+		//if(dados.isTensao())
+			renderer.setSeriesLinesVisible(0, true);
+		//else{renderer.setSeriesLinesVisible(0, false);}
+		
 		renderer.setSeriesFillPaint(0, Color.BLUE);
 		
 		
+		//tensao saturada, malha aberta
 		renderer.setSeriesShapesVisible(1, false);
-		renderer.setSeriesLinesVisible(1, true);
-		renderer.setSeriesFillPaint(0, Color.RED);
+		//if(dados.isTensaoSat())
+			renderer.setSeriesLinesVisible(1, true);
+		//else{renderer.setSeriesLinesVisible(1, false);}
+		renderer.setSeriesFillPaint(1, Color.RED);
+		
+		
+		//tensao saturada malha fechada, rever na interface
+		
+		renderer.setSeriesShapesVisible(2, false);
+		///if(dados.isTensaoSat() && dados.getTipoMalha().equals("Malha Fechada"))
+			renderer.setSeriesLinesVisible(2, true);
+	//	else{renderer.setSeriesLinesVisible(2, false);}
+		renderer.setSeriesFillPaint(2, Color.MAGENTA);
 		
 		
         graph.getXYPlot().setRenderer(renderer);

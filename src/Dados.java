@@ -1,7 +1,6 @@
 public class Dados {
 
 	private double PV;
-	//private double PV1;
 	private double vp;
 	private double Amplitude;
 	private double duracao;
@@ -17,21 +16,13 @@ public class Dados {
 	
 	private int pinoDeLeitura;
 	private int pinoDeEscrita;
-	private int comControle;
 	
 	private String tipoSinal;
 	private String tipoMalha;
 	private String tipoDeControle;
 	
+	
 	private boolean tensao, tensaoSat, nivel1, nivel2, setPoint, erro, proporcional, integral, derivativo;
-
-	public double getVp() {
-		return vp;
-	}
-
-	public void setVp(double vp) {
-		this.vp = vp;
-	}
 
 	public Dados(){
 	}
@@ -43,14 +34,6 @@ public class Dados {
 	public void setPV(double PV) {
 		this.PV = PV;
 	}
-
-	/*public double getPV1() {
-		return PV1;
-	}
-*/
-	/*public void setPV1(double PV1) {
-		this.PV1 = PV1;
-	}*/
 
 	public double getVP() {
 		return vp;
@@ -263,11 +246,4 @@ public class Dados {
 		this.tipoDeControle = tipoDeControle;
 	}
 
-	public int getComControle() {
-		return comControle;
-	}
-
-	public void setComControle(int comControle) {
-		this.comControle = comControle;
-	}
 }

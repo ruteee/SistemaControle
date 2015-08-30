@@ -2,6 +2,7 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.JTextField;
 
+@SuppressWarnings("serial")
 public final class JTextFieldAlterado extends JTextField{
 	
 		private int maximoCaracteres = -1;

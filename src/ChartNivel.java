@@ -15,7 +15,7 @@ public class ChartNivel {
 
 	public LinkedList<Ponto> filaDeNivelUm = new LinkedList<Ponto>();
 	public LinkedList<Ponto> filaDeSetPoint = new LinkedList<Ponto>();
-	public LinkedList<Ponto> filaDeErro = new LinkedList<Ponto>();
+	public LinkedList<Ponto> filaDeVP = new LinkedList<Ponto>();
 	public LinkedList<Ponto> filaDeErroP = new LinkedList<Ponto>();
 	public LinkedList<Ponto> filaDeErroI = new LinkedList<Ponto>();
 	public LinkedList<Ponto> filaDeErroD = new LinkedList<Ponto>();
@@ -55,11 +55,11 @@ public class ChartNivel {
 	
 	}
 
-	public void atualizarFilaDeErro(Ponto ponto){
+	public void atualizarFilaDeVP(Ponto ponto){
 		
-			filaDeErro.addLast(ponto);
+			filaDeVP.addLast(ponto);
 			
-			if (filaDeErro.size() > 600) filaDeErro.removeFirst();
+			if (filaDeVP.size() > 600) filaDeVP.removeFirst();
 		
 	}
 	
@@ -107,8 +107,8 @@ public class ChartNivel {
 		for (int i = 0; i < filaDeSetPoint.size(); i++)
 			serieSetPoint.add(filaDeSetPoint.get(i).getX(), filaDeSetPoint.get(i).getY());
 		
-		for (int i = 0; i < filaDeErro.size(); i++)
-			serieErro.add(filaDeErro.get(i).getX(), filaDeErro.get(i).getY());
+		for (int i = 0; i < filaDeVP.size(); i++)
+			serieErro.add(filaDeVP.get(i).getX(), filaDeVP.get(i).getY());
 		
 		for (int i = 0; i < filaDeErroP.size(); i++)
 			serieErroP.add(filaDeErroP.get(i).getX(), filaDeErroP.get(i).getY());
@@ -176,8 +176,7 @@ public class ChartNivel {
 	//	else{renderer.setSeriesLinesVisible(4, false);}
 		renderer.setSeriesPaint(4, Color.MAGENTA);
 		
-		//ERROD
-		
+		//ERROD	
 		renderer.setSeriesShapesVisible(5, false);
 		
 		//if(dados.isDerivativo())

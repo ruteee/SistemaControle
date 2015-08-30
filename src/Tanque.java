@@ -43,7 +43,7 @@ public class Tanque extends Thread {
     
 
     public void run() {
-    	int cont = 0;
+    //	int cont = 0;
     //    getConexao();
         
     	while(true){
@@ -56,13 +56,15 @@ public class Tanque extends Thread {
 	    		
 	    		if(dados.getTipoMalha().equals("Malha Aberta")){
 	    			
-	    			//fila de tensão
-	    			grafico.atualizarFila(new Ponto(onda.gerarPonto()));        			
+	    			//fila de tensão - Sinal de controle
+	    			grafico.atualizarFila(new Ponto(onda.gerarPonto()));    
+	    			
 	    			grafico.atualizarGrafico();
 	    			painelTensao.validate();
+	    			
 	    			dados.setVP(grafico.filaDePontos.get(grafico.filaDePontos.size() - 1).getY()); 
 	    			
-	    			//fila de nivel
+	    			//fila de nivel - nível do tanque
 	    			Ponto pontoNivelAberta = new Ponto();
 	    			pontoNivelAberta.setY(volt*6.25);
 	    			pontoNivelAberta.setX(onda.getTempo() - 0.1);
@@ -76,82 +78,173 @@ public class Tanque extends Thread {
 				
 					// plot do set point
 					//Ponto pontoSet = new Ponto();
+					
+					//sinal de controle do set-point
 					Ponto pontoSet = new Ponto(onda.gerarPonto());
 					
-					if(pontoSet.getY() < 0){ //djabo é isso? lembrei
+					if(pontoSet.getY() < 0){
 						pontoSet.setY(0);
 					}
-					
 					//Controle dos erros com e sem PID
 					
 					graficoAltura.atualizarFilaDeSetPoint(pontoSet);
 					erro = -volt*6.25 + (graficoAltura.filaDeSetPoint.get(graficoAltura.filaDeSetPoint.size() - 1).getY());
-				
-					/*//colocar radio button na interface para selcionar 
-					switch (dados.getComControle()){
 					
-						case 0:
-							dados.setVP(erro);
+	    			
+					//colocar radio button na interface para selcionar 
+					
+					Ponto vp;
+					switch (dados.getTipoDeControle()){
+					
+						case "P" : 
+							dados.setVP(acaoP(erro));
+							vp = new Ponto();
+				    		vp.setX(onda.getTempo() - 0.1); 
+				    		vp.setY(dados.getVP());
+				    		
 						break;
 						
-						case 1:*/
-							switch (dados.getTipoDeControle()){
+						case "PI":
+							dados.setVP(acaoP(erro) + acaoI(erro));
 							
-								case "P" : 
-									dados.setVP(acaoP(erro));
-								break;
-								
-								case "PI":
-									dados.setVP(acaoP(erro) + acaoI(erro));
-								break;
-								
-								case "PD":
-									dados.setVP(acaoP(erro) + acaoI(erro));
-								break;
-								
-								case "PID":
-									dados.setVP(acaoP(erro) + acaoI(erro) + acaoD(erro));
-								break;
-								
-								case "PI-D":
-									dados.setVP(acaoP(erro) + acaoI(erro) + acaoD(volt));
-								break;
-							}		
-				/*			break;	
-					}*/
-		
-							// Gráficos dos erros com e sem controlador.
+							vp = new Ponto();
+				    		vp.setX(onda.getTempo() - 0.1); 
+				    		vp.setY(dados.getVP());
 							
-							Ponto erroP = new Ponto();
-				    		erroP.setX(onda.getTempo() - 0.1); 
-				    		erroP.setY(acaoP(erro));
-				    		//erroP.setY(2);
-
-				    			
-				    		Ponto erroI = new Ponto();
-				    		erroI.setX(onda.getTempo() - 0.1); 
-				    		erroI.setY(acaoI(erro));
+						break;
+						
+						case "PD":
+							dados.setVP(acaoP(erro) + acaoI(erro));
+							
+							vp = new Ponto();
+				    		vp.setX(onda.getTempo() - 0.1); 
+				    		vp.setY(dados.getVP());
 				    		
-				    		Ponto erroD = new Ponto();
-				    		erroD.setX(onda.getTempo() - 0.1); 
-				    		erroD.setY(acaoD(erro));
+						break;
+						
+						case "PID":
+							dados.setVP(acaoP(erro) + acaoI(erro) + acaoD(erro));
+							
+							vp = new Ponto();
+				    		vp.setX(onda.getTempo() - 0.1); 
+				    		vp.setY(dados.getVP());
 				    		
-				    		Ponto pontoErro = new Ponto();
-				    		pontoErro.setX(onda.getTempo() - 0.1); //nao sei se funciona, rever
-				    		//pontoErro.setY(dados.getVP());
-				    		pontoErro.setY(erro);
+						break;
+						
+						case "PI-D":
+							dados.setVP(acaoP(erro) + acaoI(erro) + acaoD(volt));
+							
+							vp = new Ponto();
+							vp.setX(onda.getTempo() - 0.1); 
+				    		vp.setY(dados.getVP());
+						break;
+						
+						case "Sem Controle":
+							dados.setVP(erro);
+							
+							vp = new Ponto();
+				    		vp.setX(onda.getTempo() - 0.1); 
+				    		vp.setY(dados.getVP());
 				    		
-				    		
-				    		graficoAltura.atualizarFilaDeErroP(new Ponto (erroP));
-				    		graficoAltura.atualizarFilaDeErroI(erroI);
-				    		graficoAltura.atualizarFilaDeErroD(erroD);
-				    		
-				    		System.out.println(dados.getKP());
-				    		System.out.println(acaoP(erro));
-				    		graficoAltura.atualizarFilaDeErro(pontoErro);
-
-			    			graficoAltura.atualizarGrafico();
-			    			painelAltura.validate();
+						break;
+						
+						default:
+							vp = new Ponto();
+						break;
+					}	
+					
+					graficoAltura.atualizarFilaDeVP(vp);
+					
+					Ponto justP;
+					Ponto justI;
+					Ponto justD;
+					
+					//set das filas das ações separadas
+			
+					switch (dados.getTipoDeControle()){
+					
+						case "P":
+							
+							justP = new Ponto();
+							justP.setX(onda.getTempo() - 0.1);
+							justP.setY(acaoP(erro));
+							graficoAltura.atualizarFilaDeErroP(justP);
+							
+						break;
+						
+						case "PI":
+							
+							justP = new Ponto();
+							justP.setX(onda.getTempo() - 0.1);
+							justP.setY(acaoP(erro));
+							
+							justI = new Ponto();
+							justI.setX(onda.getTempo() - 0.1);
+							justI.setY(acaoI(erro));
+							
+							graficoAltura.atualizarFilaDeErroP((justP));
+							graficoAltura.atualizarFilaDeErroI((justI));
+							
+						break;
+						
+						case "PD":
+							
+							justP = new Ponto();
+							justP.setX(onda.getTempo() - 0.1);
+							justP.setY(acaoP(erro));
+							
+							justD = new Ponto();
+							justD.setX(onda.getTempo() - 0.1);
+							justD.setY(acaoD(erro));
+							
+							graficoAltura.atualizarFilaDeErroP(justP);
+							graficoAltura.atualizarFilaDeErroD(justD);
+						
+						break;
+						
+						case "PID":
+							
+							justP = new Ponto();
+							justP.setX(onda.getTempo() - 0.1);
+							justP.setY(acaoP(erro));
+							
+							justI = new Ponto();
+							justI.setX(onda.getTempo() - 0.1);
+							justI.setY(acaoI(erro));
+							
+							justD = new Ponto();
+							justD.setX(onda.getTempo() - 0.1);
+							justD.setY(acaoD(erro));
+							
+							graficoAltura.atualizarFilaDeErroP(justP);
+							graficoAltura.atualizarFilaDeErroI(justI);
+							graficoAltura.atualizarFilaDeErroD(justD);
+							
+						break;
+						
+						case "PI-D":
+							
+							justP = new Ponto();
+							justP.setX(onda.getTempo() - 0.1);
+							justP.setY(acaoP(erro));
+							
+							justI = new Ponto();
+							justI.setX(onda.getTempo() - 0.1);
+							justI.setY(acaoI(erro));
+							
+							justD = new Ponto();
+							justD.setX(onda.getTempo() - 0.1);
+							justD.setY(acaoD(volt));
+							
+							graficoAltura.atualizarFilaDeErroP(justP);
+							graficoAltura.atualizarFilaDeErroI(justI);
+							graficoAltura.atualizarFilaDeErroD(justD);
+							
+						
+						break;
+					}
+	    			graficoAltura.atualizarGrafico();
+	    			painelAltura.validate();
 				
 				}
 	    		
@@ -168,34 +261,29 @@ public class Tanque extends Thread {
 	    			painelTensao.validate();
 	    			
 	    		}else if (dados.getTipoMalha().equals("Malha Fechada")){
-    			
-	    			//grafico de tensão enviada na malha fechada (Erro saturado)
 	    			
-	    			Ponto erroSat = new Ponto();
-		    		erroSat.setX(onda.getTempo() - 0.1); //nao sei se funciona, rever
-		    		erroSat.setY(dados.getVP());
-		    		grafico.atualizarErroSaturado(erroSat);
-	    			
-	    			grafico.atualizarGrafico();
+	    			Ponto vpSaturado = new Ponto();
+					vpSaturado.setX(onda.getTempo() - 0.1); 
+					vpSaturado.setY(dados.getVP());
+
+					
+					grafico.atualizarDeVPSaturado(vpSaturado);
 	    			painelTensao.validate();
-	    			
-	    			//gráficos de nível	
-	    			
 	    			
 	    			//plot de nivel do tanque
 	    			
-	    			Ponto pontoNivel = new Ponto();
-	    			pontoNivel.setY(volt*6.25);
-	    			pontoNivel.setX(onda.getTempo() - 0.1);
-	    			graficoAltura.atualizarFilaDeNivelUm(new Ponto(pontoNivel));
+	    			Ponto nivel = new Ponto();
+	    			nivel.setY(volt*6.25);
+	    			nivel.setX(onda.getTempo() - 0.1);
+	    			graficoAltura.atualizarFilaDeNivelUm(new Ponto(nivel));
 	    			
 	    			graficoAltura.atualizarGrafico();
 	    			painelAltura.validate();
 			
 	    		}
-	    	
+	    		
 				Thread.sleep(100);
-				System.out.println(cont++);
+				//System.out.println(cont++);
 			} catch (/*QuanserClientException |*/ InterruptedException e) {e.printStackTrace();}
 		}
     	

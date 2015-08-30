@@ -15,7 +15,7 @@ public class Chart{
 	
 	public LinkedList<Ponto> filaDePontos = new LinkedList<Ponto>();
 	public LinkedList<Ponto> filaSaturada = new LinkedList<Ponto>();
-	public LinkedList<Ponto> filaDeErroSaturado = new LinkedList<Ponto>();
+	public LinkedList<Ponto> filaDeVPSaturado = new LinkedList<Ponto>();
 	Ponto ponto = new Ponto();
 	public ChartPanel  painel;
 	public Dados dados = new Dados();
@@ -48,11 +48,11 @@ public class Chart{
 	
 	}
 	
-	public void atualizarErroSaturado(Ponto ponto){
+	public void atualizarDeVPSaturado(Ponto ponto){
 		
-		filaDeErroSaturado.addLast(ponto);
+		filaDeVPSaturado.addLast(ponto);
 		
-		if (filaDeErroSaturado.size() > 600) filaDeErroSaturado.removeFirst();
+		if (filaDeVPSaturado.size() > 600) filaDeVPSaturado.removeFirst();
 	
 	}
 	
@@ -70,8 +70,8 @@ public class Chart{
 		for (int i = 0; i < filaSaturada.size(); i++)
 			serieSaturada.add(filaSaturada.get(i).getX(), filaSaturada.get(i).getY());
 		
-		for (int i = 0; i < filaDeErroSaturado.size(); i++)
-			serieErroSaturado.add(filaDeErroSaturado.get(i).getX(), filaDeErroSaturado.get(i).getY());
+		for (int i = 0; i < filaDeVPSaturado.size(); i++)
+			serieErroSaturado.add(filaDeVPSaturado.get(i).getX(), filaDeVPSaturado.get(i).getY());
 		
 		XYSeriesCollection dataset= new XYSeriesCollection();
 		dataset.addSeries(serieDePlot);

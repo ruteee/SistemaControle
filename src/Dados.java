@@ -1,28 +1,30 @@
 public class Dados {
 
-	private double PV;
-	private double vp;
 	private double Amplitude;
-	private double duracao;
-	private double periodo;
-	private double offset;
 	private double amplitudeMinima;
+	private double periodo;
 	private double periodoMinino;
-	private double KP;
-	private double KI;
-	private double KD;
+	private double offset;
 	
-	
-	
-	private int pinoDeLeitura;
+	private int pinoDeLeitura1;
+	private int pinoDeLeitura2;
 	private int pinoDeEscrita;
 	
 	private String tipoSinal;
 	private String tipoMalha;
+	private boolean comControle;
 	private String tipoDeControle;
 	
-	
 	private boolean tensao, tensaoSat, nivel1, nivel2, setPoint, erro, proporcional, integral, derivativo;
+
+	private double KP;
+	private double KI;
+	private double KD;	
+	
+	private double PV;
+	private double vp;
+	
+	private double duracao;	
 
 	public Dados(){
 	}
@@ -67,14 +69,20 @@ public class Dados {
 		Amplitude = amplitude;
 	}
 
-
-
-	public int getPinoDeLeitura() {
-		return pinoDeLeitura;
+	public int getPinoDeLeitura1() {
+		return pinoDeLeitura1;
 	}
 
-	public void setPinoDeLeitura(int pinoDeLeitura) {
-		this.pinoDeLeitura = pinoDeLeitura;
+	public void setPinoDeLeitura1(int pinoDeLeitura1) {
+		this.pinoDeLeitura1 = pinoDeLeitura1;
+	}
+
+	public int getPinoDeLeitura2() {
+		return pinoDeLeitura2;
+	}
+
+	public void setPinoDeLeitura2(int pinoDeLeitura2) {
+		this.pinoDeLeitura2 = pinoDeLeitura2;
 	}
 
 	public int getPinoDeEscrita() {
@@ -187,7 +195,6 @@ public class Dados {
 	public void setErro(boolean erro) {
 		this.erro = erro;
 	}
-
 	
 	public boolean isProporcional() {
 		return proporcional;
@@ -196,7 +203,6 @@ public class Dados {
 	public void setProporcional(boolean proporcional) {
 		this.proporcional = proporcional;
 	}
-	
 	
 	public boolean isIntegral() {
 		return integral;
@@ -246,4 +252,11 @@ public class Dados {
 		this.tipoDeControle = tipoDeControle;
 	}
 
+	public boolean isComControle() {
+		return comControle;
+	}
+
+	public void setComControle(boolean comControle) {
+		this.comControle = comControle;
+	}
 }

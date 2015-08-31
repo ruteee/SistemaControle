@@ -22,6 +22,8 @@ public class Tanque extends Thread {
     
     public Boolean controle = true;
     
+    public Ponto vp;
+    
     
 	QuanserClient quanserclient;
 	JLayeredPane painelTensao, painelAltura;
@@ -93,65 +95,70 @@ public class Tanque extends Thread {
 	    			
 					//colocar radio button na interface para selcionar 
 					
-					Ponto vp;
-					switch (dados.getTipoDeControle()){
+//					Ponto vp;
 					
-						case "P" : 
-							dados.setVP(acaoP(erro));
-							vp = new Ponto();
-				    		vp.setX(onda.getTempo() - 0.1); 
-				    		vp.setY(dados.getVP());
-				    		
-						break;
+					if(dados.isComControle()){
+						switch (dados.getTipoDeControle()){
 						
-						case "PI":
-							dados.setVP(acaoP(erro) + acaoI(erro));
+							case "P" : 
+								dados.setVP(acaoP(erro));
+								vp = new Ponto();
+					    		vp.setX(onda.getTempo() - 0.1); 
+					    		vp.setY(dados.getVP());
+					    		
+							break;
 							
-							vp = new Ponto();
-				    		vp.setX(onda.getTempo() - 0.1); 
-				    		vp.setY(dados.getVP());
+							case "PI":
+								dados.setVP(acaoP(erro) + acaoI(erro));
+								
+								vp = new Ponto();
+					    		vp.setX(onda.getTempo() - 0.1); 
+					    		vp.setY(dados.getVP());
+								
+							break;
 							
-						break;
-						
-						case "PD":
-							dados.setVP(acaoP(erro) + acaoI(erro));
+							case "PD":
+								dados.setVP(acaoP(erro) + acaoI(erro));
+								
+								vp = new Ponto();
+					    		vp.setX(onda.getTempo() - 0.1); 
+					    		vp.setY(dados.getVP());
+					    		
+							break;
 							
-							vp = new Ponto();
-				    		vp.setX(onda.getTempo() - 0.1); 
-				    		vp.setY(dados.getVP());
-				    		
-						break;
-						
-						case "PID":
-							dados.setVP(acaoP(erro) + acaoI(erro) + acaoD(erro));
+							case "PID":
+								dados.setVP(acaoP(erro) + acaoI(erro) + acaoD(erro));
+								
+								vp = new Ponto();
+					    		vp.setX(onda.getTempo() - 0.1); 
+					    		vp.setY(dados.getVP());
+					    		
+							break;
 							
-							vp = new Ponto();
-				    		vp.setX(onda.getTempo() - 0.1); 
-				    		vp.setY(dados.getVP());
-				    		
-						break;
-						
-						case "PI-D":
-							dados.setVP(acaoP(erro) + acaoI(erro) + acaoD(volt));
+							case "PI-D":
+								dados.setVP(acaoP(erro) + acaoI(erro) + acaoD(volt));
+								
+								vp = new Ponto();
+								vp.setX(onda.getTempo() - 0.1); 
+					    		vp.setY(dados.getVP());
+							break;
 							
-							vp = new Ponto();
-							vp.setX(onda.getTempo() - 0.1); 
-				    		vp.setY(dados.getVP());
-						break;
-						
-						case "Sem Controle":
-							dados.setVP(erro);
+							case "Sem Controle":
+								dados.setVP(erro);
+								
+								vp = new Ponto();
+					    		vp.setX(onda.getTempo() - 0.1); 
+					    		vp.setY(dados.getVP());
+					    		
+							break;
 							
-							vp = new Ponto();
-				    		vp.setX(onda.getTempo() - 0.1); 
-				    		vp.setY(dados.getVP());
-				    		
-						break;
-						
-						default:
-							vp = new Ponto();
-						break;
-					}	
+//							default:
+//								vp = new Ponto();
+//							break;
+						}
+					}else{
+						vp = new Ponto();
+					}
 					
 					graficoAltura.atualizarFilaDeVP(vp);
 					
@@ -160,90 +167,92 @@ public class Tanque extends Thread {
 					Ponto justD;
 					
 					//set das filas das ações separadas
-			
-					switch (dados.getTipoDeControle()){
-					
-						case "P":
-							
-							justP = new Ponto();
-							justP.setX(onda.getTempo() - 0.1);
-							justP.setY(acaoP(erro));
-							graficoAltura.atualizarFilaDeErroP(justP);
-							
-						break;
+					if(dados.isComControle()){
+						switch (dados.getTipoDeControle()){
 						
-						case "PI":
+							case "P":
+								
+								justP = new Ponto();
+								justP.setX(onda.getTempo() - 0.1);
+								justP.setY(acaoP(erro));
+								graficoAltura.atualizarFilaDeErroP(justP);
+								
+							break;
 							
-							justP = new Ponto();
-							justP.setX(onda.getTempo() - 0.1);
-							justP.setY(acaoP(erro));
+							case "PI":
+								
+								justP = new Ponto();
+								justP.setX(onda.getTempo() - 0.1);
+								justP.setY(acaoP(erro));
+								
+								justI = new Ponto();
+								justI.setX(onda.getTempo() - 0.1);
+								justI.setY(acaoI(erro));
+								
+								graficoAltura.atualizarFilaDeErroP((justP));
+								graficoAltura.atualizarFilaDeErroI((justI));
+								
+							break;
 							
-							justI = new Ponto();
-							justI.setX(onda.getTempo() - 0.1);
-							justI.setY(acaoI(erro));
+							case "PD":
+								
+								justP = new Ponto();
+								justP.setX(onda.getTempo() - 0.1);
+								justP.setY(acaoP(erro));
+								
+								justD = new Ponto();
+								justD.setX(onda.getTempo() - 0.1);
+								justD.setY(acaoD(erro));
+								
+								graficoAltura.atualizarFilaDeErroP(justP);
+								graficoAltura.atualizarFilaDeErroD(justD);
 							
-							graficoAltura.atualizarFilaDeErroP((justP));
-							graficoAltura.atualizarFilaDeErroI((justI));
+							break;
 							
-						break;
-						
-						case "PD":
+							case "PID":
+								
+								justP = new Ponto();
+								justP.setX(onda.getTempo() - 0.1);
+								justP.setY(acaoP(erro));
+								
+								justI = new Ponto();
+								justI.setX(onda.getTempo() - 0.1);
+								justI.setY(acaoI(erro));
+								
+								justD = new Ponto();
+								justD.setX(onda.getTempo() - 0.1);
+								justD.setY(acaoD(erro));
+								
+								graficoAltura.atualizarFilaDeErroP(justP);
+								graficoAltura.atualizarFilaDeErroI(justI);
+								graficoAltura.atualizarFilaDeErroD(justD);
+								
+							break;
 							
-							justP = new Ponto();
-							justP.setX(onda.getTempo() - 0.1);
-							justP.setY(acaoP(erro));
+							case "PI-D":
+								
+								justP = new Ponto();
+								justP.setX(onda.getTempo() - 0.1);
+								justP.setY(acaoP(erro));
+								
+								justI = new Ponto();
+								justI.setX(onda.getTempo() - 0.1);
+								justI.setY(acaoI(erro));
+								
+								justD = new Ponto();
+								justD.setX(onda.getTempo() - 0.1);
+								justD.setY(acaoD(volt));
+								
+								graficoAltura.atualizarFilaDeErroP(justP);
+								graficoAltura.atualizarFilaDeErroI(justI);
+								graficoAltura.atualizarFilaDeErroD(justD);
+								
 							
-							justD = new Ponto();
-							justD.setX(onda.getTempo() - 0.1);
-							justD.setY(acaoD(erro));
-							
-							graficoAltura.atualizarFilaDeErroP(justP);
-							graficoAltura.atualizarFilaDeErroD(justD);
-						
-						break;
-						
-						case "PID":
-							
-							justP = new Ponto();
-							justP.setX(onda.getTempo() - 0.1);
-							justP.setY(acaoP(erro));
-							
-							justI = new Ponto();
-							justI.setX(onda.getTempo() - 0.1);
-							justI.setY(acaoI(erro));
-							
-							justD = new Ponto();
-							justD.setX(onda.getTempo() - 0.1);
-							justD.setY(acaoD(erro));
-							
-							graficoAltura.atualizarFilaDeErroP(justP);
-							graficoAltura.atualizarFilaDeErroI(justI);
-							graficoAltura.atualizarFilaDeErroD(justD);
-							
-						break;
-						
-						case "PI-D":
-							
-							justP = new Ponto();
-							justP.setX(onda.getTempo() - 0.1);
-							justP.setY(acaoP(erro));
-							
-							justI = new Ponto();
-							justI.setX(onda.getTempo() - 0.1);
-							justI.setY(acaoI(erro));
-							
-							justD = new Ponto();
-							justD.setX(onda.getTempo() - 0.1);
-							justD.setY(acaoD(volt));
-							
-							graficoAltura.atualizarFilaDeErroP(justP);
-							graficoAltura.atualizarFilaDeErroI(justI);
-							graficoAltura.atualizarFilaDeErroD(justD);
-							
-						
-						break;
+							break;
+						}
 					}
-	    			graficoAltura.atualizarGrafico();
+	    			
+					graficoAltura.atualizarGrafico();
 	    			painelAltura.validate();
 				
 				}

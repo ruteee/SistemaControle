@@ -50,13 +50,9 @@ public class Tela extends TelaGeral{
 	private JPanel panelDadosSinal;
 	private JPanel panelParamsControlador;
 	
-	private String tipoMalha;
 	private String tipoSinal;
-	private String tipoControle;
 	private Tanque thread;
 	private Dados dados;
-	
-	private double KP;
 	
 	private JTextField IPServidor;
 	private JTextFieldAlterado Porta;
@@ -240,8 +236,7 @@ public class Tela extends TelaGeral{
 			}
 		});
 		panelDadosServidor.add(btnConectarDesconectar);
-	}	
-
+	}
 	
 	private void inicializeBotõesPainelPrincipal(){
 		botaoAtualizar = new JButton("Atualizar");
@@ -250,49 +245,25 @@ public class Tela extends TelaGeral{
 		
 		botaoAtualizar.setEnabled(false);
 		botaoAtualizar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
+			public void actionPerformed(ActionEvent arg0) { 
+				dados = new Dados();					
 				
-				dados = new Dados();
-				
-				//Tipo de Malha
-				if(tipoMalha.equals(""))
-					JOptionPane.showMessageDialog(frame, "Informe o Tipo de Malha.");
-				else
-					dados.setTipoMalha(tipoMalha);
-				
-				//Tipo de Sinal
-				if(tipoSinal.equals(""))
-					JOptionPane.showMessageDialog(frame, "Informe o Tipo de Sinal.");
-				else
-					dados.setTipoSinal(tipoSinal);
-				
-				if(chckbxComControle.isSelected())
-					popularParamsControlador(comboTipoControlador);
-				
-				//Dados do Sinal
-				dados.setAmplitude((double)amplitude.getValue());
-				if(!dados.getTipoSinal().equals("Degrau")){
-					dados.setPeriodo((double)periodo.getValue());
-					dados.setPeriodoMinino((double) periodoMin.getValue());
-					dados.setAmplitudeMinima(((double) amplitudeMin.getValue()));
-					dados.setOffset((double)offSet.getValue());
-				}
-				
-				//Dados de I/O
-				dados.setPinoDeEscrita((int)((Integer)leitura1.getSelectedItem()));
-				dados.setPinoDeLeitura((int)((Integer)escrita.getSelectedItem()));
-								
-				//grafico
-				//dados.jhonnyTest();
-				thread.setDados(dados);
-				if (!thread.isAlive()) {		
-					thread.setPainelTensao(panelGrafico1);
-					thread.setPainelAltura(panelGrafico2);
-					thread.start();
+				if(validaDadosDeIO() && validaTipoMalha() && validaOnda() && validaParamsControlador(comboTipoControlador)){
+
+					dados.setComControle(chckbxComControle.isSelected());
+					
+					//grafico
+					//dados.jhonnyTest();
+					thread.setDados(dados);
+					if (!thread.isAlive()) {		
+						thread.setPainelTensao(panelGrafico1);
+						thread.setPainelAltura(panelGrafico2);
+						thread.start();
+					}
 				}
 			}
 		});
-
+		
 		btnStop = new JButton("Stop");
 		btnStop.setBounds(608, 524, 101, 23);
 		btnStop.setIcon(new ImageIcon(Tela.class.getResource("/Icons/1439270049_stop.png")));				
@@ -303,38 +274,173 @@ public class Tela extends TelaGeral{
 			}
 		});
 	}
+
+	/** 
+	 * Valida campos e Popula os parâmetros de Leitura(1 e 2) e Escrita na classe Dados.
+	 */
+	public boolean validaDadosDeIO(){
 		
-	@SuppressWarnings("rawtypes")
-	private void popularParamsControlador(JComboBox tipoControlador){
-		if(tipoControlador.getSelectedIndex() == 0){
-			JOptionPane.showMessageDialog(frame, "Informe o tipo de controlador!");
-		}else{
-			if(textFieldKp.getText().equals("")){
-				JOptionPane.showMessageDialog(frame, "Informe o valor de Kp.");
-			}else{
-				dados.setKP(Double.parseDouble(textFieldKp.getText()));
-				
-				if((tipoControlador.getSelectedItem().equals("PI") || tipoControlador.getSelectedItem().equals("PID") || tipoControlador.getSelectedItem().equals("PI-D"))
-						&& (textFieldKi.getText().equals("") || textFieldTali.getText().equals(""))){
-					
-					JOptionPane.showMessageDialog(frame, "Informe todos os parâmetros do controlador integrativo (Ki e Ti).");
-				}else if((tipoControlador.getSelectedItem().equals("PI") || tipoControlador.getSelectedItem().equals("PID") || tipoControlador.getSelectedItem().equals("PI-D"))
-						&& !(textFieldKi.getText().equals("") || textFieldTali.getText().equals(""))){
+		if(leitura1.getSelectedIndex() == 0){
+			JOptionPane.showMessageDialog(frame, "Informe o porta de Leitura 1.");
 			
-					dados.setKI(Double.parseDouble(textFieldKi.getText()));
+			return false;
+		}else{
+			dados.setPinoDeLeitura1((int)((Integer)leitura1.getSelectedItem()));
+		}
+		
+		if(leitura2.getSelectedIndex() == 0){
+			JOptionPane.showMessageDialog(frame, "Informe o porta de Leitura 2.");
+			
+			return false;
+		}else{
+			dados.setPinoDeLeitura2((int)((Integer)leitura2.getSelectedItem()));
+		}
+			
+		if(escrita.getSelectedIndex() == 0){
+			JOptionPane.showMessageDialog(frame, "Informe a porta de Escrita.");
+		
+			return false;
+		}else{
+			dados.setPinoDeEscrita((int)((Integer)escrita.getSelectedItem()));
+		}
+		
+		return true;
+	}
+	
+	/** 
+	 * Valida campos e Popula o tipo de malha na classe Dados.
+	 */
+	public boolean validaTipoMalha(){
+		if(!rdbtnAberta.isSelected() && !rdbtnFechada.isSelected()){
+			JOptionPane.showMessageDialog(frame, "Informe o Tipo de Malha.");
+			
+			return false;
+		}else{
+			dados.setTipoMalha(rdbtnAberta.isSelected() ? "Malha Aberta" : "Malha Fechada");
+		}
+		
+		return true;
+	}
+	
+	/** 
+	 * Valida campos e Popula os parâmetros do sinal na classe Dados.
+	 */
+	public boolean validaOnda(){
+		
+		if(comboTipoOnda.getSelectedIndex() == 0){
+			JOptionPane.showMessageDialog(frame, "Informe o Tipo de Onda.");
+			
+			return false;
+		}else {
+			dados.setTipoSinal(comboTipoOnda.getSelectedItem().toString());
+			
+			if(amplitude.getValue().equals("")){
+				String amplitude = comboTipoOnda.getSelectedItem().equals("Degrau") ? "Amplitude (Máx)" : "Amplitude";  
+
+				JOptionPane.showMessageDialog(frame, "Informe a " + amplitude + " do sinal.");
+				
+				return false;
+			}else{
+				dados.setAmplitude((double)amplitude.getValue());
+			}
+			
+			if(comboTipoOnda.getSelectedItem().equals("Quadrada") || 
+					comboTipoOnda.getSelectedItem().equals("Senoidal") || comboTipoOnda.getSelectedItem().equals("Dente de Serra")){
+				
+				if(periodo.getValue().equals("")){
+					JOptionPane.showMessageDialog(frame, "Informe o Período do sinal.");
+					
+					return false;
+				}else{
+					dados.setPeriodo((double)periodo.getValue());
 				}
 				
-				if((tipoControlador.getSelectedItem().equals("PD") || tipoControlador.getSelectedItem().equals("PID") || tipoControlador.getSelectedItem().equals("PI-D"))
-						&& (textFieldKd.getText().equals("") || textFieldTald.getText().equals(""))){
+				if(offSet.getValue().equals("")){
+					JOptionPane.showMessageDialog(frame, "Informe a OffSet do sinal.");
 					
-					JOptionPane.showMessageDialog(frame, "Informe todos os parâmetros do controlador derivativo (Kd e Td).");
-				}else if((tipoControlador.getSelectedItem().equals("PD") || tipoControlador.getSelectedItem().equals("PID") || tipoControlador.getSelectedItem().equals("PI-D"))
-						&& !(textFieldKd.getText().equals("") || textFieldTald.getText().equals(""))){
+					return false;
+				}else{
+					dados.setOffset((double)offSet.getValue());
+				}
+			}
+			
+			if(comboTipoOnda.getSelectedItem().equals("Aleatória")){
+				
+				if(amplitudeMin.getValue().equals("")){
+					JOptionPane.showMessageDialog(frame, "Informe a Amplitude (Mín) do sinal.");
+				
+					return false;
+				}else{
+					dados.setAmplitudeMinima(((double) amplitudeMin.getValue()));
+				}
+
+				if(periodo.getValue().equals("")){
+					JOptionPane.showMessageDialog(frame, "Informe o Período do sinal.");
+				
+					return false;
+				}else{
+					dados.setPeriodo((double)periodo.getValue());
+				}
+				
+				if(periodoMin.getValue().equals("")){
+					JOptionPane.showMessageDialog(frame, "Informe o Período (Mín) do sinal.");
 					
-					dados.setKD(Double.parseDouble(textFieldKd.getText()));
+					return false;
+				}else{
+					dados.setPeriodoMinino((double) periodoMin.getValue());
 				}
 			}
 		}
+		
+		return true;
+	}
+	
+		
+	@SuppressWarnings("rawtypes")
+	private boolean validaParamsControlador(JComboBox tipoControlador){
+		if(!rdbtnAberta.isSelected() && chckbxComControle.isSelected()){
+			if(tipoControlador.getSelectedIndex() == 0){
+				JOptionPane.showMessageDialog(frame, "Informe o tipo de controlador!");
+				
+				return false;
+			}else{
+				dados.setTipoDeControle(tipoControlador.getSelectedItem().toString());
+				
+				if(textFieldKp.getText().equals("")){
+					JOptionPane.showMessageDialog(frame, "Informe o valor de Kp.");
+					
+					return false;
+				}else{
+					dados.setKP(Double.parseDouble(textFieldKp.getText()));
+					
+					if((tipoControlador.getSelectedItem().equals("PI") || tipoControlador.getSelectedItem().equals("PID") || tipoControlador.getSelectedItem().equals("PI-D"))
+							&& (textFieldKi.getText().equals("") || textFieldTali.getText().equals(""))){
+						
+						JOptionPane.showMessageDialog(frame, "Informe todos os parâmetros do controlador integrativo (Ki e Ti).");
+						
+						return false;
+					}else if((tipoControlador.getSelectedItem().equals("PI") || tipoControlador.getSelectedItem().equals("PID") || tipoControlador.getSelectedItem().equals("PI-D"))
+							&& !(textFieldKi.getText().equals("") || textFieldTali.getText().equals(""))){
+				
+						dados.setKI(Double.parseDouble(textFieldKi.getText()));
+					}
+					
+					if((tipoControlador.getSelectedItem().equals("PD") || tipoControlador.getSelectedItem().equals("PID") || tipoControlador.getSelectedItem().equals("PI-D"))
+							&& (textFieldKd.getText().equals("") || textFieldTald.getText().equals(""))){
+						
+						JOptionPane.showMessageDialog(frame, "Informe todos os parâmetros do controlador derivativo (Kd e Td).");
+						
+						return false;
+					}else if((tipoControlador.getSelectedItem().equals("PD") || tipoControlador.getSelectedItem().equals("PID") || tipoControlador.getSelectedItem().equals("PI-D"))
+							&& !(textFieldKd.getText().equals("") || textFieldTald.getText().equals(""))){
+						
+						dados.setKD(Double.parseDouble(textFieldKd.getText()));
+					}
+				}
+			}
+		}
+		
+		return true;
 	}
 	
 	private void inicializePainelOpcoesEntrada(){
@@ -426,8 +532,6 @@ public class Tela extends TelaGeral{
 				chckbxComControle.setSelected(false);
 				
 				desabilitarParamsControle();
-				
-				tipoMalha = "Malha Aberta";
 			}
 		});
 		panelTipoMalha.add(rdbtnAberta);
@@ -441,10 +545,6 @@ public class Tela extends TelaGeral{
 			
 				chckbxWindUp.setEnabled(true);
 				chckbxComControle.setEnabled(true);
-				
-				chckbxWindUp.setEnabled(false);
-				
-				tipoMalha = "Malha Fechada";
 			}
 		});
 		panelTipoMalha.add(rdbtnFechada);
@@ -774,8 +874,6 @@ public class Tela extends TelaGeral{
 					textFieldTali.setEnabled(true);
 					textFieldTald.setEnabled(true);
 				}
-				
-				tipoControle = comboTipoControlador.getSelectedItem().toString();
 			}
 		});
 	}
@@ -1318,14 +1416,13 @@ public class Tela extends TelaGeral{
 				textFieldTali.setText("");
 				textFieldTald.setEnabled(false);
 				textFieldTald.setText("");
-				tipoControle = "P";
 				/*KP = Double.parseDouble(textFieldKp.getText());
 				//dados.setKP(KP);
 */			}
 		});
 		panelTipoControlador.add(rdbtnControladorP);
 		
-				rdbtnControladorPI = new JRadioButton("PI");
+		rdbtnControladorPI = new JRadioButton("PI");
 		rdbtnControladorPI.setBounds(51, 24, 35, 14);
 		rdbtnControladorPI.setEnabled(false);
 		rdbtnControladorPI.setToolTipText("Controlador Proporcional Integral");

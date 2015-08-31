@@ -50,11 +50,10 @@ public class Tela extends TelaGeral{
 	private JPanel panelDadosSinal;
 	private JPanel panelParamsControlador;
 	
-	private String tipoSinal;
 	private Tanque thread;
 	private Dados dados;
 	
-	private JTextField IPServidor;
+	private JTextFieldAlterado IPServidor;
 	private JTextFieldAlterado Porta;
 	
 	private JCheckBox chckbxTensaoSat;
@@ -158,7 +157,7 @@ public class Tela extends TelaGeral{
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 894, 597);
+		frame.setBounds(100, 100, 1005, 593);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
@@ -173,6 +172,144 @@ public class Tela extends TelaGeral{
 		
 		inicializaPainelGraficos();
 		frame.getContentPane().add(panelGraficos);
+		
+		lblExibirSinal = new JLabel("");
+		lblExibirSinal.setBounds(604, 209, 32, 43);
+		panelGraficos.add(lblExibirSinal);
+		lblExibirSinal.setToolTipText("Exibir Sinal");
+		lblExibirSinal.setIcon(new ImageIcon(Tela.class.getResource("/Icons/Chart-Curve-Add-32.png")));
+		
+		chckbxTensaoSat = new JCheckBox("Tens\u00E3o Sat. ");
+		chckbxTensaoSat.setBounds(553, 200, 79, 13);
+		panelGraficos.add(chckbxTensaoSat);
+		chckbxTensaoSat.setBackground(Color.WHITE);
+		chckbxTensaoSat.setVisible(false);
+		chckbxTensaoSat.setEnabled(false);
+		chckbxTensaoSat.setFont(new Font("Tahoma", Font.PLAIN, 9));
+		chckbxTensaoSat.setForeground(new Color(255, 0, 0));
+		chckbxTensaoSat.setToolTipText("Sinal da Tens\u00E3o Saturada");
+		
+		chckbxTensCalc = new JCheckBox("Tens\u00E3o Calc.");
+		chckbxTensCalc.setBounds(553, 184, 79, 13);
+		panelGraficos.add(chckbxTensCalc);
+		chckbxTensCalc.setBackground(Color.WHITE);
+		chckbxTensCalc.setEnabled(false);
+		chckbxTensCalc.setVisible(false);
+		chckbxTensCalc.setFont(new Font("Tahoma", Font.PLAIN, 9));
+		chckbxTensCalc.setForeground(new Color(0, 0, 205));
+		chckbxTensCalc.setToolTipText("Sinal da Tens\u00E3o Calculada");
+		
+//		redimensionarPainelGrafico2(panelGrafico1, panelGrafico2);
+		
+		label = new JLabel("");
+		label.setBounds(604, 448, 32, 43);
+		panelGraficos.add(label);
+		label.setIcon(new ImageIcon(Tela.class.getResource("/Icons/Chart-Curve-Add-32.png")));
+		label.setToolTipText("Exibir Sinal");
+		
+		chckbxErro = new JCheckBox("Erro");
+		chckbxErro.setBounds(530, 439, 102, 13);
+		panelGraficos.add(chckbxErro);
+		chckbxErro.setBackground(Color.WHITE);
+		chckbxErro.setVisible(false);
+		chckbxErro.setEnabled(false);
+		chckbxErro.setToolTipText("Sinal de Erro");
+		chckbxErro.setFont(new Font("Tahoma", Font.PLAIN, 9));
+		chckbxErro.setForeground(new Color(50, 205, 50));
+		
+		chckbxSetPoint = new JCheckBox("Set-Point");
+		chckbxSetPoint.setBounds(530, 423, 102, 13);
+		panelGraficos.add(chckbxSetPoint);
+		chckbxSetPoint.setBackground(Color.WHITE);
+		chckbxSetPoint.setVisible(false);
+		chckbxSetPoint.setEnabled(false);
+		chckbxSetPoint.setToolTipText("Sinal do Set-Point");
+		chckbxSetPoint.setFont(new Font("Tahoma", Font.PLAIN, 9));
+		chckbxSetPoint.setForeground(Color.RED);
+		
+		chckbxNivTanque2 = new JCheckBox("N\u00EDvel do Tanque 2");
+		chckbxNivTanque2.setBounds(530, 407, 102, 13);
+		panelGraficos.add(chckbxNivTanque2);
+		chckbxNivTanque2.setBackground(Color.WHITE);
+		chckbxNivTanque2.setVisible(false);
+		chckbxNivTanque2.setEnabled(false);
+		chckbxNivTanque2.setToolTipText("Sinal de N\u00EDvel do Tanque 2");
+		chckbxNivTanque2.setFont(new Font("Tahoma", Font.PLAIN, 9));
+		chckbxNivTanque2.setForeground(new Color(0, 0, 205));
+		
+		chckbxNivTanque1 = new JCheckBox("N\u00EDvel do Tanque 1");
+		chckbxNivTanque1.setBounds(530, 391, 102, 13);
+		panelGraficos.add(chckbxNivTanque1);
+		chckbxNivTanque1.setBackground(Color.WHITE);
+		chckbxNivTanque1.setHorizontalAlignment(SwingConstants.RIGHT);
+		chckbxNivTanque1.setVisible(false);
+		chckbxNivTanque1.setEnabled(false);
+		chckbxNivTanque1.setToolTipText("Sinal de N\u00EDvel do Tanque 1");
+		chckbxNivTanque1.setFont(new Font("Tahoma", Font.PLAIN, 9));
+		chckbxNivTanque1.setForeground(Color.BLACK);
+		chckbxNivTanque1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dados.setNivel1(chckbxNivTanque1.isSelected());
+			}
+		});
+		chckbxNivTanque2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dados.setNivel2(chckbxNivTanque2.isSelected());
+			}
+		});
+		chckbxSetPoint.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dados.setSetPoint(chckbxSetPoint.isSelected());
+			}
+		});
+		chckbxErro.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dados.setErro(chckbxErro.isSelected());
+			}
+		});
+		label.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				if(!chckbxNivTanque1.isVisible()){
+					label.setIcon(new ImageIcon(Tela.class.getResource("Icons/Chart-Curve-Delete-32.png")));
+
+					chckbxNivTanque1.setVisible(true);
+					chckbxNivTanque2.setVisible(true);
+					chckbxSetPoint.setVisible(true);
+					chckbxErro.setVisible(true);
+				}else{
+					label.setIcon(new ImageIcon(Tela.class.getResource("Icons/Chart-Curve-Add-32.png")));
+					
+					chckbxNivTanque1.setVisible(false);
+					chckbxNivTanque2.setVisible(false);
+					chckbxSetPoint.setVisible(false);
+					chckbxErro.setVisible(false);
+				}
+			}
+		});
+		chckbxTensCalc.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				dados.setTensao(chckbxTensCalc.isSelected());	}
+		});
+		chckbxTensaoSat.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dados.setTensaoSat(chckbxTensaoSat.isSelected());
+			}
+		});
+		lblExibirSinal.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				if(!chckbxTensaoSat.isVisible()){
+					lblExibirSinal.setIcon(new ImageIcon(Tela.class.getResource("Icons/Chart-Curve-Delete-32.png")));
+					chckbxTensCalc.setVisible(true);
+					chckbxTensaoSat.setVisible(true);
+				}else{
+					lblExibirSinal.setIcon(new ImageIcon(Tela.class.getResource("Icons/Chart-Curve-Add-32.png")));
+					chckbxTensCalc.setVisible(false);
+					chckbxTensaoSat.setVisible(false);
+				}
+			}
+		});
 	}
 	
 	private void inicializarPainelDadosServidor(){
@@ -185,7 +322,7 @@ public class Tela extends TelaGeral{
 		lblIPServidor.setBounds(10, 17, 88, 20);
 		panelDadosServidor.add(lblIPServidor);
 		
-		IPServidor = new JTextField();
+		IPServidor = new JTextFieldAlterado();
 		IPServidor.setColumns(10);
 		IPServidor.setBounds(87, 17, 112, 20);
 		panelDadosServidor.add(IPServidor);
@@ -240,7 +377,7 @@ public class Tela extends TelaGeral{
 	
 	private void inicializeBotõesPainelPrincipal(){
 		botaoAtualizar = new JButton("Atualizar");
-		botaoAtualizar.setBounds(497, 524, 101, 23);
+		botaoAtualizar.setBounds(564, 528, 101, 23);
 		botaoAtualizar.setIcon(new ImageIcon(Tela.class.getResource("/Icons/1439269378_gtk-refresh.png")));
 		
 		botaoAtualizar.setEnabled(false);
@@ -265,7 +402,7 @@ public class Tela extends TelaGeral{
 		});
 		
 		btnStop = new JButton("Stop");
-		btnStop.setBounds(608, 524, 101, 23);
+		btnStop.setBounds(675, 528, 101, 23);
 		btnStop.setIcon(new ImageIcon(Tela.class.getResource("/Icons/1439270049_stop.png")));				
 		btnStop.setEnabled(false);
 		btnStop.addActionListener(new ActionListener() {
@@ -807,8 +944,6 @@ public class Tela extends TelaGeral{
 					periodoMin.setValue(0);
 					offSet.setEnabled(true);	
 				}
-				
-				tipoSinal = comboTipoOnda.getSelectedItem().toString();
 			}
 		});
 		
@@ -880,7 +1015,7 @@ public class Tela extends TelaGeral{
 	
 	private void inicializaPainelGraficos(){
 		panelGraficos = new JPanel();
-		panelGraficos.setBounds(333, 11, 538, 502);
+		panelGraficos.setBounds(333, 11, 646, 502);
 		panelGraficos.setBorder(new TitledBorder(null, "Gr\u00E1ficos", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panelGraficos.setLayout(null);
 		
@@ -899,55 +1034,6 @@ public class Tela extends TelaGeral{
 		panelGrafico1.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panelGrafico1.setLayout(null);
 		
-		chckbxTensaoSat = new JCheckBox("Tens\u00E3o Sat. ");
-		chckbxTensaoSat.setBackground(Color.WHITE);
-		chckbxTensaoSat.setBounds(424, 119, 79, 13);
-		chckbxTensaoSat.setVisible(false);
-		chckbxTensaoSat.setEnabled(false);
-		chckbxTensaoSat.setFont(new Font("Tahoma", Font.PLAIN, 9));
-		chckbxTensaoSat.setForeground(new Color(255, 0, 0));
-		chckbxTensaoSat.setToolTipText("Sinal da Tens\u00E3o Saturada");
-		chckbxTensaoSat.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				dados.setTensaoSat(chckbxTensaoSat.isSelected());
-			}
-		});
-		panelGrafico1.add(chckbxTensaoSat);
-		
-		chckbxTensCalc = new JCheckBox("Tens\u00E3o Calc.");
-		chckbxTensCalc.setBackground(Color.WHITE);
-		chckbxTensCalc.setBounds(424, 103, 79, 13);
-		chckbxTensCalc.setEnabled(false);
-		chckbxTensCalc.setVisible(false);
-		chckbxTensCalc.setFont(new Font("Tahoma", Font.PLAIN, 9));
-		chckbxTensCalc.setForeground(new Color(0, 0, 205));
-		chckbxTensCalc.setToolTipText("Sinal da Tens\u00E3o Calculada");
-		chckbxTensCalc.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				dados.setTensao(chckbxTensCalc.isSelected());	}
-		});
-		panelGrafico1.add(chckbxTensCalc);
-		
-		lblExibirSinal = new JLabel("");
-		lblExibirSinal.setBounds(475, 128, 32, 43);
-		lblExibirSinal.setToolTipText("Exibir Sinal");
-		lblExibirSinal.setIcon(new ImageIcon(Tela.class.getResource("/Icons/Chart-Curve-Add-32.png")));
-		lblExibirSinal.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				if(!chckbxTensaoSat.isVisible()){
-					lblExibirSinal.setIcon(new ImageIcon(Tela.class.getResource("Icons/Chart-Curve-Delete-32.png")));
-					chckbxTensCalc.setVisible(true);
-					chckbxTensaoSat.setVisible(true);
-				}else{
-					lblExibirSinal.setIcon(new ImageIcon(Tela.class.getResource("Icons/Chart-Curve-Add-32.png")));
-					chckbxTensCalc.setVisible(false);
-					chckbxTensaoSat.setVisible(false);
-				}
-			}
-		});		
-		panelGrafico1.add(lblExibirSinal);
-		
 //		redimensionarPainelGrafico1(panelGrafico1, panelGrafico2);
 		
 //		inicializaPainelTipoSinal();
@@ -958,95 +1044,6 @@ public class Tela extends TelaGeral{
 		panelGrafico2 = new JLayeredPane();
 		panelGrafico2.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panelGrafico2.setBounds(8, 256, 524, 235);
-		
-		chckbxSetPoint = new JCheckBox("Set-Point");
-		chckbxSetPoint.setBackground(Color.WHITE);
-		chckbxSetPoint.setBounds(401, 103, 102, 13);
-		chckbxSetPoint.setVisible(false);
-		chckbxSetPoint.setEnabled(false);
-		chckbxSetPoint.setToolTipText("Sinal do Set-Point");
-		chckbxSetPoint.setFont(new Font("Tahoma", Font.PLAIN, 9));
-		chckbxSetPoint.setForeground(Color.RED);
-		chckbxSetPoint.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				dados.setSetPoint(chckbxSetPoint.isSelected());
-			}
-		});
-		panelGrafico2.add(chckbxSetPoint);
-		
-		chckbxNivTanque1 = new JCheckBox("N\u00EDvel do Tanque 1");
-		chckbxNivTanque1.setBackground(Color.WHITE);
-		chckbxNivTanque1.setHorizontalAlignment(SwingConstants.RIGHT);
-		chckbxNivTanque1.setBounds(401, 71, 102, 13);
-		chckbxNivTanque1.setVisible(false);
-		chckbxNivTanque1.setEnabled(false);
-		chckbxNivTanque1.setToolTipText("Sinal de N\u00EDvel do Tanque 1");
-		chckbxNivTanque1.setFont(new Font("Tahoma", Font.PLAIN, 9));
-		chckbxNivTanque1.setForeground(Color.BLACK);
-		chckbxNivTanque1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				dados.setNivel1(chckbxNivTanque1.isSelected());
-			}
-		});
-		panelGrafico2.add(chckbxNivTanque1);
-		
-		chckbxNivTanque2 = new JCheckBox("N\u00EDvel do Tanque 2");
-		chckbxNivTanque2.setBackground(Color.WHITE);		
-		chckbxNivTanque2.setBounds(401, 87, 102, 13);
-		chckbxNivTanque2.setVisible(false);
-		chckbxNivTanque2.setEnabled(false);
-		chckbxNivTanque2.setToolTipText("Sinal de N\u00EDvel do Tanque 2");
-		chckbxNivTanque2.setFont(new Font("Tahoma", Font.PLAIN, 9));
-		chckbxNivTanque2.setForeground(new Color(0, 0, 205));
-		chckbxNivTanque2.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				dados.setNivel2(chckbxNivTanque2.isSelected());
-			}
-		});
-		panelGrafico2.add(chckbxNivTanque2);
-		
-		chckbxErro = new JCheckBox("Erro");
-		chckbxErro.setBackground(Color.WHITE);
-		chckbxErro.setBounds(401, 119, 102, 13);
-		chckbxErro.setVisible(false);
-		chckbxErro.setEnabled(false);
-		chckbxErro.setToolTipText("Sinal de Erro");
-		chckbxErro.setFont(new Font("Tahoma", Font.PLAIN, 9));
-		chckbxErro.setForeground(new Color(50, 205, 50));
-		chckbxErro.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				dados.setErro(chckbxErro.isSelected());
-			}
-		});
-		panelGrafico2.add(chckbxErro);
-		
-//		redimensionarPainelGrafico2(panelGrafico1, panelGrafico2);
-		
-		label = new JLabel("");
-		label.setIcon(new ImageIcon(Tela.class.getResource("/Icons/Chart-Curve-Add-32.png")));
-		label.setToolTipText("Exibir Sinal");
-		label.setBounds(475, 128, 32, 43);
-		label.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				if(!chckbxNivTanque1.isVisible()){
-					label.setIcon(new ImageIcon(Tela.class.getResource("Icons/Chart-Curve-Delete-32.png")));
-
-					chckbxNivTanque1.setVisible(true);
-					chckbxNivTanque2.setVisible(true);
-					chckbxSetPoint.setVisible(true);
-					chckbxErro.setVisible(true);
-				}else{
-					label.setIcon(new ImageIcon(Tela.class.getResource("Icons/Chart-Curve-Add-32.png")));
-					
-					chckbxNivTanque1.setVisible(false);
-					chckbxNivTanque2.setVisible(false);
-					chckbxSetPoint.setVisible(false);
-					chckbxErro.setVisible(false);
-				}
-			}
-		});
-		panelGrafico2.add(label);		
 	}
 	
 	public void mudarPropriedadesBotoes(String acao){
@@ -1212,8 +1209,6 @@ public class Tela extends TelaGeral{
 				periodoMin.setValue(0);
 				offSet.setEnabled(false);
 				offSet.setValue(0);
-				
-				tipoSinal = "Degrau";
 			}
 		});
 		panelTipoSinal.add(rdbtnDegrau);
@@ -1237,8 +1232,6 @@ public class Tela extends TelaGeral{
 				periodoMin.setEnabled(false);
 				periodoMin.setValue(0);
 				offSet.setEnabled(true);
-				
-				tipoSinal = "Senoidal";
 			}
 		});
 		panelTipoSinal.add(rdbtnSenoidal);
@@ -1262,8 +1255,6 @@ public class Tela extends TelaGeral{
 				periodoMin.setEnabled(false);
 				periodoMin.setValue(0);
 				offSet.setEnabled(true);
-				
-				tipoSinal = "Quadrada";
 			}
 		});
 		panelTipoSinal.add(rdbtnQuadrada);
@@ -1288,8 +1279,6 @@ public class Tela extends TelaGeral{
 				periodoMin.setEnabled(false);
 				periodoMin.setValue(0);
 				offSet.setEnabled(true);
-				
-				tipoSinal = "Dente de serra";
 			}
 		});		
 		panelTipoSinal.add(rdbtnDenteSerra);
@@ -1312,8 +1301,6 @@ public class Tela extends TelaGeral{
 				periodoMin.setEnabled(true);
 				offSet.setEnabled(false);
 				offSet.setValue(0);
-								
-				tipoSinal = "Aleatoria";
 			}
 		});
 		panelTipoSinal.add(rdbtnAleatorio);		

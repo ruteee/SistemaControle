@@ -19,6 +19,7 @@ public class ChartNivel {
 	public LinkedList<Ponto> filaDeErroP = new LinkedList<Ponto>();
 	public LinkedList<Ponto> filaDeErroI = new LinkedList<Ponto>();
 	public LinkedList<Ponto> filaDeErroD = new LinkedList<Ponto>();
+	public LinkedList<Ponto> filaDeErroMesmo = new LinkedList<Ponto>();
 	
 	Ponto ponto = new Ponto();
 	public ChartPanel  painelG2;
@@ -63,6 +64,13 @@ public class ChartNivel {
 		
 	}
 	
+	public void atualizarFilaDeErroMesmo(Ponto ponto){
+		
+		filaDeErroMesmo.addLast(ponto);
+		
+		if (filaDeErroMesmo.size() > 600) filaDeErroMesmo.removeFirst();
+	
+	}
 	public void atualizarFilaDeErroP(Ponto ponto){
 			
 			filaDeErroP.addLast(ponto);
@@ -70,6 +78,8 @@ public class ChartNivel {
 			if (filaDeErroP.size() > 600) filaDeErroP.removeFirst();
 		
 	}
+	
+	
 
 	public void atualizarFilaDeErroI(Ponto ponto){
 		
@@ -94,10 +104,11 @@ public class ChartNivel {
 
 		XYSeries serieNivelUm = new XYSeries("NivelUm");
 		XYSeries serieSetPoint = new XYSeries("SetPoint");
-		XYSeries serieErro = new XYSeries("Erro");
+		XYSeries serieErro = new XYSeries("VP não saturado");
 		XYSeries serieErroP = new XYSeries("Erro Proporcional");
 		XYSeries serieErroI = new XYSeries("Erro Integral");
 		XYSeries serieErroD = new XYSeries("Erro Derivativo");
+		XYSeries serieErroMesmo = new XYSeries("Erro");
 		
 		//isso trava a thread?
 		
@@ -119,6 +130,9 @@ public class ChartNivel {
 		for (int i = 0; i < filaDeErroD.size(); i++)
 			serieErroD.add(filaDeErroD.get(i).getX(), filaDeErroD.get(i).getY());
 		
+		for (int i = 0; i < filaDeErroMesmo.size(); i++)
+			serieErroMesmo.add(filaDeErroMesmo.get(i).getX(), filaDeErroMesmo.get(i).getY());
+		
 		
 		
 		XYSeriesCollection dataset= new XYSeriesCollection();
@@ -128,6 +142,7 @@ public class ChartNivel {
 		dataset.addSeries(serieErroP);
 		dataset.addSeries(serieErroI);
 		dataset.addSeries(serieErroD);
+		dataset.addSeries(serieErroMesmo);
 		
 		
 		return dataset;
@@ -186,6 +201,18 @@ public class ChartNivel {
 			renderer.setSeriesLinesVisible(5, true);
 		else{renderer.setSeriesLinesVisible(5, false);}
 		renderer.setSeriesPaint(5, Color.GRAY);
+		
+		
+		//Erro Mesmo
+			renderer.setSeriesShapesVisible(6, false);
+				if(dados.isErroMesmo()){
+					renderer.setSeriesLinesVisible(6, true);
+					renderer.setSeriesPaint(6, Color.PINK);
+				}
+				else{renderer.setSeriesLinesVisible(6, false);}
+				
+				
+		
 		
         graph.getXYPlot().setRenderer(renderer);
         

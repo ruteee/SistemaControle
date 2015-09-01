@@ -46,14 +46,14 @@ public class Tanque extends Thread {
 
     public void run() {
     //	int cont = 0;
-    //    getConexao();
+        getConexao();
         
     	while(true){
 	       	try {
 	        		
-	    	//	dados.setPV( quanserclient.read(dados.getPinoDeLeitura()));
-	    	//	volt = dados.getPV();
-	       		volt = 1;
+	    		dados.setPV( quanserclient.read(dados.getPinoDeLeitura1()));
+	    		volt = dados.getPV();
+	       		//volt = 1;
 	       		
 	    		
 	    		if(dados.getTipoMalha().equals("Malha Aberta")){
@@ -94,6 +94,14 @@ public class Tanque extends Thread {
 					
 	    			
 					//colocar radio button na interface para selcionar 
+					
+					Ponto vpSemControle = new Ponto();
+					vpSemControle.setX(onda.getTempo() - 0.1);
+					vpSemControle.setY(erro);
+					graficoAltura.atualizarFilaDeErroMesmo(vpSemControle);
+					//painelAltura.validate();
+					
+					
 					
 //					Ponto vp;
 					
@@ -253,7 +261,7 @@ public class Tanque extends Thread {
 				}
 	    		
 	    		verificarRegras();
-	    		//quanserclient.write(dados.getPinoDeEscrita(), dados.getVP());
+	    		quanserclient.write(dados.getPinoDeEscrita(), dados.getVP());
 	    		
 	    		if(dados.getTipoMalha().equals("Malha Aberta")){
 	    			//graficos de tensão
@@ -271,6 +279,7 @@ public class Tanque extends Thread {
 					vpSaturado.setY(dados.getVP());
 
 					grafico.atualizarDeVPSaturado(new Ponto(vpSaturado));
+					grafico.atualizarGrafico();
 	    			painelTensao.validate();
 	    			
 	    			//plot de nivel do tanque
@@ -287,7 +296,7 @@ public class Tanque extends Thread {
 	    		
 				Thread.sleep(100);
 				//System.out.println(cont++);
-			} catch (/*QuanserClientException |*/ InterruptedException e) {e.printStackTrace();}
+			} catch (QuanserClientException | InterruptedException e) {e.printStackTrace();}
 		}
     	
     }
@@ -378,7 +387,7 @@ public class Tanque extends Thread {
 	}
 	
 	public double acaoI(double erro){
-		erroI = erroI + dados.getKI()*onda.getTempo()*erro;
+		erroI = erroI + dados.getKI()*erro;
 		return erroI;	
 	}
 	

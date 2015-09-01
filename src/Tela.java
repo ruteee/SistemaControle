@@ -6,6 +6,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
+import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
@@ -52,7 +53,7 @@ public class Tela extends TelaGeral{
 	private Tanque thread;
 	private Dados dados;
 	
-	private JTextFieldAlterado IPServidor;
+	private JTextField IPServidor;
 	private JTextFieldAlterado Porta;
 	
 	private JCheckBox chckbxTensaoSat;
@@ -61,6 +62,7 @@ public class Tela extends TelaGeral{
 	private JCheckBox chckbxNivTanque2;
 	private JCheckBox chckbxSetPoint;
 	private JCheckBox chckbxErro;
+	private JCheckBox chckbxControle; 
 	
 	private JCheckBox chckbxP, chckbxI, chckbxD;
 	
@@ -94,11 +96,11 @@ public class Tela extends TelaGeral{
 	private JButton botaoAtualizar;
 	private JButton btnStop;
 	private JPanel panelTipoControlador;
-	private JTextFieldAlterado textFieldKp;
-	private JTextFieldAlterado textFieldKi;
-	private JTextFieldAlterado textFieldTali;
-	private JTextFieldAlterado textFieldKd;
-	private JTextFieldAlterado textFieldTald;
+	private JTextField textFieldKp;
+	private JTextField textFieldKi;
+	private JTextField textFieldTali;
+	private JTextField textFieldKd;
+	private JTextField textFieldTald;
 	
 	private JRadioButton rdbtnControladorP;
 	private JRadioButton rdbtnControladorPI;
@@ -208,15 +210,15 @@ public class Tela extends TelaGeral{
 		label.setIcon(new ImageIcon(Tela.class.getResource("/Icons/Chart-Curve-Add-32.png")));
 		label.setToolTipText("Exibir Sinal");
 		
-		chckbxErro = new JCheckBox("Erro");
-		chckbxErro.setBounds(530, 439, 102, 13);
-		panelGraficos.add(chckbxErro);
-		chckbxErro.setBackground(Color.WHITE);
-		chckbxErro.setVisible(false);
-		chckbxErro.setEnabled(false);
-		chckbxErro.setToolTipText("Sinal de Erro");
-		chckbxErro.setFont(new Font("Tahoma", Font.PLAIN, 9));
-		chckbxErro.setForeground(Color.CYAN);
+		chckbxControle = new JCheckBox("Controle");
+		chckbxControle .setBounds(530, 439, 102, 13);
+		panelGraficos.add(chckbxControle );
+		chckbxControle .setBackground(Color.WHITE);
+		chckbxControle .setVisible(false);
+		chckbxControle .setEnabled(false);
+		chckbxControle .setToolTipText("Sinal de Controle");
+		chckbxControle .setFont(new Font("Tahoma", Font.PLAIN, 9));
+		chckbxControle .setForeground(Color.CYAN);
 		
 		chckbxSetPoint = new JCheckBox("Set-Point");
 		chckbxSetPoint.setBounds(530, 423, 102, 13);
@@ -282,6 +284,17 @@ public class Tela extends TelaGeral{
 		chckbxD.setFont(new Font("Tahoma", Font.PLAIN, 9));
 		chckbxD.setForeground(Color.GRAY);
 		
+		chckbxErro = new JCheckBox("Erro");
+		chckbxErro.setBounds(530, 458, 102, 13);
+		panelGraficos.add(chckbxErro);
+		chckbxErro.setBackground(Color.WHITE);
+		chckbxErro.setVisible(false);
+		chckbxErro.setEnabled(false);
+		chckbxErro.setToolTipText("ERRO");
+		chckbxErro.setFont(new Font("Tahoma", Font.PLAIN, 9));
+		chckbxErro.setForeground(Color.PINK);
+		
+		
 		chckbxNivTanque1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dados.setNivel1(chckbxNivTanque1.isSelected());
@@ -302,11 +315,16 @@ public class Tela extends TelaGeral{
 		});
 		chckbxErro.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				dados.setErro(chckbxErro.isSelected());
+				dados.setErroMesmo(chckbxErro.isSelected());
 				thread.setDadosGrafico(dados);
 			}
 		});
-		
+		chckbxControle.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dados.setErro(chckbxControle.isSelected());
+				thread.setDadosGrafico(dados);
+			}
+		});
 		chckbxP.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dados.setProporcional(chckbxP.isSelected());
@@ -338,6 +356,7 @@ public class Tela extends TelaGeral{
 					chckbxNivTanque2.setVisible(true);
 					chckbxSetPoint.setVisible(true);
 					chckbxErro.setVisible(true);
+					chckbxControle.setVisible(true);
 					chckbxP.setVisible(true);
 					chckbxI.setVisible(true);
 					chckbxD.setVisible(true);
@@ -348,6 +367,7 @@ public class Tela extends TelaGeral{
 					chckbxNivTanque2.setVisible(false);
 					chckbxSetPoint.setVisible(false);
 					chckbxErro.setVisible(false);
+					chckbxControle.setVisible(false);
 					chckbxP.setVisible(false);
 					chckbxI.setVisible(false);
 					chckbxD.setVisible(false);
@@ -391,7 +411,7 @@ public class Tela extends TelaGeral{
 		lblIPServidor.setBounds(10, 17, 88, 20);
 		panelDadosServidor.add(lblIPServidor);
 		
-		IPServidor = new JTextFieldAlterado();
+		IPServidor = new JTextField();
 		IPServidor.setColumns(10);
 		IPServidor.setBounds(87, 17, 112, 20);
 		panelDadosServidor.add(IPServidor);
@@ -835,7 +855,7 @@ public class Tela extends TelaGeral{
 		lblKp.setBounds(31, 26, 22, 14);
 		panelParamsControlador.add(lblKp);
 		
-		textFieldKp = new JTextFieldAlterado();
+		textFieldKp = new JTextField();
 		textFieldKp.setEnabled(false);
 		textFieldKp.setBounds(57, 20, 66, 20);
 		textFieldKp.setColumns(10);
@@ -845,7 +865,7 @@ public class Tela extends TelaGeral{
 		lblKi.setBounds(31, 51, 22, 14);
 		panelParamsControlador.add(lblKi);
 		
-		textFieldKi = new JTextFieldAlterado();
+		textFieldKi = new JTextField();
 		textFieldKi.setEnabled(false);
 		textFieldKi.setColumns(10);
 		textFieldKi.setBounds(57, 45, 66, 20);	
@@ -865,7 +885,7 @@ public class Tela extends TelaGeral{
 		lblTali.setBounds(194, 51, 23, 14);
 		panelParamsControlador.add(lblTali);
 		
-		textFieldTali = new JTextFieldAlterado();
+		textFieldTali = new JTextField();
 		textFieldTali.setEnabled(false);
 		textFieldTali.setColumns(10);
 		textFieldTali.setBounds(220, 45, 66, 20);		
@@ -885,7 +905,7 @@ public class Tela extends TelaGeral{
 		lblKd.setBounds(31, 77, 22, 14);
 		panelParamsControlador.add(lblKd);
 		
-		textFieldKd = new JTextFieldAlterado();
+		textFieldKd = new JTextField();
 		textFieldKd.setEnabled(false);
 		textFieldKd.setColumns(10);
 		textFieldKd.setBounds(57, 71, 66, 20);
@@ -907,7 +927,7 @@ public class Tela extends TelaGeral{
 		lblTald.setBounds(194, 77, 23, 14);
 		panelParamsControlador.add(lblTald);
 		
-		textFieldTald = new JTextFieldAlterado();
+		textFieldTald = new JTextField();
 		textFieldTald.setEnabled(false);
 		textFieldTald.setColumns(10);
 		textFieldTald.setBounds(220, 71, 66, 20);
@@ -1152,6 +1172,7 @@ public class Tela extends TelaGeral{
 			chckbxNivTanque2.setEnabled(true);
 			chckbxSetPoint.setEnabled(true);
 			chckbxErro.setEnabled(true);
+			chckbxControle.setEnabled(true);
 			chckbxP.setEnabled(true);
 			chckbxD.setEnabled(true);
 			chckbxI.setEnabled(true);

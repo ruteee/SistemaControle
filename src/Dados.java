@@ -15,7 +15,7 @@ public class Dados {
 	private boolean comControle;
 	private String tipoDeControle;
 	
-	private boolean tensao, tensaoSat, nivel1, nivel2, setPoint, erro, proporcional, integral, derivativo;
+	private boolean tensao, tensaoSat, nivel1, nivel2, setPoint, erro, proporcional, integral, derivativo, erroMesmo;
 
 	private double KP;
 	private double KI;
@@ -179,6 +179,16 @@ public class Dados {
 
 	public void setErro(boolean erro) {
 		this.erro = erro;
+	}
+	
+	
+	
+	public boolean isErroMesmo() {
+		return erroMesmo;
+	}
+
+	public void setErroMesmo(boolean erroMesmo) {
+		this.erroMesmo = erroMesmo;
 	}
 	
 	public boolean isProporcional() {

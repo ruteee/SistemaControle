@@ -133,21 +133,6 @@ public class Dados {
 		this.periodoMinino = periodoMinino;
 	}
 	
-/*	public void jhonnyTest(){
-		this.PV = 1;
-		//private double PV1;
-		this.vp = 1;
-		this.Amplitude = 1;
-		this.periodo = 1;
-		this.offset = 1;
-		this.amplitudeMinima = 1;
-		this.periodoMinino = 1;
-		this.pinoDeLeitura = 1;
-		this.pinoDeEscrita = 1;
-		this.tipoSinal = "Senoidal";
-		this.tipoMalha = "Malha Aberta";
-	}
-*/
 	public boolean isTensao() {
 		return tensao;
 	}

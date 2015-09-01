@@ -145,44 +145,47 @@ public class ChartNivel {
 		
 		//Nivel 1
 		renderer.setSeriesShapesVisible(0, false);
-		//if(dados.isNivel1())
+		if(dados.isNivel1())
 			renderer.setSeriesLinesVisible(0, true);
-		//else{renderer.setSeriesLinesVisible(0, false);}
+		else{renderer.setSeriesLinesVisible(0, false);}
 		renderer.setSeriesPaint(0, Color.BLACK);
 		
 		//SetPoint
 		renderer.setSeriesShapesVisible(1, false);
-		//if(dados.isSetPoint())
+		if(dados.isSetPoint())
 			renderer.setSeriesLinesVisible(1, true);
-		//else{renderer.setSeriesLinesVisible(1, false);}
+		else{renderer.setSeriesLinesVisible(1, false);}
 		renderer.setSeriesPaint(1, Color.RED);
 		
 		//Erro
 		renderer.setSeriesShapesVisible(2, false);
-		renderer.setSeriesLinesVisible(2, true);
+		if(dados.isErro())
+			renderer.setSeriesLinesVisible(2, true);
+		else{renderer.setSeriesLinesVisible(2, false);}
+		
 		renderer.setSeriesPaint(2, Color.CYAN);
 		
 		//ErroP
 		renderer.setSeriesShapesVisible(3, false);
-		//if(dados.isProporcional())
+		if(dados.isProporcional())
 			renderer.setSeriesLinesVisible(3, true);
-		//else{renderer.setSeriesLinesVisible(3, false);}
-		renderer.setSeriesPaint(3, Color.GREEN);
+		else{renderer.setSeriesLinesVisible(3, false);}
+		renderer.setSeriesPaint(3, Color.ORANGE);
 		
 		//ErroI
 		renderer.setSeriesShapesVisible(4, false);
-		//if(dados.isIntegral())
+		if(dados.isIntegral())
 			renderer.setSeriesLinesVisible(4, true);
-	//	else{renderer.setSeriesLinesVisible(4, false);}
+		else{renderer.setSeriesLinesVisible(4, false);}
 		renderer.setSeriesPaint(4, Color.MAGENTA);
 		
 		//ERROD	
 		renderer.setSeriesShapesVisible(5, false);
 		
-		//if(dados.isDerivativo())
+		if(dados.isDerivativo())
 			renderer.setSeriesLinesVisible(5, true);
-		//else{renderer.setSeriesLinesVisible(5, false);}
-		renderer.setSeriesPaint(5, Color.YELLOW);
+		else{renderer.setSeriesLinesVisible(5, false);}
+		renderer.setSeriesPaint(5, Color.GRAY);
 		
         graph.getXYPlot().setRenderer(renderer);
         

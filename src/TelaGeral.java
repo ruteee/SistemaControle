@@ -27,7 +27,7 @@ public class TelaGeral {
 	}
 	
 	protected Object[] getItensComboTiposControle() {
-		String[] tiposControle = {"Selecione", "P", "PI", "PD", "PID", "PI-D"};
+		String[] tiposControle = {"Selecione", "P", "PI", "PD", "PID", "PI-D", "Sem controle"};
 		
 		return tiposControle;
 	}

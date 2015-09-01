@@ -52,7 +52,7 @@ public class Tsunami {
 				
 			break;
 			
-			case "Aleatoria":
+			case "Aleatória":
 				
 				if(contadorDePeriodo <= randomPeriodo)
 					ponto.setY(randomAmplitude + offset);
@@ -96,7 +96,7 @@ public class Tsunami {
 				
 			break;
 			
-			case "Dente de serra":
+			case "Dente de Serra":
 				
 				if (passoNovo  < amplitude){
 					ponto.setY(passoNovo + offset);

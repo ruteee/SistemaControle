@@ -126,7 +126,7 @@ public class Tela extends TelaGeral{
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				//Muda disgn para o disgn padrï¿½o do SO.
+				//Muda disgn para o disgn padrão do SO.
 				try {   
 				    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());  
 				} catch (UnsupportedLookAndFeelException ex1) {  
@@ -164,7 +164,7 @@ public class Tela extends TelaGeral{
 		inicializarPainelDadosServidor();
 		frame.getContentPane().add(panelDadosServidor);
 		
-		inicializeBotoesPainelPrincipal();
+		inicializeBotõesPainelPrincipal();
 		frame.getContentPane().add(botaoAtualizar);
 		frame.getContentPane().add(btnStop);
 		
@@ -345,16 +345,16 @@ public class Tela extends TelaGeral{
 			public void actionPerformed(ActionEvent arg0) {
 				
 				if(IPServidor.getText().equals("") || Porta.getText().equals("")){
-					JOptionPane.showMessageDialog(frame, "                          Conexï¿½o nï¿½o Realizada! " +
+					JOptionPane.showMessageDialog(frame, "                          Conexão não Realizada! " +
 							"\nInforme o Ip do Servidor e/ou a Porta e tente novamente.");
 				}else{
 					thread = new Tanque();
 					thread.setServer(IPServidor.getText(), Integer.parseInt(Porta.getText()));
 					
-					//Muda nome (conectar ou desconectar) e cor (verde ou vermelho) do botï¿½o.
-					//Tambï¿½m desabilita alguns componentes da tela.			
+					//Muda nome (conectar ou desconectar) e cor (verde ou vermelho) do botão.
+					//Também desabilita alguns componentes da tela.			
 					if(btnConectarDesconectar.getText().equals("Conectar")){
-						JOptionPane.showMessageDialog(frame, "Conexï¿½o Realizada com Sucesso!");
+						JOptionPane.showMessageDialog(frame, "Conexão Realizada com Sucesso!");
 												
 						btnConectarDesconectar.setForeground(Color.RED);
 						btnConectarDesconectar.setBackground(Color.RED);
@@ -375,7 +375,7 @@ public class Tela extends TelaGeral{
 		panelDadosServidor.add(btnConectarDesconectar);
 	}
 	
-	private void inicializeBotoesPainelPrincipal(){
+	private void inicializeBotõesPainelPrincipal(){
 		botaoAtualizar = new JButton("Atualizar");
 		botaoAtualizar.setBounds(564, 528, 101, 23);
 		botaoAtualizar.setIcon(new ImageIcon(Tela.class.getResource("/Icons/1439269378_gtk-refresh.png")));
@@ -413,7 +413,7 @@ public class Tela extends TelaGeral{
 	}
 
 	/** 
-	 * Valida campos e Popula os parï¿½metros de Leitura(1 e 2) e Escrita na classe Dados.
+	 * Valida campos e Popula os parâmetros de Leitura(1 e 2) e Escrita na classe Dados.
 	 */
 	public boolean validaDadosDeIO(){
 		
@@ -460,7 +460,7 @@ public class Tela extends TelaGeral{
 	}
 	
 	/** 
-	 * Valida campos e Popula os parï¿½metros do sinal na classe Dados.
+	 * Valida campos e Popula os parâmetros do sinal na classe Dados.
 	 */
 	public boolean validaOnda(){
 		
@@ -472,7 +472,7 @@ public class Tela extends TelaGeral{
 			dados.setTipoSinal(comboTipoOnda.getSelectedItem().toString());
 			
 			if(amplitude.getValue().equals("")){
-				String amplitude = comboTipoOnda.getSelectedItem().equals("Degrau") ? "Amplitude (Mï¿½x)" : "Amplitude";  
+				String amplitude = comboTipoOnda.getSelectedItem().equals("Degrau") ? "Amplitude (Máx)" : "Amplitude";  
 
 				JOptionPane.showMessageDialog(frame, "Informe a " + amplitude + " do sinal.");
 				
@@ -485,7 +485,7 @@ public class Tela extends TelaGeral{
 					comboTipoOnda.getSelectedItem().equals("Senoidal") || comboTipoOnda.getSelectedItem().equals("Dente de Serra")){
 				
 				if(periodo.getValue().equals("")){
-					JOptionPane.showMessageDialog(frame, "Informe o Perï¿½odo do sinal.");
+					JOptionPane.showMessageDialog(frame, "Informe o Período do sinal.");
 					
 					return false;
 				}else{
@@ -501,10 +501,10 @@ public class Tela extends TelaGeral{
 				}
 			}
 			
-			if(comboTipoOnda.getSelectedItem().equals("Aleatï¿½ria")){
+			if(comboTipoOnda.getSelectedItem().equals("Aleatória")){
 				
 				if(amplitudeMin.getValue().equals("")){
-					JOptionPane.showMessageDialog(frame, "Informe a Amplitude (Mï¿½n) do sinal.");
+					JOptionPane.showMessageDialog(frame, "Informe a Amplitude (Mín) do sinal.");
 				
 					return false;
 				}else{
@@ -512,7 +512,7 @@ public class Tela extends TelaGeral{
 				}
 
 				if(periodo.getValue().equals("")){
-					JOptionPane.showMessageDialog(frame, "Informe o Perï¿½odo do sinal.");
+					JOptionPane.showMessageDialog(frame, "Informe o Período do sinal.");
 				
 					return false;
 				}else{
@@ -520,7 +520,7 @@ public class Tela extends TelaGeral{
 				}
 				
 				if(periodoMin.getValue().equals("")){
-					JOptionPane.showMessageDialog(frame, "Informe o Perï¿½odo (Mï¿½n) do sinal.");
+					JOptionPane.showMessageDialog(frame, "Informe o Período (Mín) do sinal.");
 					
 					return false;
 				}else{
@@ -553,7 +553,7 @@ public class Tela extends TelaGeral{
 					if((tipoControlador.getSelectedItem().equals("PI") || tipoControlador.getSelectedItem().equals("PID") || tipoControlador.getSelectedItem().equals("PI-D"))
 							&& (textFieldKi.getText().equals("") || textFieldTali.getText().equals(""))){
 						
-						JOptionPane.showMessageDialog(frame, "Informe todos os parï¿½metros do controlador integrativo (Ki e Ti).");
+						JOptionPane.showMessageDialog(frame, "Informe todos os parâmetros do controlador integrativo (Ki e Ti).");
 						
 						return false;
 					}else if((tipoControlador.getSelectedItem().equals("PI") || tipoControlador.getSelectedItem().equals("PID") || tipoControlador.getSelectedItem().equals("PI-D"))
@@ -565,7 +565,7 @@ public class Tela extends TelaGeral{
 					if((tipoControlador.getSelectedItem().equals("PD") || tipoControlador.getSelectedItem().equals("PID") || tipoControlador.getSelectedItem().equals("PI-D"))
 							&& (textFieldKd.getText().equals("") || textFieldTald.getText().equals(""))){
 						
-						JOptionPane.showMessageDialog(frame, "Informe todos os parï¿½metros do controlador derivativo (Kd e Td).");
+						JOptionPane.showMessageDialog(frame, "Informe todos os parâmetros do controlador derivativo (Kd e Td).");
 						
 						return false;
 					}else if((tipoControlador.getSelectedItem().equals("PD") || tipoControlador.getSelectedItem().equals("PID") || tipoControlador.getSelectedItem().equals("PI-D"))
@@ -586,7 +586,7 @@ public class Tela extends TelaGeral{
 		frame.getContentPane().add(abas);
 		
 		panelOpcoesEntrada = new JPanel();
-		abas.addTab("Opï¿½ï¿½es de Entrada", null, panelOpcoesEntrada, null);
+		abas.addTab("Opções de Entrada", null, panelOpcoesEntrada, null);
 		panelOpcoesEntrada.setLayout(null);
 		
 		inicializarPainelEntradasSaidas();
@@ -885,7 +885,7 @@ public class Tela extends TelaGeral{
 					amplitude.setEnabled(false);
 					amplitudeMin.setEnabled(false);
 					amplitudeMin.setValue(0);
-					lblPeriodo.setText("Perï¿½odo:");
+					lblPeriodo.setText("Período:");
 					periodo.setEnabled(false);
 					periodo.setValue(0);
 					periodoMin.setEnabled(false);
@@ -897,7 +897,7 @@ public class Tela extends TelaGeral{
 					amplitude.setEnabled(true);
 					amplitudeMin.setEnabled(false);
 					amplitudeMin.setValue(0);
-					lblPeriodo.setText("Perï¿½odo:");
+					lblPeriodo.setText("Período:");
 					periodo.setEnabled(true);
 					periodoMin.setEnabled(false);
 					periodoMin.setValue(0);
@@ -907,18 +907,18 @@ public class Tela extends TelaGeral{
 					amplitude.setEnabled(true);
 					amplitudeMin.setEnabled(false);
 					amplitudeMin.setValue(0);
-					lblPeriodo.setText("Perï¿½odo:");
+					lblPeriodo.setText("Período:");
 					periodo.setEnabled(false);
 					periodo.setValue(0);
 					periodoMin.setEnabled(false);
 					periodoMin.setValue(0);
 					offSet.setEnabled(false);
 					offSet.setValue(0);
-				}else if(comboTipoOnda.getSelectedItem().equals("Aleatï¿½ria")){
-					lblAmplitude.setText("Amplitude (Mï¿½x):");
+				}else if(comboTipoOnda.getSelectedItem().equals("Aleatória")){
+					lblAmplitude.setText("Amplitude (Máx):");
 					amplitude.setEnabled(true);
 					amplitudeMin.setEnabled(true);
-					lblPeriodo.setText("Perï¿½odo (Mï¿½x):");
+					lblPeriodo.setText("Período (Máx):");
 					periodo.setEnabled(true);
 					periodoMin.setEnabled(true);
 					offSet.setEnabled(false);
@@ -928,7 +928,7 @@ public class Tela extends TelaGeral{
 					amplitude.setEnabled(true);
 					amplitudeMin.setEnabled(false);
 					amplitudeMin.setValue(0);
-					lblPeriodo.setText("Perï¿½odo:");
+					lblPeriodo.setText("Período:");
 					periodo.setEnabled(true);
 					periodoMin.setEnabled(false);
 					periodoMin.setValue(0);
@@ -938,7 +938,7 @@ public class Tela extends TelaGeral{
 					amplitude.setEnabled(true);
 					amplitudeMin.setEnabled(false);
 					amplitudeMin.setValue(0);
-					lblPeriodo.setText("Perï¿½odo:");
+					lblPeriodo.setText("Período:");
 					periodo.setEnabled(true);
 					periodoMin.setEnabled(false);
 					periodoMin.setValue(0);
@@ -1118,7 +1118,7 @@ public class Tela extends TelaGeral{
 			chckbxErro.setEnabled(false);
 			
 			lblAmplitude.setText("Amplitude:");
-			lblPeriodo.setText("Perï¿½odo:");
+			lblPeriodo.setText("Período:");
 			
 			amplitude.setValue(0);
 			amplitudeMin.setValue(0);
@@ -1202,7 +1202,7 @@ public class Tela extends TelaGeral{
 				amplitude.setEnabled(true);
 				amplitudeMin.setEnabled(false);
 				amplitudeMin.setValue(0);
-				lblPeriodo.setText("Perï¿½odo:");
+				lblPeriodo.setText("Período:");
 				periodo.setEnabled(false);
 				periodo.setValue(0);
 				periodoMin.setEnabled(false);
@@ -1227,7 +1227,7 @@ public class Tela extends TelaGeral{
 				amplitude.setEnabled(true);
 				amplitudeMin.setEnabled(false);
 				amplitudeMin.setValue(0);
-				lblPeriodo.setText("Perï¿½odo:");
+				lblPeriodo.setText("Período:");
 				periodo.setEnabled(true);
 				periodoMin.setEnabled(false);
 				periodoMin.setValue(0);
@@ -1250,7 +1250,7 @@ public class Tela extends TelaGeral{
 				amplitude.setEnabled(true);
 				amplitudeMin.setEnabled(false);
 				amplitudeMin.setValue(0);
-				lblPeriodo.setText("Perï¿½odo:");
+				lblPeriodo.setText("Período:");
 				periodo.setEnabled(true);
 				periodoMin.setEnabled(false);
 				periodoMin.setValue(0);
@@ -1274,7 +1274,7 @@ public class Tela extends TelaGeral{
 				amplitude.setEnabled(true);
 				amplitudeMin.setEnabled(false);
 				amplitudeMin.setValue(0);
-				lblPeriodo.setText("Perï¿½odo:");
+				lblPeriodo.setText("Período:");
 				periodo.setEnabled(true);
 				periodoMin.setEnabled(false);
 				periodoMin.setValue(0);
@@ -1293,10 +1293,10 @@ public class Tela extends TelaGeral{
 				rdbtnQuadrada.setSelected(false);
 				rdbtnDenteSerra.setSelected(false);
 								
-				lblAmplitude.setText("Amplitude (Mï¿½x):");
+				lblAmplitude.setText("Amplitude (Máx):");
 				amplitude.setEnabled(true);
 				amplitudeMin.setEnabled(true);
-				lblPeriodo.setText("Perï¿½odo (Mï¿½x):");
+				lblPeriodo.setText("Período (Máx):");
 				periodo.setEnabled(true);
 				periodoMin.setEnabled(true);
 				offSet.setEnabled(false);

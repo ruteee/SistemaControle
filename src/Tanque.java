@@ -154,10 +154,10 @@ public class Tanque extends Thread {
 						case "Sem Controle":
 							dados.setVP(erro);
 							
-							vp = new Ponto();
-				    		vp.setX(onda.getTempo() - 0.1); 
-				    		vp.setY(dados.getVP());
-				    		
+							Ponto erroPonto = new Ponto();
+				    		erroPonto.setX(onda.getTempo() - 0.1); 
+				    		erroPonto.setY(dados.getVP());
+				    		graficoAltura.atualizarFilaDeErroMesmo(erroPonto);
 						break;
 						
 						default:

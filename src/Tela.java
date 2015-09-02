@@ -153,12 +153,14 @@ public class Tela extends TelaGeral{
 	 */
 	public Tela() {
 		initialize();
+		
 	}
 	
 	/**
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		dados = new Dados();
 		frame = new JFrame();
 		frame.setBounds(100, 100, 1005, 593);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -481,11 +483,14 @@ public class Tela extends TelaGeral{
 					// Setar na dados os checkBox dos gráficos
 					dados.setTensao(chckbxTensCalc.isSelected());
 					dados.setTensaoSat(chckbxTensaoSat.isSelected());
-					dados.setErro(chckbxErro.isSelected());
+					dados.setSetPoint(chckbxSetPoint.isSelected());
+					dados.setErroMesmo(chckbxErro.isSelected());
+					dados.setErro(chckbxControle.isSelected());
 					dados.setProporcional(chckbxP.isSelected());
 					dados.setIntegral(chckbxI.isSelected());
 					dados.setDerivativo(chckbxD.isSelected());
 					dados.setNivel1(chckbxNivTanque1.isSelected());
+					
 					
 					//grafico
 					thread.setDados(dados);

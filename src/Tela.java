@@ -161,6 +161,8 @@ public class Tela extends TelaGeral{
 	 */
 	private void initialize() {
 		dados = new Dados();
+
+		
 		frame = new JFrame();
 		frame.setBounds(100, 100, 1005, 593);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

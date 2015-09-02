@@ -126,7 +126,7 @@ public class Tanque extends Thread {
 						break;
 						
 						case "PD":
-							dados.setVP(acaoP(erro) + acaoI(erro));
+							dados.setVP(acaoP(erro) + acaoD(erro));
 							
 							vp = new Ponto();
 				    		vp.setX(onda.getTempo() - 0.1); 
@@ -176,14 +176,24 @@ public class Tanque extends Thread {
 					
 						case "P":
 							
+							Ponto base = new Ponto();
+							base.setX(onda.getTempo() - 0.1);
+							base.setY(0);
+							
 							justP = new Ponto();
 							justP.setX(onda.getTempo() - 0.1);
 							justP.setY(acaoP(erro));
 							graficoAltura.atualizarFilaDeErroP(justP);
+							graficoAltura.atualizarFilaDeErroD(base);
+							graficoAltura.atualizarFilaDeErroI(base);
 							
 						break;
 						
 						case "PI":
+							
+							Ponto base1 = new Ponto();
+							base1.setX(onda.getTempo() - 0.1);
+							base1.setY(0);
 							
 							justP = new Ponto();
 							justP.setX(onda.getTempo() - 0.1);
@@ -195,10 +205,17 @@ public class Tanque extends Thread {
 							
 							graficoAltura.atualizarFilaDeErroP((justP));
 							graficoAltura.atualizarFilaDeErroI((justI));
+							graficoAltura.atualizarFilaDeErroD(base1);
+						
 							
 						break;
 						
 						case "PD":
+							
+							Ponto base2 = new Ponto();
+							base2.setY(0);
+							base2.setX(onda.getTempo() - 0.1);
+							
 							
 							justP = new Ponto();
 							justP.setX(onda.getTempo() - 0.1);
@@ -210,6 +227,7 @@ public class Tanque extends Thread {
 							
 							graficoAltura.atualizarFilaDeErroP(justP);
 							graficoAltura.atualizarFilaDeErroD(justD);
+							graficoAltura.atualizarFilaDeErroI(base2);
 						
 						break;
 						

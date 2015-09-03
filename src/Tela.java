@@ -492,6 +492,7 @@ public class Tela extends TelaGeral{
 					dados.setIntegral(chckbxI.isSelected());
 					dados.setDerivativo(chckbxD.isSelected());
 					dados.setNivel1(chckbxNivTanque1.isSelected());
+					dados.setWindUP(chckbxWindUp.isSelected());
 					
 					
 					//grafico

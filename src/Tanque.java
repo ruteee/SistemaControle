@@ -11,9 +11,11 @@ public class Tanque extends Thread {
    
 	public double vps;
 	public double volt = 0;
-	public static  double erroI = 0;
+	public static  double IntErro = 0;
 	public static  double erroAnterior = 0;
 	public static double derivada = 0;
+	public double controleWindUP;
+	public double controleAnteriorSaturado;
 	public double erroD;
 	public double erro;
 	
@@ -47,14 +49,14 @@ public class Tanque extends Thread {
 
     public void run() {
     //	int cont = 0;
-        getConexao();
+       // getConexao();
         
     	while(true){
 	       	try {
 	        		
-	    		dados.setPV( quanserclient.read(dados.getPinoDeLeitura1()));
-	    		volt = dados.getPV();
-	       		//volt = 1;
+	    		//dados.setPV( quanserclient.read(dados.getPinoDeLeitura1()));
+	    		//volt = dados.getPV();
+	       		volt = 1;
 	       		
 	    		
 	    		if(dados.getTipoMalha().equals("Malha Aberta")){
@@ -281,9 +283,10 @@ public class Tanque extends Thread {
 	    			painelAltura.validate();
 				
 				}
-	    		
+	    		controleWindUP = dados.getVP();
 	    		verificarRegras();
-	    		quanserclient.write(dados.getPinoDeEscrita(), dados.getVP());
+	    		controleAnteriorSaturado = dados.getVP();
+	    		//quanserclient.write(dados.getPinoDeEscrita(), dados.getVP());
 	    		
 	    		if(dados.getTipoMalha().equals("Malha Aberta")){
 	    			//graficos de tensão
@@ -318,7 +321,7 @@ public class Tanque extends Thread {
 	    		
 				Thread.sleep(100);
 				//System.out.println(cont++);
-			} catch (QuanserClientException | InterruptedException e) {e.printStackTrace();}
+			} catch (/*QuanserClientException | */InterruptedException e) {e.printStackTrace();}
 		}
     	
     }
@@ -346,6 +349,10 @@ public class Tanque extends Thread {
 			    vps = 0;
 			
 			dados.setVP(vps);
+			
+		
+			
+			
    }
     
     public QuanserClient getConexao(){
@@ -409,8 +416,12 @@ public class Tanque extends Thread {
 	}
 	
 	public double acaoI(double erro){
-		erroI = erroI + dados.getKI()*erro;
-		return erroI;	
+		if(!dados.isWindUP())
+			IntErro = IntErro + dados.getKI()*erro;
+		else{
+			IntErro = IntErro + dados.getKI()*erro + 0.3*(controleAnteriorSaturado - controleWindUP);
+		}
+		return IntErro;	
 	}
 	
 	public double acaoD(double erro){

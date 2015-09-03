@@ -15,7 +15,7 @@ public class Dados {
 	private boolean comControle;
 	private String tipoDeControle;
 	
-	private boolean tensao, tensaoSat, nivel1, nivel2, setPoint, erro, proporcional, integral, derivativo, erroMesmo;
+	private boolean windUP, tensao, tensaoSat, nivel1, nivel2, setPoint, erro, proporcional, integral, derivativo, erroMesmo;
 
 	private double KP;
 	private double KI;
@@ -214,6 +214,15 @@ public class Dados {
 	public void setDerivativo(boolean derivativo) {
 		this.derivativo = derivativo;
 	}
+	
+	public boolean isWindUP() {
+		return windUP;
+	}
+
+	public void setWindUP(boolean windUP) {
+		this.windUP = windUP;
+	}
+	
 	
 	public double getKP() {
 		return KP;

@@ -13,6 +13,7 @@ public class Tanque extends Thread {
 	public double volt = 0;
 	public static  double erroI = 0;
 	public static  double erroAnterior = 0;
+	public static double derivada = 0;
 	public double erroD;
 	public double erro;
 	
@@ -126,7 +127,8 @@ public class Tanque extends Thread {
 						break;
 						
 						case "PD":
-							dados.setVP(acaoP(erro) + acaoD(erro));
+							derivada = acaoD(erro);
+							dados.setVP(acaoP(erro) + derivada);
 							
 							vp = new Ponto();
 				    		vp.setX(onda.getTempo() - 0.1); 
@@ -135,7 +137,8 @@ public class Tanque extends Thread {
 						break;
 						
 						case "PID":
-							dados.setVP(acaoP(erro) + acaoI(erro) + acaoD(erro));
+							derivada = acaoD(erro);
+							dados.setVP(acaoP(erro) + acaoI(erro) + derivada);
 							
 							vp = new Ponto();
 				    		vp.setX(onda.getTempo() - 0.1); 
@@ -144,7 +147,8 @@ public class Tanque extends Thread {
 						break;
 						
 						case "PI-D":
-							dados.setVP(acaoP(erro) + acaoI(erro) + acaoD(volt));
+							derivada = acaoD(volt);
+							dados.setVP(acaoP(erro) + acaoI(erro) + derivada);
 							
 							vp = new Ponto();
 							vp.setX(onda.getTempo() - 0.1); 
@@ -223,7 +227,7 @@ public class Tanque extends Thread {
 							
 							justD = new Ponto();
 							justD.setX(onda.getTempo() - 0.1);
-							justD.setY(acaoD(erro));
+							justD.setY(derivada);
 							
 							graficoAltura.atualizarFilaDeErroP(justP);
 							graficoAltura.atualizarFilaDeErroD(justD);
@@ -243,7 +247,7 @@ public class Tanque extends Thread {
 							
 							justD = new Ponto();
 							justD.setX(onda.getTempo() - 0.1);
-							justD.setY(acaoD(erro));
+							justD.setY(derivada);
 							
 							graficoAltura.atualizarFilaDeErroP(justP);
 							graficoAltura.atualizarFilaDeErroI(justI);
@@ -263,7 +267,7 @@ public class Tanque extends Thread {
 							
 							justD = new Ponto();
 							justD.setX(onda.getTempo() - 0.1);
-							justD.setY(acaoD(volt));
+							justD.setY(derivada);
 							
 							graficoAltura.atualizarFilaDeErroP(justP);
 							graficoAltura.atualizarFilaDeErroI(justI);

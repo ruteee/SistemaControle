@@ -878,14 +878,14 @@ public class Tela extends TelaGeral{
 		textFieldKi.setColumns(10);
 		textFieldKi.setBounds(57, 45, 66, 20);	
 		panelParamsControlador.add(textFieldKi);
-		/*textFieldKi.addCaretListener(new CaretListener() {
+		textFieldKi.addCaretListener(new CaretListener() {
 			public void caretUpdate(CaretEvent arg0) {
-				if(!textFieldKi.getText().equals("")){
+				try{
 					textFieldTali.setText("" + Double.parseDouble(textFieldKp.getText())
 							/Double.parseDouble(textFieldKi.getText()));
-				}
+				}catch (Exception e){}
 			}
-		});*/
+		});
 		
 		
 		JLabel lblTali = new JLabel("\u03C4i:");
@@ -897,16 +897,17 @@ public class Tela extends TelaGeral{
 		textFieldTali.setEnabled(false);
 		textFieldTali.setColumns(10);
 		textFieldTali.setBounds(220, 45, 66, 20);		
-		/*textFieldTali.addCaretListener(new CaretListener() {
+		textFieldTali.addCaretListener(new CaretListener() {
 			public void caretUpdate(CaretEvent arg0) {
-				if(!textFieldKp.getText().equals("") && !textFieldTali.getText().equals("")){
-					if(!textFieldTali.getText().equals("")){
-						textFieldKi.setText("" + Double.parseDouble(textFieldKp.getText())
+				
+				try{
+					textFieldKi.setText("" + Double.parseDouble(textFieldKp.getText())
 							/Double.parseDouble(textFieldTali.getText()));
-					}
-				}
+				}catch(Exception e){}
+					
+				
 			}
-		});*/
+		});
 		panelParamsControlador.add(textFieldTali);
 		
 		lblKd = new JLabel("Kd:");
@@ -917,17 +918,17 @@ public class Tela extends TelaGeral{
 		textFieldKd.setEnabled(false);
 		textFieldKd.setColumns(10);
 		textFieldKd.setBounds(57, 71, 66, 20);
-		/*textFieldKd.addCaretListener(new CaretListener() {
+		textFieldKd.addCaretListener(new CaretListener() {
 			public void caretUpdate(CaretEvent arg0) {
-				if(!textFieldKp.getText().equals("") && !textFieldKd.getText().equals("")){
+			
+				try {
+					textFieldTald.setText("" + Double.parseDouble(textFieldKd.getText())
+							/Double.parseDouble(textFieldKp.getText()));
+				} catch (Exception e) {	}
 					
-					if(!textFieldTald.getText().equals("")){
-						textFieldTald.setText("" + Double.parseDouble(textFieldKp.getText())
-								/Double.parseDouble(textFieldKd.getText()));
-					}
-				}
+				
 			}
-		});*/
+		});
 		panelParamsControlador.add(textFieldKd);
 		
 		JLabel lblTald = new JLabel("\u03C4d:");
@@ -939,16 +940,16 @@ public class Tela extends TelaGeral{
 		textFieldTald.setEnabled(false);
 		textFieldTald.setColumns(10);
 		textFieldTald.setBounds(220, 71, 66, 20);
-		/*textFieldTald.addCaretListener(new CaretListener() {
+		textFieldTald.addCaretListener(new CaretListener() {
 			public void caretUpdate(CaretEvent arg0) {
-				if(!textFieldKp.getText().equals("") && !textFieldTald.getText().equals("")){
+			
+				try {
 					textFieldKd.setText("" + Double.parseDouble(textFieldKp.getText())
-							/Double.parseDouble(textFieldTald.getText()));
-				}else{
-					
-				}
+							*Double.parseDouble(textFieldTald.getText()));
+				} catch (Exception e) {}
+				
 			}
-		});*/
+		});
 		panelParamsControlador.add(textFieldTald);
 		
 		labelInterrogation = new JLabel("");

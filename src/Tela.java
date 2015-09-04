@@ -122,6 +122,7 @@ public class Tela extends TelaGeral{
 	private JComboBox comboTipoControlador;
 	
 	private JPanel panelDadosServidor;
+	private JTextField textFieldTt;
 	
 	/**
 	 * Launch the application.
@@ -494,7 +495,9 @@ public class Tela extends TelaGeral{
 					dados.setNivel1(chckbxNivTanque1.isSelected());
 					dados.setWindUP(chckbxWindUp.isSelected());
 					
-					
+					if(chckbxWindUp.isSelected()){
+						dados.setTt(Double.parseDouble(textFieldTt.getText()));
+					}
 					//grafico
 					thread.setDados(dados);
 					thread.setDadosGrafico(dados);
@@ -710,6 +713,16 @@ public class Tela extends TelaGeral{
 		inicializarPainelParamsControlador();
 		panelOpcoesEntrada.add(panelParamsControlador);
 		
+		textFieldTt = new JTextField();
+		textFieldTt.setEnabled(false);
+		textFieldTt.setBounds(228, 23, 52, 20);
+		panelParamsControlador.add(textFieldTt);
+		textFieldTt.setColumns(10);
+		
+		JLabel lblTt = new JLabel("Tt:");
+		lblTt.setBounds(196, 26, 22, 20);
+		panelParamsControlador.add(lblTt);
+		
 		inicializarOutrosComponentesPainelOpcoesEntrada();
 		panelOpcoesEntrada.add(comboTipoOnda);
 		panelOpcoesEntrada.add(chckbxComControle);
@@ -890,13 +903,13 @@ public class Tela extends TelaGeral{
 		
 		JLabel lblTali = new JLabel("\u03C4i:");
 		lblTali.setFont(new Font("Microsoft YaHei UI", Font.PLAIN, 13));
-		lblTali.setBounds(194, 51, 23, 14);
+		lblTali.setBounds(195, 57, 23, 14);
 		panelParamsControlador.add(lblTali);
 		
 		textFieldTali = new JTextField();
 		textFieldTali.setEnabled(false);
 		textFieldTali.setColumns(10);
-		textFieldTali.setBounds(220, 45, 66, 20);		
+		textFieldTali.setBounds(228, 45, 66, 20);		
 		textFieldTali.addCaretListener(new CaretListener() {
 			public void caretUpdate(CaretEvent arg0) {
 				
@@ -933,13 +946,13 @@ public class Tela extends TelaGeral{
 		
 		JLabel lblTald = new JLabel("\u03C4d:");
 		lblTald.setFont(new Font("Microsoft YaHei UI", Font.PLAIN, 13));
-		lblTald.setBounds(194, 77, 23, 14);
+		lblTald.setBounds(195, 83, 23, 14);
 		panelParamsControlador.add(lblTald);
 		
 		textFieldTald = new JTextField();
 		textFieldTald.setEnabled(false);
 		textFieldTald.setColumns(10);
-		textFieldTald.setBounds(220, 71, 66, 20);
+		textFieldTald.setBounds(228, 71, 66, 20);
 		textFieldTald.addCaretListener(new CaretListener() {
 			public void caretUpdate(CaretEvent arg0) {
 			
@@ -981,6 +994,10 @@ public class Tela extends TelaGeral{
 		chckbxWindUp.setEnabled(false);
 		chckbxWindUp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				if(chckbxWindUp.isSelected()){
+					textFieldTt.setEnabled(true);
+				}else{ textFieldTt.setEnabled(false);}
+					
 			}
 		});
 		

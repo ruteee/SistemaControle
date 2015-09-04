@@ -20,6 +20,7 @@ public class Dados {
 	private double KP;
 	private double KI;
 	private double KD;	
+	private double Tt;
 	
 	private double PV;
 	private double vp;
@@ -262,5 +263,13 @@ public class Dados {
 
 	public void setComControle(boolean comControle) {
 		this.comControle = comControle;
+	}
+
+	public double getTt() {
+		return Tt;
+	}
+
+	public void setTt(double tt) {
+		Tt = tt;
 	}
 }

@@ -5,6 +5,9 @@ public class Dados {
 	private double periodo;
 	private double periodoMinino;
 	private double offset;
+	private double tempoDePico;
+	private double tempoDeSubida;
+	private double sobreSinalMax;
 	
 	private int pinoDeLeitura1;
 	private int pinoDeLeitura2;
@@ -271,5 +274,29 @@ public class Dados {
 
 	public void setTt(double tt) {
 		Tt = tt;
+	}
+
+	public double getTempoDePico() {
+		return tempoDePico;
+	}
+
+	public void setTempoDePico(double tempoDePico) {
+		this.tempoDePico = tempoDePico;
+	}
+
+	public double getTempoDeSubida() {
+		return tempoDeSubida;
+	}
+
+	public void setTempoDeSubida(double tempoDeSubida) {
+		this.tempoDeSubida = tempoDeSubida;
+	}
+
+	public double getSobreSinalMax() {
+		return sobreSinalMax;
+	}
+
+	public void setSobreSinalMax(double sobreSinalMax) {
+		this.sobreSinalMax = sobreSinalMax;
 	}
 }

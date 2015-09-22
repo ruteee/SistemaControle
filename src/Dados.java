@@ -8,6 +8,7 @@ public class Dados {
 	private double tempoDePico;
 	private double tempoDeSubida;
 	private double sobreSinalMax;
+	private double settleTempo;
 	
 	private int pinoDeLeitura1;
 	private int pinoDeLeitura2;
@@ -298,5 +299,13 @@ public class Dados {
 
 	public void setSobreSinalMax(double sobreSinalMax) {
 		this.sobreSinalMax = sobreSinalMax;
+	}
+
+	public double getSettleTempo() {
+		return settleTempo;
+	}
+
+	public void setSettleTempo(double settleTempo) {
+		this.settleTempo = settleTempo;
 	}
 }

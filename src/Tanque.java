@@ -18,16 +18,25 @@ public class Tanque extends Thread {
 	public double controleAnteriorSaturado;
 	public double erroD;
 	public double erro;
+	public double setPoint;
+	public double newSetPoint;
+	
 	
 	private Dados dados = new Dados();
     public Chart grafico = new Chart(dados);
     public ChartNivel graficoAltura = new ChartNivel(dados);
     
     public Boolean controle = true;
+    public boolean flagSetPoint = false;
+    public boolean flagPico = false;
+    public boolean flagSobreSinal = false;
+    public boolean flagSettleTempo = false;
     
     public Ponto vp;
     
-    
+    int t_pico = 0, t_acomoda = 0, t_subida = 0;
+    boolean t_pico_set = false, t_acomoda_set = false, t_subida_set = false;
+
 	QuanserClient quanserclient;
 	JLayeredPane painelTensao, painelAltura;
 	Tsunami onda = new Tsunami(dados.getPeriodo(), dados.getPeriodoMinino(),dados.getOffset(),dados.getAmplitude(),dados.getAmplitudeMinima(),dados.getTipoSinal());
@@ -95,7 +104,26 @@ public class Tanque extends Thread {
 					graficoAltura.atualizarFilaDeSetPoint(pontoSet);
 					erro = -volt*6.25 + (graficoAltura.filaDeSetPoint.get(graficoAltura.filaDeSetPoint.size() - 1).getY());
 					
-	    			
+					newSetPoint = pontoSet.getY();
+					
+	    			if(!dados.getTipoSinal().equals("Dente de serra") && !dados.getTipoSinal().equals("Senoidal")){
+	    				//if(newSetPoint > setPoint){
+	    				//	sp_atual = pontoSet.getY();
+					
+						if (setPoint != newSetPoint)
+							sp_mudou();
+						
+						setPoint = newSetPoint;
+						
+						if (!t_subida_set)
+							tempoSubida();
+						if (!t_pico_set)
+							tempoPico();
+						if (!t_acomoda_set)
+							tempoAcomoda();
+	    				//}
+	    				
+	    			}
 					//colocar radio button na interface para selcionar 
 					
 					Ponto vpSemControle = new Ponto();
@@ -285,6 +313,7 @@ public class Tanque extends Thread {
 				}
 	    		controleWindUP = dados.getVP();
 	    		verificarRegras();
+	    		
 	    		controleAnteriorSaturado = dados.getVP();
 	    		quanserclient.write(dados.getPinoDeEscrita(), dados.getVP());
 	    		
@@ -430,5 +459,36 @@ public class Tanque extends Thread {
 		erroAnterior = erro;
 		
 		return erroD;
+	}
+
+	void tempoAcomoda(){
+		
+	}
+	
+	void tempoSubida(){
+		if(setPoint > dados.getPV())
+		{
+			t_subida++;
+		}
+		else
+		{
+			t_subida_set = true;
+		}
+	}
+	
+	void tempoPico(){
+		if (newSetPoint > setPoint)
+		{
+			t_pico++;
+		}
+		else
+		{
+			t_pico_set = true;
+		}
+	}
+	
+	void sp_mudou(){
+		t_pico = t_subida = t_acomoda = 0;
+		t_pico_set = t_subida_set = t_acomoda_set = false;
 	}
 }

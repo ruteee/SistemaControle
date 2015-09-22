@@ -20,6 +20,7 @@ public class Tsunami {
 	
 	
 	
+	
 	Random random = new Random();
 	
 	

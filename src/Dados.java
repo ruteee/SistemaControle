@@ -1,3 +1,5 @@
+import javax.swing.JTextPane;
+
 public class Dados {
 
 	private double Amplitude;
@@ -29,8 +31,13 @@ public class Dados {
 	private double PV;
 	private double vp;
 	
-	private double duracao;	
+	private double duracao;
+	
+	private JTextPane tPico, tSubida, tAcomoda, nivelPico;
 
+	private double fatSup = 1, fatInf = 0; 
+	private boolean picoAbs;
+	
 	public Dados(){
 	}
 
@@ -307,5 +314,70 @@ public class Dados {
 
 	public void setSettleTempo(double settleTempo) {
 		this.settleTempo = settleTempo;
+	}
+
+	public double getVp() {
+		return vp;
+	}
+
+	public void setVp(double vp) {
+		this.vp = vp;
+	}
+
+	public JTextPane gettPico() {
+		return tPico;
+	}
+
+	public void settPico(JTextPane tPico) {
+		this.tPico = tPico;
+	}
+
+	public JTextPane gettSubida() {
+		return tSubida;
+	}
+
+	public void settSubida(JTextPane tSubida) {
+		this.tSubida = tSubida;
+	}
+
+	public JTextPane gettAcomoda() {
+		return tAcomoda;
+	}
+
+	public void settAcomoda(JTextPane tAcomoda) {
+		this.tAcomoda = tAcomoda;
+	}
+
+	public JTextPane getNivelPico() {
+		return nivelPico;
+	}
+
+	public void setNivelPico(JTextPane nivelPico) {
+		this.nivelPico = nivelPico;
+	}
+
+	
+	public double getFatSup() {
+		return fatSup;
+	}
+
+	public void setFatSup(double fatSup) {
+		this.fatSup = fatSup;
+	}
+
+	public double getFatInf() {
+		return fatInf;
+	}
+
+	public void setFatInf(double fatInf) {
+		this.fatInf = fatInf;
+	}
+
+	public boolean isPicoAbs() {
+		return picoAbs;
+	}
+
+	public void setPicoAbs(boolean picoAbs) {
+		this.picoAbs = picoAbs;
 	}
 }

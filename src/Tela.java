@@ -667,6 +667,28 @@ public class Tela extends TelaGeral{
 					dados.setNivel1(chckbxNivTanque1.isSelected());
 					dados.setWindUP(chckbxWindUp.isSelected());
 					
+					dados.settPico(textPaneTp);
+					dados.settAcomoda(textPaneTs);
+					dados.settSubida(textPaneTr);
+					dados.setNivelPico(textPaneMp);
+					
+					dados.setPicoAbs(rdbtnAbs.isSelected());
+					
+					if (rdbtnTempoSubida1.isSelected())
+					{
+						dados.setFatInf(0);
+						dados.setFatSup(1);
+					}
+					else if (rdbtnTempoSubida2.isSelected())
+					{
+						dados.setFatInf(0.05);
+						dados.setFatSup(0.95);
+					}
+					else if (rdbtnTempoSubida3.isSelected())
+					{
+						dados.setFatInf(0.1);
+						dados.setFatSup(0.9);
+					}
 					if(chckbxWindUp.isSelected()){
 						dados.setTt(Double.parseDouble(textFieldTt.getText()));
 					}

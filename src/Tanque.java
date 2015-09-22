@@ -18,32 +18,35 @@ public class Tanque extends Thread {
 	public double controleAnteriorSaturado;
 	public double erroD;
 	public double erro;
+	
 	public double setPoint;
 	public double newSetPoint;
+	public double oldSetPoint;
 	
+	public double nivel_passado;
+	public double nivel_pico = 0;
 	
 	private Dados dados = new Dados();
     public Chart grafico = new Chart(dados);
     public ChartNivel graficoAltura = new ChartNivel(dados);
     
-    public Boolean controle = true;
-    public boolean flagSetPoint = false;
+    public boolean controle = true;
+    public boolean flagSubida = false;
     public boolean flagPico = false;
-    public boolean flagSobreSinal = false;
+    //public boolean flagSobreSinal = false;
     public boolean flagSettleTempo = false;
     
     public Ponto vp;
     
-    int t_pico = 0, t_acomoda = 0, t_subida = 0;
-    boolean t_pico_set = false, t_acomoda_set = false, t_subida_set = false;
+    double t_pico = 0, t_acomoda = 0, t_subida = 0;
+   // boolean t_pico_set = false, t_acomoda_set = false, t_subida_set = false;
 
 	QuanserClient quanserclient;
 	JLayeredPane painelTensao, painelAltura;
 	Tsunami onda = new Tsunami(dados.getPeriodo(), dados.getPeriodoMinino(),dados.getOffset(),dados.getAmplitude(),dados.getAmplitudeMinima(),dados.getTipoSinal());
 
 	
-	public Tanque() {
-    }
+	public Tanque() {}
 	
     public Tanque(String servidor, int porta) {
         this.servidor = servidor;
@@ -113,16 +116,14 @@ public class Tanque extends Thread {
 						if (setPoint != newSetPoint)
 							sp_mudou();
 						
-						setPoint = newSetPoint;
-						
-						if (!t_subida_set)
+						if (!flagSubida)
 							tempoSubida();
-						if (!t_pico_set)
+						if (!flagPico)
 							tempoPico();
-						if (!t_acomoda_set)
+						if (!flagSettleTempo)
 							tempoAcomoda();
 	    				//}
-	    				
+	    				nivel_passado = pontoSet.getY();
 	    			}
 					//colocar radio button na interface para selcionar 
 					
@@ -130,12 +131,10 @@ public class Tanque extends Thread {
 					vpSemControle.setX(onda.getTempo() - 0.1);
 					vpSemControle.setY(erro);
 					graficoAltura.atualizarFilaDeErroMesmo(vpSemControle);
+
 					//painelAltura.validate();
 					
-					
-					
-//					Ponto vp;
-					
+					//Ponto vp;
 					
 					switch (dados.getTipoDeControle()){
 					
@@ -144,7 +143,6 @@ public class Tanque extends Thread {
 							vp = new Ponto();
 				    		vp.setX(onda.getTempo() - 0.1); 
 				    		vp.setY(dados.getVP());
-				    		
 						break;
 						
 						case "PI":
@@ -153,7 +151,6 @@ public class Tanque extends Thread {
 							vp = new Ponto();
 				    		vp.setX(onda.getTempo() - 0.1); 
 				    		vp.setY(dados.getVP());
-							
 						break;
 						
 						case "PD":
@@ -163,7 +160,6 @@ public class Tanque extends Thread {
 							vp = new Ponto();
 				    		vp.setX(onda.getTempo() - 0.1); 
 				    		vp.setY(dados.getVP());
-				    		
 						break;
 						
 						case "PID":
@@ -173,7 +169,6 @@ public class Tanque extends Thread {
 							vp = new Ponto();
 				    		vp.setX(onda.getTempo() - 0.1); 
 				    		vp.setY(dados.getVP());
-				    		
 						break;
 						
 						case "PI-D":
@@ -220,7 +215,6 @@ public class Tanque extends Thread {
 							graficoAltura.atualizarFilaDeErroP(justP);
 							graficoAltura.atualizarFilaDeErroD(base);
 							graficoAltura.atualizarFilaDeErroI(base);
-							
 						break;
 						
 						case "PI":
@@ -240,8 +234,6 @@ public class Tanque extends Thread {
 							graficoAltura.atualizarFilaDeErroP((justP));
 							graficoAltura.atualizarFilaDeErroI((justI));
 							graficoAltura.atualizarFilaDeErroD(base1);
-						
-							
 						break;
 						
 						case "PD":
@@ -262,7 +254,6 @@ public class Tanque extends Thread {
 							graficoAltura.atualizarFilaDeErroP(justP);
 							graficoAltura.atualizarFilaDeErroD(justD);
 							graficoAltura.atualizarFilaDeErroI(base2);
-						
 						break;
 						
 						case "PID":
@@ -282,7 +273,6 @@ public class Tanque extends Thread {
 							graficoAltura.atualizarFilaDeErroP(justP);
 							graficoAltura.atualizarFilaDeErroI(justI);
 							graficoAltura.atualizarFilaDeErroD(justD);
-							
 						break;
 						
 						case "PI-D":
@@ -302,14 +292,11 @@ public class Tanque extends Thread {
 							graficoAltura.atualizarFilaDeErroP(justP);
 							graficoAltura.atualizarFilaDeErroI(justI);
 							graficoAltura.atualizarFilaDeErroD(justD);
-							
-						
 						break;
 					}
 	    			
 					graficoAltura.atualizarGrafico();
 	    			painelAltura.validate();
-				
 				}
 	    		controleWindUP = dados.getVP();
 	    		verificarRegras();
@@ -345,7 +332,6 @@ public class Tanque extends Thread {
 	    			
 	    			graficoAltura.atualizarGrafico();
 	    			painelAltura.validate();
-			
 	    		}
 	    		
 				Thread.sleep(100);
@@ -462,33 +448,63 @@ public class Tanque extends Thread {
 	}
 
 	void tempoAcomoda(){
-		
+		if (true)
+		{
+			t_acomoda = onda.getTempo() - t_acomoda - 0.1;
+			dados.gettAcomoda().setText(String.valueOf(t_acomoda));
+			flagSettleTempo = true;
+		}
 	}
 	
 	void tempoSubida(){
-		if(setPoint > dados.getPV())
+		if(dados.getPV() >= dados.getFatSup() * setPoint)
 		{
-			t_subida++;
+			t_subida = onda.getTempo() -  t_subida - 0.1;
+			dados.gettSubida().setText(String.valueOf(t_subida));
+			flagSubida = true;
 		}
-		else
+		else if (dados.getPV() <= dados.getFatInf() * setPoint)
 		{
-			t_subida_set = true;
+			t_subida = onda.getTempo();
 		}
 	}
 	
 	void tempoPico(){
-		if (newSetPoint > setPoint)
-		{
-			t_pico++;
+		if (setPoint - oldSetPoint > 0){
+			if (dados.getPV() < nivel_passado)
+			{
+				t_pico = onda.getTempo() - t_pico - 0.1;
+				nivel_pico = nivel_passado;
+				if (dados.isPicoAbs())
+					dados.getNivelPico().setText(String.valueOf(100 * (nivel_pico - setPoint)/(setPoint - oldSetPoint)));
+				else
+					dados.gettPico().setText(String.valueOf(t_pico));
+				flagPico = true;
+			}
 		}
 		else
 		{
-			t_pico_set = true;
+			if (dados.getPV() > nivel_passado)
+			{
+				t_pico = onda.getTempo() - t_pico - 0.1;
+				nivel_pico = nivel_passado;
+				if (dados.isPicoAbs())
+					dados.getNivelPico().setText(String.valueOf(100 * (nivel_pico - setPoint)/(setPoint - oldSetPoint)));
+				else
+					dados.gettPico().setText(String.valueOf(t_pico));
+				flagPico = true;
+			}
 		}
 	}
 	
 	void sp_mudou(){
-		t_pico = t_subida = t_acomoda = 0;
-		t_pico_set = t_subida_set = t_acomoda_set = false;
+		//t_pico = t_subida = t_acomoda = 0;
+		flagPico = flagSettleTempo = flagSubida = false;
+		oldSetPoint = setPoint;
+		setPoint = newSetPoint;
+		dados.gettSubida().setText("");
+		dados.gettAcomoda().setText("");
+		dados.gettPico().setText("");
+		dados.getNivelPico().setText("");
 	}
 }

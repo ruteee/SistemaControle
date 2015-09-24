@@ -15,6 +15,7 @@ public class ChartNivel {
 
 	public LinkedList<Ponto> filaDeNivelUm = new LinkedList<Ponto>();
 	public LinkedList<Ponto> filaDeNivelDois = new LinkedList<Ponto>();
+	public LinkedList<Ponto> filaDeErroMesmo = new LinkedList<Ponto>();
 	
 	
 	Ponto ponto = new Ponto();
@@ -52,6 +53,35 @@ public class ChartNivel {
 	
     }
 	
+	public void atualizarFilaDeErroMesmo(Ponto ponto){
+		
+		filaDeErroMesmo.addLast(ponto);
+		
+		if (filaDeErroMesmo.size() > 600) filaDeErroMesmo.removeFirst();
+	
+	}
+	
+	public void limparFilaDeNivelDois(){
+		
+		while(!filaDeNivelDois.isEmpty())
+			filaDeNivelDois.remove();
+	
+    }
+	
+	public void limparFilaDeNivelUm(){
+		
+		while(!filaDeNivelUm.isEmpty())
+			filaDeNivelUm.remove();
+	
+    }
+	
+	public void limparFilaDeErroMesmo(){
+		
+		while(!filaDeErroMesmo.isEmpty())
+			filaDeErroMesmo.remove();
+	
+    }
+	
 
 
 		
@@ -60,6 +90,7 @@ public class ChartNivel {
 
 		XYSeries serieNivelUm = new XYSeries("NivelUm");
 		XYSeries serieNivelDois = new XYSeries("Nivel 2");
+		XYSeries serieErroMesmo = new XYSeries("Erro");
 		
 		
 		//isso trava a thread?
@@ -70,13 +101,14 @@ public class ChartNivel {
 		for (int i = 0; i < filaDeNivelDois.size(); i++)
 			serieNivelUm.add(filaDeNivelDois.get(i).getX(), filaDeNivelDois.get(i).getY());
 		
-		
+		for (int i = 0; i < filaDeErroMesmo.size(); i++)
+			serieErroMesmo.add(filaDeErroMesmo.get(i).getX(), filaDeErroMesmo.get(i).getY());
 		
 		
 		XYSeriesCollection dataset= new XYSeriesCollection();
 		dataset.addSeries(serieNivelUm);
 		dataset.addSeries(serieNivelDois);
-		
+		dataset.addSeries(serieErroMesmo);
 		
 		
 		return dataset;
@@ -106,7 +138,13 @@ public class ChartNivel {
 		else{renderer.setSeriesLinesVisible(0, false);}
 		renderer.setSeriesPaint(0, Color.BLUE);
 		
-				
+		//Erro Mesmo
+		renderer.setSeriesShapesVisible(6, false);
+			if(dados.isErroMesmo()){
+				renderer.setSeriesLinesVisible(6, true);
+				renderer.setSeriesPaint(6, Color.PINK);
+			}
+			else{renderer.setSeriesLinesVisible(6, false);}
 				
 		
 		

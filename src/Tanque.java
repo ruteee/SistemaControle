@@ -136,7 +136,7 @@ public class Tanque extends Thread {
 					Ponto vpSemControle = new Ponto();
 					vpSemControle.setX(onda.getTempo() - 0.1);
 					vpSemControle.setY(erro);
-					grafico.atualizarFilaDeErroMesmo(vpSemControle);
+					graficoAltura.atualizarFilaDeErroMesmo(vpSemControle);
 
 					//painelAltura.validate();
 					
@@ -192,7 +192,7 @@ public class Tanque extends Thread {
 							Ponto erroPonto = new Ponto();
 				    		erroPonto.setX(onda.getTempo() - 0.1); 
 				    		erroPonto.setY(dados.getVP());
-				    		grafico.atualizarFilaDeErroMesmo(erroPonto);
+				    		graficoAltura.atualizarFilaDeErroMesmo(erroPonto);
 						break;
 						
 						default:

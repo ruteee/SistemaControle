@@ -24,7 +24,7 @@ public class Chart{
 	public LinkedList<Ponto> filaDeErroP = new LinkedList<Ponto>();
 	public LinkedList<Ponto> filaDeErroI = new LinkedList<Ponto>();
 	public LinkedList<Ponto> filaDeErroD = new LinkedList<Ponto>();
-	public LinkedList<Ponto> filaDeErroMesmo = new LinkedList<Ponto>();
+	
 	
 	
 	Ponto ponto = new Ponto();
@@ -77,13 +77,7 @@ public void atualizarFilaDeSetPoint(Ponto ponto){
 		
 	}
 	
-	public void atualizarFilaDeErroMesmo(Ponto ponto){
-		
-		filaDeErroMesmo.addLast(ponto);
-		
-		if (filaDeErroMesmo.size() > 600) filaDeErroMesmo.removeFirst();
-	
-	}
+
 	public void atualizarFilaDeErroP(Ponto ponto){
 			
 			filaDeErroP.addLast(ponto);
@@ -91,7 +85,41 @@ public void atualizarFilaDeSetPoint(Ponto ponto){
 			if (filaDeErroP.size() > 600) filaDeErroP.removeFirst();
 		
 	}
+
+	public void limparFilaDeSetPoint(){
+		
+		while(!filaDeSetPoint.isEmpty())
+			filaDeSetPoint.remove();
 	
+    }
+	
+	public void limparFilaDeVP(){
+		
+		while(!filaDeVP.isEmpty())
+			filaDeVP.remove();
+	
+    }
+	
+	public void limparFilaDeP(){
+		
+		while(!filaDeErroP.isEmpty())
+			filaDeErroP.remove();
+	
+    }
+	
+	public void limparFilaDeI(){
+			
+			while(!filaDeErroI.isEmpty())
+				filaDeErroI.remove();
+		
+	}
+	
+	public void limparFilaDeD(){
+		
+		while(!filaDeErroP.isEmpty())
+			filaDeErroP.remove();
+	
+    }
 	
 
 	public void atualizarFilaDeErroI(Ponto ponto){
@@ -122,7 +150,7 @@ public void atualizarFilaDeSetPoint(Ponto ponto){
 		XYSeries serieErroP = new XYSeries("Erro Proporcional");
 		XYSeries serieErroI = new XYSeries("Erro Integral");
 		XYSeries serieErroD = new XYSeries("Erro Derivativo");
-		XYSeries serieErroMesmo = new XYSeries("Erro");
+		
 		//erro saturado de malha fechada
 		//XYSeries VPsaturado = new XYSeries("VP Saturado");
 	
@@ -149,8 +177,7 @@ public void atualizarFilaDeSetPoint(Ponto ponto){
 		for (int i = 0; i < filaDeErroD.size(); i++)
 			serieErroD.add(filaDeErroD.get(i).getX(), filaDeErroD.get(i).getY());
 		
-		for (int i = 0; i < filaDeErroMesmo.size(); i++)
-			serieErroMesmo.add(filaDeErroMesmo.get(i).getX(), filaDeErroMesmo.get(i).getY());
+		
 		
 		
 		/*for (int i = 0; i < filaDeVPSaturado.size(); i++)
@@ -166,7 +193,7 @@ public void atualizarFilaDeSetPoint(Ponto ponto){
 		dataset.addSeries(serieErroP);
 		dataset.addSeries(serieErroI);
 		dataset.addSeries(serieErroD);
-		dataset.addSeries(serieErroMesmo);
+		
 		//dataset.addSeries(serieErroSaturado);
 		
 		
@@ -257,13 +284,7 @@ public void atualizarFilaDeSetPoint(Ponto ponto){
 		renderer.setSeriesPaint(5, Color.GRAY);
 		
 		
-		//Erro Mesmo
-		renderer.setSeriesShapesVisible(6, false);
-			if(dados.isErroMesmo()){
-				renderer.setSeriesLinesVisible(6, true);
-				renderer.setSeriesPaint(6, Color.PINK);
-			}
-			else{renderer.setSeriesLinesVisible(6, false);}
+		
 	
 	
     graph.getXYPlot().setRenderer(renderer);

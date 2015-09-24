@@ -139,6 +139,9 @@ public class Tela extends TelaGeral{
 	
 	private JTextPane textPaneTr, textPaneMp, textPaneTp, textPaneTs;
 	
+	public String onda_limpa_tanque;
+	public double amplitude_limpa_tanque;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -644,7 +647,9 @@ public class Tela extends TelaGeral{
 		btnReset.setEnabled(false);
 		btnReset.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				thread.interrupt();
+				//onda_limpa_tanque = "Degrau";
+				//amplitude_limpa_tanque = 0;
+				
 			}
 		});
 		botaoAtualizar.addActionListener(new ActionListener() {
@@ -654,6 +659,16 @@ public class Tela extends TelaGeral{
 				if(validaDadosDeIO() && validaTipoMalha() && validaOnda() && validaParamsControlador(comboTipoControlador)){
 					
 					dados.setComControle(chckbxComControle.isSelected());
+					
+					thread.graficoAltura.limparFilaDeErroMesmo();
+					thread.graficoAltura.limparFilaDeNivelDois();
+					thread.graficoAltura.limparFilaDeNivelUm();
+					thread.grafico.limparFilaDeSetPoint();
+					thread.grafico.limparFilaDeVP();
+					thread.grafico.limparFilaDeP();
+					thread.grafico.limparFilaDeI();
+					thread.grafico.limparFilaDeD();
+					
 					
 					// Setar na dados os checkBox dos gráficos
 					dados.setTensao(chckbxTensCalc.isSelected());
@@ -1298,7 +1313,7 @@ public class Tela extends TelaGeral{
 	
 	private void inicializaCheckSinaisGrafico1(){
 		chckbxTensaoSat = new JCheckBox("Tens\u00E3o Sat. ");
-		chckbxTensaoSat.setBounds(623, 185, 79, 13);		
+		chckbxTensaoSat.setBounds(619, 185, 79, 13);		
 		chckbxTensaoSat.setBackground(Color.WHITE);
 		chckbxTensaoSat.setVisible(false);
 		chckbxTensaoSat.setEnabled(false);

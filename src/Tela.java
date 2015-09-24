@@ -74,9 +74,9 @@ public class Tela extends TelaGeral{
 	private JLabel lblAmplitude;
 	private JLabel lblAmplitudeMin;
 	
-	@SuppressWarnings("rawtypes")
+	//@SuppressWarnings("rawtypes")
 	private JComboBox leitura1;
-	@SuppressWarnings("rawtypes")
+	//@SuppressWarnings("rawtypes")
 	private JComboBox leitura2;
 	@SuppressWarnings("rawtypes")
 	private JComboBox escrita;
@@ -396,35 +396,29 @@ public class Tela extends TelaGeral{
 	 */
 	public boolean validaDadosDeIO(){
 		
-		//if(leitura1.getSelectedIndex() == 0){
-		if(rdbtnTanque1.isSelected()){
-			//JOptionPane.showMessageDialog(frame, "Informe o porta de Leitura 1.");
-			//dados.setPinoDeLeitura1((int)((Integer)leitura1.getSelectedItem()));
-			dados.setPinoDeLeitura1(0);
-			return false;
-		}/*else{
+		if(leitura1.getSelectedIndex() == 0){
+				JOptionPane.showMessageDialog(frame, "Informe o porta de Leitura 1.");
 			dados.setPinoDeLeitura1((int)((Integer)leitura1.getSelectedItem()));
-		}*/
-		
-		//if(leitura2.getSelectedIndex() == 0){
-		if(rdbtnTanque2.isSelected()){
-			//JOptionPane.showMessageDialog(frame, "Informe o porta de Leitura 2.");
-			//dados.setPinoDeLeitura2((int)((Integer)leitura2.getSelectedItem()));
-			dados.setPinoDeLeitura2(1);
-			return true;
-			//return false;
-		}/*else{
-			dados.setPinoDeLeitura2((int)((Integer)leitura2.getSelectedItem()));
-		}*/
 			
-		//if(escrita.getSelectedIndex() == 0){
-			//JOptionPane.showMessageDialog(frame, "Informe a porta de Escrita.");
+		}else{
+			dados.setPinoDeLeitura1((int)((Integer)leitura1.getSelectedItem()));
+		}
 		
-			//return true;
-			//return false;
-		/*}else{
+		if(leitura2.getSelectedIndex() == 0){
+		
+			JOptionPane.showMessageDialog(frame, "Informe o porta de Leitura 2.");
+			dados.setPinoDeLeitura2((int)((Integer)leitura2.getSelectedItem()));
+			return false;
+		}else{
+			dados.setPinoDeLeitura2((int)((Integer)leitura2.getSelectedItem()));
+		}
+			
+		if(escrita.getSelectedIndex() == 0){
+			JOptionPane.showMessageDialog(frame, "Informe a porta de Escrita.");
+			return false;
+		}else{
 			dados.setPinoDeEscrita((int)((Integer)escrita.getSelectedItem()));
-		}*/
+		}
 		
 		return true;
 	}
@@ -572,7 +566,7 @@ public class Tela extends TelaGeral{
 		panelBombas.setLayout(null);
 		
 		rdbtnTanque1 = new JRadioButton("Tanque 1");
-		rdbtnTanque1.setBounds(29, 35, 71, 23);
+		/*rdbtnTanque1.setBounds(29, 35, 71, 23);
 		rdbtnTanque1.setEnabled(false);
 		rdbtnTanque1.setSelected(false);
 		rdbtnTanque1.addActionListener(new ActionListener() {
@@ -591,7 +585,7 @@ public class Tela extends TelaGeral{
 				rdbtnTanque1.setSelected(false);
 			}
 		});
-		panelBombas.add(rdbtnTanque2);
+		panelBombas.add(rdbtnTanque2);*/
 		
 	}
 	
@@ -604,8 +598,8 @@ public class Tela extends TelaGeral{
 		abas.addTab("Opções de Entrada", null, panelOpcoesEntrada, null);
 		panelOpcoesEntrada.setLayout(null);
 		
-//		inicializarPainelEntradasSaidas();
-//		panelOpcoesEntrada.add(panelIO);
+		inicializarPainelEntradasSaidas();
+		panelOpcoesEntrada.add(panelIO);
 		
 		inicializePainelOpcoesTanque();
 		panelOpcoesEntrada.add(panelBombas);
@@ -1175,12 +1169,12 @@ public class Tela extends TelaGeral{
 			
 			habilitarComponentesPainelTipoMalha(true);
 			
-//			leitura1.setEnabled(true);
-//			leitura2.setEnabled(true);
-//			escrita.setEnabled(true);
+			leitura1.setEnabled(true);
+			leitura2.setEnabled(true);
+			escrita.setEnabled(true);
 			
-			rdbtnTanque1.setEnabled(true);
-			rdbtnTanque2.setEnabled(true);
+			//rdbtnTanque1.setEnabled(true);
+			//rdbtnTanque2.setEnabled(true);
 			
 			comboTipoOnda.setEnabled(true);
 			
@@ -1225,18 +1219,18 @@ public class Tela extends TelaGeral{
 			periodoMin.setEnabled(false);
 			offSet.setEnabled(false);
 			
-//			escrita.setEnabled(false);
-//			leitura1.setEnabled(false);
-//			leitura2.setEnabled(false);
+			escrita.setEnabled(false);
+			leitura1.setEnabled(false);
+			leitura2.setEnabled(false);
 			
-//			escrita.setSelectedItem("Selecione");
-//			leitura1.setSelectedItem("Selecione");
-//			leitura2.setSelectedItem("Selecione");
+			escrita.setSelectedItem("Selecione");
+			leitura1.setSelectedItem("Selecione");
+			leitura2.setSelectedItem("Selecione");
 			
-			rdbtnTanque1.setEnabled(false);
-			rdbtnTanque1.setSelected(false);
-			rdbtnTanque2.setEnabled(false);
-			rdbtnTanque2.setSelected(false);
+	//		rdbtnTanque1.setEnabled(false);
+		//	rdbtnTanque1.setSelected(false);
+			//rdbtnTanque2.setEnabled(false);
+		//	rdbtnTanque2.setSelected(false);
 
 			comboTipoOnda.setEnabled(false);
 			comboTipoOnda.setSelectedIndex(0);

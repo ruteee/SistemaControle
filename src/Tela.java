@@ -396,29 +396,35 @@ public class Tela extends TelaGeral{
 	 */
 	public boolean validaDadosDeIO(){
 		
-		if(leitura1.getSelectedIndex() == 0){
-			JOptionPane.showMessageDialog(frame, "Informe o porta de Leitura 1.");
-			
+		//if(leitura1.getSelectedIndex() == 0){
+		if(rdbtnTanque1.isSelected()){
+			//JOptionPane.showMessageDialog(frame, "Informe o porta de Leitura 1.");
+			//dados.setPinoDeLeitura1((int)((Integer)leitura1.getSelectedItem()));
+			dados.setPinoDeLeitura1(0);
 			return false;
-		}else{
+		}/*else{
 			dados.setPinoDeLeitura1((int)((Integer)leitura1.getSelectedItem()));
-		}
+		}*/
 		
-		if(leitura2.getSelectedIndex() == 0){
-			JOptionPane.showMessageDialog(frame, "Informe o porta de Leitura 2.");
-			
-			return false;
-		}else{
+		//if(leitura2.getSelectedIndex() == 0){
+		if(rdbtnTanque2.isSelected()){
+			//JOptionPane.showMessageDialog(frame, "Informe o porta de Leitura 2.");
+			//dados.setPinoDeLeitura2((int)((Integer)leitura2.getSelectedItem()));
+			dados.setPinoDeLeitura2(1);
+			return true;
+			//return false;
+		}/*else{
 			dados.setPinoDeLeitura2((int)((Integer)leitura2.getSelectedItem()));
-		}
+		}*/
 			
-		if(escrita.getSelectedIndex() == 0){
-			JOptionPane.showMessageDialog(frame, "Informe a porta de Escrita.");
+		//if(escrita.getSelectedIndex() == 0){
+			//JOptionPane.showMessageDialog(frame, "Informe a porta de Escrita.");
 		
-			return false;
-		}else{
+			//return true;
+			//return false;
+		/*}else{
 			dados.setPinoDeEscrita((int)((Integer)escrita.getSelectedItem()));
-		}
+		}*/
 		
 		return true;
 	}
@@ -692,6 +698,28 @@ public class Tela extends TelaGeral{
 					if(chckbxWindUp.isSelected()){
 						dados.setTt(Double.parseDouble(textFieldTt.getText()));
 					}
+					
+					int a = (int) spinnerTs.getValue();
+					switch(a){
+					
+						case 2: 
+							dados.setfaixa2(true);
+						break;
+						
+						case 5: 
+							dados.setfaixa5(true);
+						break;
+						
+						case 7: 
+							dados.setfaixa7(true);
+						break;
+						
+						case 10: 
+							dados.setfaixa10(true);
+						break;
+					}
+						
+					
 					//grafico
 					thread.setDados(dados);
 					thread.setDadosGrafico(dados);

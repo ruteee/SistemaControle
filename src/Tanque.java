@@ -11,6 +11,7 @@ public class Tanque extends Thread {
    
 	public double vps;
 	public double volt = 0;
+	public double volt1 = 0;
 	public static  double IntErro = 0;
 	public static  double erroAnterior = 0;
 	public static double derivada = 0;
@@ -22,6 +23,7 @@ public class Tanque extends Thread {
 	public double setPoint;
 	public double newSetPoint;
 	public double oldSetPoint;
+	public double settleTempo;
 	
 	public double nivel_passado;
 	public double nivel_pico = 0;
@@ -35,6 +37,8 @@ public class Tanque extends Thread {
     public boolean flagPico = false;
     //public boolean flagSobreSinal = false;
     public boolean flagSettleTempo = false;
+
+    public int faixa;
     
     public Ponto vp;
     
@@ -62,12 +66,13 @@ public class Tanque extends Thread {
     public void run() {
     //	int cont = 0;
         getConexao();
-        
+     //  setPoint = dados.getAmplitude();
     	while(true){
 	       	try {
 	        		
-	    		dados.setPV( quanserclient.read(dados.getPinoDeLeitura1()));
+	    		dados.setPV( quanserclient.read(dados.getPinoDeLeitura2()));
 	    		volt = dados.getPV();
+	    		volt1 = quanserclient.read(0);
 	       		//volt = 1;
 	       		
 	    		
@@ -94,7 +99,7 @@ public class Tanque extends Thread {
 				}else if (dados.getTipoMalha().equals("Malha Fechada")){
 				
 					// plot do set point
-					//Ponto pontoSet = new Ponto();
+					
 					
 					//sinal de controle do set-point
 					Ponto pontoSet = new Ponto(onda.gerarPonto());
@@ -110,8 +115,7 @@ public class Tanque extends Thread {
 					newSetPoint = pontoSet.getY();
 					
 	    			if(!dados.getTipoSinal().equals("Dente de serra") && !dados.getTipoSinal().equals("Senoidal")){
-	    				//if(newSetPoint > setPoint){
-	    				//	sp_atual = pontoSet.getY();
+	    				
 					
 						if (setPoint != newSetPoint)
 							sp_mudou();
@@ -121,7 +125,8 @@ public class Tanque extends Thread {
 						if (!flagPico)
 							tempoPico();
 						if (!flagSettleTempo)
-							tempoAcomoda();
+							settleTempo();
+
 	    				//}
 	    				nivel_passado = pontoSet.getY();
 	    			}
@@ -352,15 +357,15 @@ public class Tanque extends Thread {
 			    vps = -4;
 			
 			//LH
-			if (volt*6.25 > 28 && dados.getVP() > 3.15)
+			if (volt1*6.25 > 28 && dados.getVP() > 3.15)
 			    vps = 3.15;
 
 			//LHH
-			if (volt*6.25 > 29 && dados.getVP() > 0) 
+			if (volt1*6.25 > 29 && dados.getVP() > 0) 
 			    vps = 0;
 	
 			//LL
-			if (volt*6.25 < 4 && dados.getVP()< 0)
+			if (volt1*6.25 < 4 && dados.getVP()< 0)
 			    vps = 0;
 			
 			dados.setVP(vps);
@@ -432,9 +437,9 @@ public class Tanque extends Thread {
 	
 	public double acaoI(double erro){
 		if(!dados.isWindUP())
-			IntErro = IntErro + dados.getKI()*erro;
+			IntErro = IntErro + dados.getKI()*erro*0.1;
 		else{
-			IntErro = IntErro + dados.getKI()*erro + (1/(dados.getTt()))*(controleAnteriorSaturado - controleWindUP);
+			IntErro = IntErro + dados.getKI()*erro*0.1 + (1/(dados.getTt()))*(controleAnteriorSaturado - controleWindUP);
 		}
 		return IntErro;	
 	}
@@ -451,6 +456,7 @@ public class Tanque extends Thread {
 		if (true)
 		{
 			t_acomoda = onda.getTempo() - t_acomoda - 0.1;
+
 			dados.gettAcomoda().setText(String.valueOf(t_acomoda));
 			flagSettleTempo = true;
 		}
@@ -459,7 +465,7 @@ public class Tanque extends Thread {
 	void tempoSubida(){
 		if(dados.getPV() >= dados.getFatSup() * setPoint)
 		{
-			t_subida = onda.getTempo() -  t_subida - 0.1;
+			t_subida = onda.getTempo() - t_subida - 0.1;
 			dados.gettSubida().setText(String.valueOf(t_subida));
 			flagSubida = true;
 		}
@@ -495,6 +501,37 @@ public class Tanque extends Thread {
 				flagPico = true;
 			}
 		}
+	}
+
+	void settleTempo(){
+		
+		double nivelDeComparacao = 0; 
+		
+
+
+		if (dados.isFaixa2())
+			nivelDeComparacao = setPoint*0.02; 
+
+		if (dados.isFaixa5())
+			nivelDeComparacao = setPoint*0.05; 
+
+		if (dados.isFaixa7())
+			nivelDeComparacao = setPoint*0.07;
+
+		if (dados.isFaixa10())
+			nivelDeComparacao = setPoint*0.1;
+	
+		if(!flagSettleTempo){
+			if(dados.getPV() <= nivelDeComparacao + setPoint && dados.getPV() >= setPoint - nivelDeComparacao ){
+					settleTempo = onda.getTempo() - 0.1;
+					flagSettleTempo = true; 
+			}
+		}
+
+
+		if(flagSettleTempo)
+			dados.gettAcomoda().setText(String.valueOf(settleTempo));
+		else{dados.gettAcomoda().setText("");}
 	}
 	
 	void sp_mudou(){

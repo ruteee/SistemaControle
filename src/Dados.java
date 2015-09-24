@@ -22,6 +22,7 @@ public class Dados {
 	private String tipoDeControle;
 	
 	private boolean windUP, tensao, tensaoSat, nivel1, nivel2, setPoint, erro, proporcional, integral, derivativo, erroMesmo;
+	private boolean faixa2, faixa5, faixa7, faixa10;
 
 	private double KP;
 	private double KI;
@@ -30,6 +31,7 @@ public class Dados {
 	
 	private double PV;
 	private double vp;
+	private double vp1;
 	
 	private double duracao;
 	
@@ -231,6 +233,40 @@ public class Dados {
 		return windUP;
 	}
 
+	public void setfaixa2(boolean faixa2) {
+		this.faixa2 = faixa2;
+	}
+
+	public boolean isFaixa2() {
+		return faixa2;
+	}
+
+	public void setfaixa5(boolean faixa5) {
+		this.faixa5 = faixa5;
+	}
+
+	public boolean isFaixa5() {
+		return faixa5;
+	}
+
+
+	public void setfaixa7(boolean faixa4) {
+		this.faixa7 = faixa7;
+	}
+
+	public boolean isFaixa7() {
+		return faixa10;
+	}
+
+	public void setfaixa10(boolean faixa4) {
+		this.faixa10 = faixa10;
+	}
+
+	public boolean isFaixa10() {
+		return faixa10;
+	}
+
+	
 	public void setWindUP(boolean windUP) {
 		this.windUP = windUP;
 	}
@@ -379,5 +415,13 @@ public class Dados {
 
 	public void setPicoAbs(boolean picoAbs) {
 		this.picoAbs = picoAbs;
+	}
+
+	public double getVp1() {
+		return vp1;
+	}
+
+	public void setVp1(double vp1) {
+		this.vp1 = vp1;
 	}
 }

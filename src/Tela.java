@@ -196,11 +196,20 @@ public class Tela extends TelaGeral{
 		inicializaPainelGraficos();
 		frame.getContentPane().add(panelGraficos);
 		
+		inicializePaineisParametrosSinal();
+		
+		inicializaPainelCheckSinaisGraficos();
+		
+//		redimensionarPainelGrafico2(panelGrafico1, panelGrafico2);
+	}
+	
+	private void inicializePaineisParametrosSinal(){
+		//Inicializando Painel Tr
 		JPanel panelTr = new JPanel();
 		panelTr.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Tempo de Subida (Tr)", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
-		panelTr.setBounds(333, 513, 122, 117);
-		frame.getContentPane().add(panelTr);
+		panelTr.setBounds(333, 513, 122, 117);		
 		panelTr.setLayout(null);
+		frame.getContentPane().add(panelTr);
 		
 		rdbtnTempoSubida1 = new JRadioButton("0 - 100%");
 		rdbtnTempoSubida1.setEnabled(false);
@@ -235,6 +244,7 @@ public class Tela extends TelaGeral{
 		rdbtnTempoSubida3.setBounds(18, 87, 76, 23);
 		panelTr.add(rdbtnTempoSubida3);
 		
+		//Inicializando Painel Mp
 		panelMp = new JPanel();
 		panelMp.setLayout(null);
 		panelMp.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "M\u00E1x. Sobre-Sinal Percentual (Mp)", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
@@ -261,11 +271,16 @@ public class Tela extends TelaGeral{
 		rdbtnAbs.setBounds(131, 29, 45, 23);
 		panelMp.add(rdbtnAbs);
 		
+		//Inicializando Painel Ts
 		panelTs = new JPanel();
 		panelTs.setLayout(null);
 		panelTs.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Tempo de Acomoda\u00E7\u00E3o (Ts)", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		panelTs.setBounds(465, 571, 199, 59);
 		frame.getContentPane().add(panelTs);
+		
+		JLabel lblTsPorcentagem = new JLabel("Ts (%):");
+		lblTsPorcentagem.setBounds(31, 28, 56, 20);
+		panelTs.add(lblTsPorcentagem);
 		
 		spinnerTs = new JSpinner();
 		spinnerTs.setEnabled(false);
@@ -273,59 +288,52 @@ public class Tela extends TelaGeral{
 		spinnerTs.setBounds(87, 28, 56, 20);
 		panelTs.add(spinnerTs);
 		
-		JLabel lblTsPorcentagem = new JLabel("Ts (%):");
-		lblTsPorcentagem.setBounds(31, 28, 56, 20);
-		panelTs.add(lblTsPorcentagem);
-		
+		//Inicializando Painel Painel de exibição dos Valores
 		panelValores = new JPanel();
 		panelValores.setBorder(new TitledBorder(null, "Valores Atuais", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panelValores.setBounds(670, 513, 375, 117);
 		frame.getContentPane().add(panelValores);
 		panelValores.setLayout(null);
 		
-		textPaneTr = new JTextPane();
-		textPaneTr.setBounds(59, 26, 101, 36);
-		textPaneTr.setEditable(false);
-		panelValores.add(textPaneTr);
-		
-		textPaneMp = new JTextPane();
-		textPaneMp.setBounds(59, 70, 101, 36);
-		textPaneMp.setEditable(false);
-		panelValores.add(textPaneMp);
-		
-		textPaneTp = new JTextPane();
-		textPaneTp.setBounds(225, 26, 101, 36);
-		textPaneTp.setEditable(false);
-		panelValores.add(textPaneTp);
-		
-		textPaneTs = new JTextPane();
-		textPaneTs.setBounds(225, 70, 101, 36);
-		textPaneTs.setEditable(false);
-		panelValores.add(textPaneTs);
-		
-		JLabel lblTp = new JLabel("Tp:");
-		lblTp.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		lblTp.setBounds(194, 26, 28, 36);
-		panelValores.add(lblTp);
-		
-		JLabel lblTs = new JLabel("Ts:");
-		lblTs.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		lblTs.setBounds(194, 70, 28, 36);
-		panelValores.add(lblTs);
-		
 		JLabel lblTr = new JLabel("Tr:");
 		lblTr.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		lblTr.setBounds(31, 26, 24, 36);
 		panelValores.add(lblTr);
+		
+		textPaneTr = new JTextPane();
+		textPaneTr.setBounds(59, 26, 101, 36);
+		textPaneTr.setEditable(false);
+		panelValores.add(textPaneTr);
 		
 		JLabel lblMp = new JLabel("Mp:");
 		lblMp.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		lblMp.setBounds(25, 70, 30, 36);
 		panelValores.add(lblMp);
 		
-		inicializaPainelCheckSinaisGraficos();
+		textPaneMp = new JTextPane();
+		textPaneMp.setBounds(59, 70, 101, 36);
+		textPaneMp.setEditable(false);
+		panelValores.add(textPaneMp);
 		
-//		redimensionarPainelGrafico2(panelGrafico1, panelGrafico2);
+		JLabel lblTp = new JLabel("Tp:");
+		lblTp.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		lblTp.setBounds(194, 26, 28, 36);
+		panelValores.add(lblTp);
+		
+		textPaneTp = new JTextPane();
+		textPaneTp.setBounds(225, 26, 101, 36);
+		textPaneTp.setEditable(false);
+		panelValores.add(textPaneTp);
+		
+		JLabel lblTs = new JLabel("Ts:");
+		lblTs.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		lblTs.setBounds(194, 70, 28, 36);
+		panelValores.add(lblTs);
+		
+		textPaneTs = new JTextPane();
+		textPaneTs.setBounds(225, 70, 101, 36);
+		textPaneTs.setEditable(false);
+		panelValores.add(textPaneTs);		
 	}
 	
 	private void inicializarPainelDadosServidor(){
@@ -393,12 +401,36 @@ public class Tela extends TelaGeral{
 	
 	private void inicializeBotõesPainelPrincipal(){
 	}
+	
+	/** 
+	 * Valida o tanque que será controlado. Depois, Popula os parâmetros de Leitura e Escrita na classe Dados.
+	 */
+	public boolean validaTanque(){
+		if(!rdbtnTanque1.isSelected() && !rdbtnTanque2.isSelected()){
+			JOptionPane.showMessageDialog(frame, "Informe a planta que você deseja controlar.");
+		
+			return false;
+		}
+		
+		if(rdbtnTanque1.isSelected()){		
+			dados.setPinoDeLeitura1(0);
+		
+			return true;
+		}
+		
+		if(rdbtnTanque2.isSelected()){
+			dados.setPinoDeLeitura2(1);
+			
+			return true;
+		}
+		
+		return true;
+	}	
 
 	/** 
 	 * Valida campos e Popula os parâmetros de Leitura(1 e 2) e Escrita na classe Dados.
 	 */
-	public boolean validaDadosDeIO(){
-		
+	public boolean validaDadosDeIO(){			
 		if(leitura1.getSelectedIndex() == 0){
 				JOptionPane.showMessageDialog(frame, "Informe o porta de Leitura 1.");
 			dados.setPinoDeLeitura1((int)((Integer)leitura1.getSelectedItem()));
@@ -569,7 +601,7 @@ public class Tela extends TelaGeral{
 		panelBombas.setLayout(null);
 		
 		rdbtnTanque1 = new JRadioButton("Tanque 1");
-		/*rdbtnTanque1.setBounds(29, 35, 71, 23);
+		rdbtnTanque1.setBounds(29, 35, 71, 23);
 		rdbtnTanque1.setEnabled(false);
 		rdbtnTanque1.setSelected(false);
 		rdbtnTanque1.addActionListener(new ActionListener() {
@@ -588,8 +620,7 @@ public class Tela extends TelaGeral{
 				rdbtnTanque1.setSelected(false);
 			}
 		});
-		panelBombas.add(rdbtnTanque2);*/
-		
+		panelBombas.add(rdbtnTanque2);
 	}
 	
 	private void inicializePainelOpcoesEntrada(){
@@ -617,32 +648,21 @@ public class Tela extends TelaGeral{
 //		panelOpcoesEntrada.add(panelTipoControlador);
 		
 		inicializarPainelParamsControlador();
-		panelOpcoesEntrada.add(panelParamsControlador);
-		
-		textFieldTt = new JTextField();
-		textFieldTt.setEnabled(false);
-		textFieldTt.setBounds(196, 20, 66, 20);
-		panelParamsControlador.add(textFieldTt);
-		textFieldTt.setColumns(10);
-		
-		JLabel lblTt = new JLabel("Tt:");
-		lblTt.setBounds(164, 20, 22, 20);
-		panelParamsControlador.add(lblTt);
+		panelOpcoesEntrada.add(panelParamsControlador);		
 		
 		inicializarOutrosComponentesPainelOpcoesEntrada();
 		panelOpcoesEntrada.add(comboTipoOnda);
 		panelOpcoesEntrada.add(chckbxComControle);
 		panelOpcoesEntrada.add(chckbxWindUp);
-		panelOpcoesEntrada.add(comboTipoControlador);
+		panelOpcoesEntrada.add(comboTipoControlador);		
 		botaoAtualizar = new JButton("Atualizar");
-		botaoAtualizar.setBounds(40, 462, 101, 43);
+		botaoAtualizar.setBounds(32, 462, 101, 43);
 		panelOpcoesEntrada.add(botaoAtualizar);
-		botaoAtualizar.setIcon(new ImageIcon(Tela.class.getResource("/Icons/1439269378_gtk-refresh.png")));
-		
+		botaoAtualizar.setIcon(new ImageIcon(Tela.class.getResource("/Icons/1439269378_gtk-refresh.png")));		
 		botaoAtualizar.setEnabled(false);
 		
 		btnReset = new JButton("Reset");
-		btnReset.setBounds(181, 462, 101, 43);
+		btnReset.setBounds(173, 462, 101, 43);
 		panelOpcoesEntrada.add(btnReset);
 		btnReset.setEnabled(false);
 		btnReset.addActionListener(new ActionListener() {
@@ -726,8 +746,7 @@ public class Tela extends TelaGeral{
 						case 10: 
 							dados.setFaixa10(true);
 						break;
-					}
-						
+					}					
 					
 					//grafico
 					thread.setDados(dados);
@@ -779,7 +798,7 @@ public class Tela extends TelaGeral{
 	
 	private void inicializarPainelTiposMalha(){
 		panelTipoMalha = new JPanel();
-		panelTipoMalha.setBounds(166, 5, 153, 110);
+		panelTipoMalha.setBounds(195, 5, 124, 110);
 		panelTipoMalha.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Tipo de Malha", TitledBorder.LEADING, TitledBorder.TOP, null, Color.GRAY));
 		panelTipoMalha.setLayout(null);	
 				
@@ -966,6 +985,16 @@ public class Tela extends TelaGeral{
 			}
 		});
 		panelParamsControlador.add(textFieldTald);
+		
+		textFieldTt = new JTextField();
+		textFieldTt.setEnabled(false);
+		textFieldTt.setBounds(196, 20, 66, 20);
+		panelParamsControlador.add(textFieldTt);
+		textFieldTt.setColumns(10);
+		
+		JLabel lblTt = new JLabel("Tt:");
+		lblTt.setBounds(164, 20, 22, 20);
+		panelParamsControlador.add(lblTt);
 		
 		labelInterrogation = new JLabel("");
 		labelInterrogation.setToolTipText("Para Atualizar os parametros, basta clicar nos campos.");

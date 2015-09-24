@@ -35,7 +35,7 @@ public class Tanque extends Thread {
     public boolean controle = true;
     public boolean flagSubida = false;
     public boolean flagPico = false;
-    //public boolean flagSobreSinal = false;
+    public boolean flagSobreSinal = false;
     public boolean flagSettleTempo = false;
 
     public int faixa;
@@ -48,6 +48,8 @@ public class Tanque extends Thread {
 	QuanserClient quanserclient;
 	JLayeredPane painelTensao, painelAltura;
 	Tsunami onda = new Tsunami(dados.getPeriodo(), dados.getPeriodoMinino(),dados.getOffset(),dados.getAmplitude(),dados.getAmplitudeMinima(),dados.getTipoSinal());
+
+	
 
 	
 	public Tanque() {}
@@ -73,8 +75,7 @@ public class Tanque extends Thread {
 	    		dados.setPV( quanserclient.read(dados.getPinoDeLeitura2()));
 	    		volt = dados.getPV();
 	    		volt1 = quanserclient.read(0);
-	       		//volt = 1;
-	       		
+	       		       		
 	    		
 	    		if(dados.getTipoMalha().equals("Malha Aberta")){
 	    			
@@ -109,8 +110,8 @@ public class Tanque extends Thread {
 					}
 					//Controle dos erros com e sem PID
 					
-					graficoAltura.atualizarFilaDeSetPoint(pontoSet);
-					erro = -volt*6.25 + (graficoAltura.filaDeSetPoint.get(graficoAltura.filaDeSetPoint.size() - 1).getY());
+					grafico.atualizarFilaDeSetPoint(pontoSet);
+					erro = -volt*6.25 + (grafico.filaDeSetPoint.get(grafico.filaDeSetPoint.size() - 1).getY());
 					
 					newSetPoint = pontoSet.getY();
 					
@@ -128,14 +129,14 @@ public class Tanque extends Thread {
 							settleTempo();
 
 	    				//}
-	    				nivel_passado = pontoSet.getY();
+	    				nivel_passado = pontoSet.getY(); //??????
 	    			}
 					//colocar radio button na interface para selcionar 
 					
 					Ponto vpSemControle = new Ponto();
 					vpSemControle.setX(onda.getTempo() - 0.1);
 					vpSemControle.setY(erro);
-					graficoAltura.atualizarFilaDeErroMesmo(vpSemControle);
+					grafico.atualizarFilaDeErroMesmo(vpSemControle);
 
 					//painelAltura.validate();
 					
@@ -191,7 +192,7 @@ public class Tanque extends Thread {
 							Ponto erroPonto = new Ponto();
 				    		erroPonto.setX(onda.getTempo() - 0.1); 
 				    		erroPonto.setY(dados.getVP());
-				    		graficoAltura.atualizarFilaDeErroMesmo(erroPonto);
+				    		grafico.atualizarFilaDeErroMesmo(erroPonto);
 						break;
 						
 						default:
@@ -199,7 +200,7 @@ public class Tanque extends Thread {
 						break;
 					}
 					
-					graficoAltura.atualizarFilaDeVP(vp);
+					grafico.atualizarFilaDeVP(vp);
 					
 					Ponto justP;
 					Ponto justI;
@@ -217,9 +218,9 @@ public class Tanque extends Thread {
 							justP = new Ponto();
 							justP.setX(onda.getTempo() - 0.1);
 							justP.setY(acaoP(erro));
-							graficoAltura.atualizarFilaDeErroP(justP);
-							graficoAltura.atualizarFilaDeErroD(base);
-							graficoAltura.atualizarFilaDeErroI(base);
+							grafico.atualizarFilaDeErroP(justP);
+							grafico.atualizarFilaDeErroD(base);
+							grafico.atualizarFilaDeErroI(base);
 						break;
 						
 						case "PI":
@@ -236,9 +237,9 @@ public class Tanque extends Thread {
 							justI.setX(onda.getTempo() - 0.1);
 							justI.setY(acaoI(erro));
 							
-							graficoAltura.atualizarFilaDeErroP((justP));
-							graficoAltura.atualizarFilaDeErroI((justI));
-							graficoAltura.atualizarFilaDeErroD(base1);
+							grafico.atualizarFilaDeErroP((justP));
+							grafico.atualizarFilaDeErroI((justI));
+							grafico.atualizarFilaDeErroD(base1);
 						break;
 						
 						case "PD":
@@ -256,9 +257,9 @@ public class Tanque extends Thread {
 							justD.setX(onda.getTempo() - 0.1);
 							justD.setY(derivada);
 							
-							graficoAltura.atualizarFilaDeErroP(justP);
-							graficoAltura.atualizarFilaDeErroD(justD);
-							graficoAltura.atualizarFilaDeErroI(base2);
+							grafico.atualizarFilaDeErroP(justP);
+							grafico.atualizarFilaDeErroD(justD);
+							grafico.atualizarFilaDeErroI(base2);
 						break;
 						
 						case "PID":
@@ -275,9 +276,9 @@ public class Tanque extends Thread {
 							justD.setX(onda.getTempo() - 0.1);
 							justD.setY(derivada);
 							
-							graficoAltura.atualizarFilaDeErroP(justP);
-							graficoAltura.atualizarFilaDeErroI(justI);
-							graficoAltura.atualizarFilaDeErroD(justD);
+							grafico.atualizarFilaDeErroP(justP);
+							grafico.atualizarFilaDeErroI(justI);
+							grafico.atualizarFilaDeErroD(justD);
 						break;
 						
 						case "PI-D":
@@ -294,9 +295,9 @@ public class Tanque extends Thread {
 							justD.setX(onda.getTempo() - 0.1);
 							justD.setY(derivada);
 							
-							graficoAltura.atualizarFilaDeErroP(justP);
-							graficoAltura.atualizarFilaDeErroI(justI);
-							graficoAltura.atualizarFilaDeErroD(justD);
+							grafico.atualizarFilaDeErroP(justP);
+							grafico.atualizarFilaDeErroI(justI);
+							grafico.atualizarFilaDeErroD(justD);
 						break;
 					}
 	    			
@@ -341,6 +342,7 @@ public class Tanque extends Thread {
 	    		
 				Thread.sleep(100);
 				//System.out.println(cont++);
+				System.out.println(volt);
 			} catch (QuanserClientException | InterruptedException e) {e.printStackTrace();}
 		}
     	
@@ -463,13 +465,13 @@ public class Tanque extends Thread {
 	}
 	
 	void tempoSubida(){
-		if(dados.getPV() >= dados.getFatSup() * setPoint)
+		if(/*dados.getPV()*/ volt >= dados.getFatSup() * setPoint)
 		{
-			t_subida = onda.getTempo() - t_subida - 0.1;
+			t_subida = onda.getTempo() - t_subida;
 			dados.gettSubida().setText(String.valueOf(t_subida));
 			flagSubida = true;
 		}
-		else if (dados.getPV() <= dados.getFatInf() * setPoint)
+		else if (/*dados.getPV()*/ volt <= dados.getFatInf() * setPoint)
 		{
 			t_subida = onda.getTempo();
 		}
@@ -477,7 +479,7 @@ public class Tanque extends Thread {
 	
 	void tempoPico(){
 		if (setPoint - oldSetPoint > 0){
-			if (dados.getPV() < nivel_passado)
+			if (/*dados.getPV()*/ volt < nivel_passado)
 			{
 				t_pico = onda.getTempo() - t_pico - 0.1;
 				nivel_pico = nivel_passado;
@@ -490,7 +492,7 @@ public class Tanque extends Thread {
 		}
 		else
 		{
-			if (dados.getPV() > nivel_passado)
+			if (/*dados.getPV()*/ volt > nivel_passado)
 			{
 				t_pico = onda.getTempo() - t_pico - 0.1;
 				nivel_pico = nivel_passado;
@@ -544,4 +546,6 @@ public class Tanque extends Thread {
 		dados.gettPico().setText("");
 		dados.getNivelPico().setText("");
 	}
+	
+	
 }

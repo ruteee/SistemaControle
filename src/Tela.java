@@ -74,9 +74,9 @@ public class Tela extends TelaGeral{
 	private JLabel lblAmplitude;
 	private JLabel lblAmplitudeMin;
 	
-	//@SuppressWarnings("rawtypes")
+	@SuppressWarnings("rawtypes")
 	private JComboBox leitura1;
-	//@SuppressWarnings("rawtypes")
+	@SuppressWarnings("rawtypes")
 	private JComboBox leitura2;
 	@SuppressWarnings("rawtypes")
 	private JComboBox escrita;
@@ -399,7 +399,7 @@ public class Tela extends TelaGeral{
 		if(leitura1.getSelectedIndex() == 0){
 				JOptionPane.showMessageDialog(frame, "Informe o porta de Leitura 1.");
 			dados.setPinoDeLeitura1((int)((Integer)leitura1.getSelectedItem()));
-			
+			return false;
 		}else{
 			dados.setPinoDeLeitura1((int)((Integer)leitura1.getSelectedItem()));
 		}
@@ -697,19 +697,19 @@ public class Tela extends TelaGeral{
 					switch(a){
 					
 						case 2: 
-							dados.setfaixa2(true);
+							dados.setFaixa2(true);
 						break;
 						
 						case 5: 
-							dados.setfaixa5(true);
+							dados.setFaixa5(true);
 						break;
 						
 						case 7: 
-							dados.setfaixa7(true);
+							dados.setFaixa7(true);
 						break;
 						
 						case 10: 
-							dados.setfaixa10(true);
+							dados.setFaixa10(true);
 						break;
 					}
 						

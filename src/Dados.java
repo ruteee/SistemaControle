@@ -233,7 +233,7 @@ public class Dados {
 		return windUP;
 	}
 
-	public void setfaixa2(boolean faixa2) {
+	public void setFaixa2(boolean faixa2) {
 		this.faixa2 = faixa2;
 	}
 
@@ -241,7 +241,7 @@ public class Dados {
 		return faixa2;
 	}
 
-	public void setfaixa5(boolean faixa5) {
+	public void setFaixa5(boolean faixa5) {
 		this.faixa5 = faixa5;
 	}
 
@@ -250,15 +250,15 @@ public class Dados {
 	}
 
 
-	public void setfaixa7(boolean faixa4) {
+	public void setFaixa7(boolean faixa7) {
 		this.faixa7 = faixa7;
 	}
 
 	public boolean isFaixa7() {
-		return faixa10;
+		return faixa7;
 	}
 
-	public void setfaixa10(boolean faixa4) {
+	public void setFaixa10(boolean faixa10) {
 		this.faixa10 = faixa10;
 	}
 

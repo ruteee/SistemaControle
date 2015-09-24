@@ -400,6 +400,108 @@ public class Tela extends TelaGeral{
 	}
 	
 	private void inicializeBotõesPainelPrincipal(){
+		botaoAtualizar = new JButton("Atualizar");
+		botaoAtualizar.setBounds(37, 462, 101, 43);
+		botaoAtualizar.setIcon(new ImageIcon(Tela.class.getResource("/Icons/1439269378_gtk-refresh.png")));		
+		botaoAtualizar.setEnabled(false);
+		
+		btnReset = new JButton("Reset");
+		btnReset.setBounds(178, 462, 101, 43);
+		btnReset.setEnabled(false);
+		btnReset.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				//onda_limpa_tanque = "Degrau";
+				//amplitude_limpa_tanque = 0;
+				
+			}
+		});
+		botaoAtualizar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) { 
+				dados = new Dados();					
+				
+				if(validaDadosDeIO() && validaTipoMalha() && validaOnda() && validaParamsControlador(comboTipoControlador)){
+					
+					dados.setComControle(chckbxComControle.isSelected());
+					
+					thread.graficoAltura.limparFilaDeErroMesmo();
+					thread.graficoAltura.limparFilaDeNivelDois();
+					thread.graficoAltura.limparFilaDeNivelUm();
+					thread.grafico.limparFilaDeSetPoint();
+					thread.grafico.limparFilaDeVP();
+					thread.grafico.limparFilaDeP();
+					thread.grafico.limparFilaDeI();
+					thread.grafico.limparFilaDeD();
+					
+					
+					// Setar na dados os checkBox dos gráficos
+					dados.setTensao(chckbxTensCalc.isSelected());
+					dados.setTensaoSat(chckbxTensaoSat.isSelected());
+					dados.setSetPoint(chckbxSetPoint.isSelected());
+					dados.setErroMesmo(chckbxErro.isSelected());
+					dados.setErro(chckbxControle.isSelected());
+					dados.setProporcional(chckbxP.isSelected());
+					dados.setIntegral(chckbxI.isSelected());
+					dados.setDerivativo(chckbxD.isSelected());
+					dados.setNivel1(chckbxNivTanque1.isSelected());
+					dados.setWindUP(chckbxWindUp.isSelected());
+					
+					dados.settPico(textPaneTp);
+					dados.settAcomoda(textPaneTs);
+					dados.settSubida(textPaneTr);
+					dados.setNivelPico(textPaneMp);
+					
+					dados.setPicoAbs(rdbtnAbs.isSelected());
+					
+					if (rdbtnTempoSubida1.isSelected())
+					{
+						dados.setFatInf(0);
+						dados.setFatSup(1);
+					}
+					else if (rdbtnTempoSubida2.isSelected())
+					{
+						dados.setFatInf(0.05);
+						dados.setFatSup(0.95);
+					}
+					else if (rdbtnTempoSubida3.isSelected())
+					{
+						dados.setFatInf(0.1);
+						dados.setFatSup(0.9);
+					}
+					if(chckbxWindUp.isSelected()){
+						dados.setTt(Double.parseDouble(textFieldTt.getText()));
+					}
+					
+					int a = (int) spinnerTs.getValue();
+					switch(a){
+					
+						case 2: 
+							dados.setFaixa2(true);
+						break;
+						
+						case 5: 
+							dados.setFaixa5(true);
+						break;
+						
+						case 7: 
+							dados.setFaixa7(true);
+						break;
+						
+						case 10: 
+							dados.setFaixa10(true);
+						break;
+					}					
+					
+					//grafico
+					thread.setDados(dados);
+					thread.setDadosGrafico(dados);
+					if (!thread.isAlive()) {		
+						thread.setPainelTensao(panelGrafico1);
+						thread.setPainelAltura(panelGrafico2);
+						thread.start();
+					}
+				}
+			}
+		});
 	}
 	
 	/** 
@@ -654,111 +756,12 @@ public class Tela extends TelaGeral{
 		panelOpcoesEntrada.add(comboTipoOnda);
 		panelOpcoesEntrada.add(chckbxComControle);
 		panelOpcoesEntrada.add(chckbxWindUp);
-		panelOpcoesEntrada.add(comboTipoControlador);		
-		botaoAtualizar = new JButton("Atualizar");
-		botaoAtualizar.setBounds(32, 462, 101, 43);
-		panelOpcoesEntrada.add(botaoAtualizar);
-		botaoAtualizar.setIcon(new ImageIcon(Tela.class.getResource("/Icons/1439269378_gtk-refresh.png")));		
-		botaoAtualizar.setEnabled(false);
+		panelOpcoesEntrada.add(comboTipoControlador);
 		
-		btnReset = new JButton("Reset");
-		btnReset.setBounds(173, 462, 101, 43);
+		inicializeBotõesPainelPrincipal();
+		panelOpcoesEntrada.add(botaoAtualizar);
 		panelOpcoesEntrada.add(btnReset);
-		btnReset.setEnabled(false);
-		btnReset.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				//onda_limpa_tanque = "Degrau";
-				//amplitude_limpa_tanque = 0;
-				
-			}
-		});
-		botaoAtualizar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) { 
-				dados = new Dados();					
-				
-				if(validaDadosDeIO() && validaTipoMalha() && validaOnda() && validaParamsControlador(comboTipoControlador)){
-					
-					dados.setComControle(chckbxComControle.isSelected());
-					
-					thread.graficoAltura.limparFilaDeErroMesmo();
-					thread.graficoAltura.limparFilaDeNivelDois();
-					thread.graficoAltura.limparFilaDeNivelUm();
-					thread.grafico.limparFilaDeSetPoint();
-					thread.grafico.limparFilaDeVP();
-					thread.grafico.limparFilaDeP();
-					thread.grafico.limparFilaDeI();
-					thread.grafico.limparFilaDeD();
-					
-					
-					// Setar na dados os checkBox dos gráficos
-					dados.setTensao(chckbxTensCalc.isSelected());
-					dados.setTensaoSat(chckbxTensaoSat.isSelected());
-					dados.setSetPoint(chckbxSetPoint.isSelected());
-					dados.setErroMesmo(chckbxErro.isSelected());
-					dados.setErro(chckbxControle.isSelected());
-					dados.setProporcional(chckbxP.isSelected());
-					dados.setIntegral(chckbxI.isSelected());
-					dados.setDerivativo(chckbxD.isSelected());
-					dados.setNivel1(chckbxNivTanque1.isSelected());
-					dados.setWindUP(chckbxWindUp.isSelected());
-					
-					dados.settPico(textPaneTp);
-					dados.settAcomoda(textPaneTs);
-					dados.settSubida(textPaneTr);
-					dados.setNivelPico(textPaneMp);
-					
-					dados.setPicoAbs(rdbtnAbs.isSelected());
-					
-					if (rdbtnTempoSubida1.isSelected())
-					{
-						dados.setFatInf(0);
-						dados.setFatSup(1);
-					}
-					else if (rdbtnTempoSubida2.isSelected())
-					{
-						dados.setFatInf(0.05);
-						dados.setFatSup(0.95);
-					}
-					else if (rdbtnTempoSubida3.isSelected())
-					{
-						dados.setFatInf(0.1);
-						dados.setFatSup(0.9);
-					}
-					if(chckbxWindUp.isSelected()){
-						dados.setTt(Double.parseDouble(textFieldTt.getText()));
-					}
-					
-					int a = (int) spinnerTs.getValue();
-					switch(a){
-					
-						case 2: 
-							dados.setFaixa2(true);
-						break;
-						
-						case 5: 
-							dados.setFaixa5(true);
-						break;
-						
-						case 7: 
-							dados.setFaixa7(true);
-						break;
-						
-						case 10: 
-							dados.setFaixa10(true);
-						break;
-					}					
-					
-					//grafico
-					thread.setDados(dados);
-					thread.setDadosGrafico(dados);
-					if (!thread.isAlive()) {		
-						thread.setPainelTensao(panelGrafico1);
-						thread.setPainelAltura(panelGrafico2);
-						thread.start();
-					}
-				}
-			}
-		});
+		
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })

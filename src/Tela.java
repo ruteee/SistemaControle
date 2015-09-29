@@ -472,6 +472,13 @@ public class Tela extends TelaGeral{
 						dados.setTt(Double.parseDouble(textFieldTt.getText()));
 					}
 					
+					if(rdbtnTanque1.isSelected()){
+						dados.setTanque1(true);
+					}					
+					if(rdbtnTanque2.isSelected()){
+						dados.setTanque2(true);
+					}
+					
 					int a = (int) spinnerTs.getValue();
 					switch(a){
 					
@@ -768,6 +775,7 @@ public class Tela extends TelaGeral{
 		panelOpcoesEntrada.add(lblControlar);
 		
 		JRadioButton rdbtnTanque = new JRadioButton("Tanque 1");
+		
 		rdbtnTanque.setBounds(73, 122, 71, 23);
 		panelOpcoesEntrada.add(rdbtnTanque);
 		

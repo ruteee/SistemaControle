@@ -141,6 +141,7 @@ public class Tela extends TelaGeral{
 	
 	public String onda_limpa_tanque;
 	public double amplitude_limpa_tanque;
+	private JLabel lblControlar;
 	
 	/**
 	 * Launch the application.
@@ -401,12 +402,12 @@ public class Tela extends TelaGeral{
 	
 	private void inicializeBotõesPainelPrincipal(){
 		botaoAtualizar = new JButton("Atualizar");
-		botaoAtualizar.setBounds(37, 462, 101, 43);
+		botaoAtualizar.setBounds(37, 482, 101, 23);
 		botaoAtualizar.setIcon(new ImageIcon(Tela.class.getResource("/Icons/1439269378_gtk-refresh.png")));		
 		botaoAtualizar.setEnabled(false);
 		
 		btnReset = new JButton("Reset");
-		btnReset.setBounds(178, 462, 101, 43);
+		btnReset.setBounds(178, 482, 101, 23);
 		btnReset.setEnabled(false);
 		btnReset.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -762,6 +763,18 @@ public class Tela extends TelaGeral{
 		panelOpcoesEntrada.add(botaoAtualizar);
 		panelOpcoesEntrada.add(btnReset);
 		
+		lblControlar = new JLabel("Controlar: ");
+		lblControlar.setBounds(15, 126, 52, 14);
+		panelOpcoesEntrada.add(lblControlar);
+		
+		JRadioButton rdbtnTanque = new JRadioButton("Tanque 1");
+		rdbtnTanque.setBounds(73, 122, 71, 23);
+		panelOpcoesEntrada.add(rdbtnTanque);
+		
+		JRadioButton rdbtnTanque_1 = new JRadioButton("Tanque 2");
+		rdbtnTanque_1.setBounds(150, 122, 71, 23);
+		panelOpcoesEntrada.add(rdbtnTanque_1);
+		
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -842,7 +855,7 @@ public class Tela extends TelaGeral{
 	
 	private void inicializarPainelDadosSinal(){
 		panelDadosSinal = new JPanel();
-		panelDadosSinal.setBounds(5, 150, 314, 115);		
+		panelDadosSinal.setBounds(5, 178, 314, 115);		
 		panelDadosSinal.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Par\u00E2metros do Sinal", TitledBorder.RIGHT, TitledBorder.TOP, null, Color.GRAY));
 		panelDadosSinal.setLayout(null);
 		
@@ -900,7 +913,7 @@ public class Tela extends TelaGeral{
 		
 	private void inicializarPainelParamsControlador(){
 		panelParamsControlador = new JPanel();
-		panelParamsControlador.setBounds(5, 335, 314, 103);
+		panelParamsControlador.setBounds(5, 368, 314, 103);
 		panelParamsControlador.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Par\u00E2metros do Controlador", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(128, 128, 128)));
 		panelParamsControlador.setLayout(null);
 		
@@ -1009,7 +1022,7 @@ public class Tela extends TelaGeral{
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void inicializarOutrosComponentesPainelOpcoesEntrada(){
 		chckbxComControle = new JCheckBox("Acionar Controlador");
-		chckbxComControle.setBounds(28, 272, 124, 23);
+		chckbxComControle.setBounds(32, 304, 124, 23);
 		chckbxComControle.setEnabled(false);
 		chckbxComControle.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -1024,7 +1037,7 @@ public class Tela extends TelaGeral{
 		});
 		
 		chckbxWindUp = new JCheckBox("Acionar Wind Up");
-		chckbxWindUp.setBounds(177, 272, 113, 23);
+		chckbxWindUp.setBounds(177, 304, 113, 23);
 		chckbxWindUp.setEnabled(false);
 		chckbxWindUp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -1035,12 +1048,12 @@ public class Tela extends TelaGeral{
 		});
 		
 		JLabel lblTipoOnda = new JLabel("Tipo de Onda:");
-		lblTipoOnda.setBounds(49, 120, 78, 23);
+		lblTipoOnda.setBounds(49, 144, 78, 23);
 		panelOpcoesEntrada.add(lblTipoOnda);
 		
 		comboTipoOnda = new JComboBox(getItensComboTiposOnda());
 		comboTipoOnda.setEnabled(false);
-		comboTipoOnda.setBounds(128, 120, 151, 23);
+		comboTipoOnda.setBounds(128, 144, 151, 23);
 		comboTipoOnda.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(comboTipoOnda.getSelectedItem().equals("Selecione")){
@@ -1111,11 +1124,11 @@ public class Tela extends TelaGeral{
 		});
 		
 		JLabel lblTipoControlador = new JLabel("Tipo do Controlador:");
-		lblTipoControlador.setBounds(32, 303, 100, 23);
+		lblTipoControlador.setBounds(38, 334, 100, 23);
 		panelOpcoesEntrada.add(lblTipoControlador);
 		
 		comboTipoControlador = new JComboBox(getItensComboTiposControle());
-		comboTipoControlador.setBounds(145, 303, 151, 23);
+		comboTipoControlador.setBounds(139, 334, 151, 23);
 		comboTipoControlador.setEnabled(false);
 		comboTipoControlador.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {

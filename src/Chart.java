@@ -61,7 +61,7 @@ public class Chart{
 	
 	//novass
 	
-public void atualizarFilaDeSetPoint(Ponto ponto){
+	public void atualizarFilaDeSetPoint(Ponto ponto){
 		
 		filaDeSetPoint.addLast(ponto);
 		
@@ -86,12 +86,28 @@ public void atualizarFilaDeSetPoint(Ponto ponto){
 		
 	}
 
-	public void limparFilaDeSetPoint(){
+	public void atualizarFilaDeErroI(Ponto ponto){
 		
-		while(!filaDeSetPoint.isEmpty())
-			filaDeSetPoint.remove();
+		filaDeErroI.addLast(ponto);
+		
+		if (filaDeErroI.size() > 600) filaDeErroI.removeFirst();
 	
-    }
+	}
+	
+	public void atualizarFilaDeErroD(Ponto ponto){
+		
+		filaDeErroD.addLast(ponto);
+		
+		if (filaDeErroD.size() > 600) filaDeErroD.removeFirst();
+	
+	}
+	
+	public void limparFilaDeSetPoint(){
+			
+			while(!filaDeSetPoint.isEmpty())
+				filaDeSetPoint.remove();
+		
+	}
 	
 	public void limparFilaDeVP(){
 		
@@ -116,28 +132,10 @@ public void atualizarFilaDeSetPoint(Ponto ponto){
 	
 	public void limparFilaDeD(){
 		
-		while(!filaDeErroP.isEmpty())
-			filaDeErroP.remove();
+		while(!filaDeErroD.isEmpty())
+			filaDeErroD.remove();
 	
     }
-	
-
-	public void atualizarFilaDeErroI(Ponto ponto){
-		
-		filaDeErroI.addLast(ponto);
-		
-		if (filaDeErroI.size() > 600) filaDeErroI.removeFirst();
-	
-	}
-	
-	public void atualizarFilaDeErroD(Ponto ponto){
-		
-		filaDeErroD.addLast(ponto);
-		
-		if (filaDeErroD.size() > 600) filaDeErroD.removeFirst();
-	
-	}
-	
 	public XYDataset criarDataset()
 	{
 

@@ -80,13 +80,7 @@ public class Tanque extends Thread {
 	    		nivel_one = dados.getPV();
 	    		nivel_two = dados.getPV_two();
 	       		       		
-	    		if(dados.isTanque1()){
-	    			nivel_coringa = nivel_one;
-	    			erro_coringa = erro_nivel_one;
-	    		}else{
-	    			nivel_coringa = nivel_two;
-	    			erro_coringa = erro_nivel_two;
-	    		}
+	    		
 	    		if(dados.getTipoMalha().equals("Malha Aberta")){
 	    			
 	    			//fila de tensão - Sinal de controle
@@ -98,19 +92,21 @@ public class Tanque extends Thread {
 	    			dados.setVP(grafico.filaDePontos.get(grafico.filaDePontos.size() - 1).getY()); 
 	    			
 	    			//fila de nivel - nível do tanque
-	    			Ponto pontoNivelAberta = new Ponto();
-	    			pontoNivelAberta.setY(nivel_coringa*6.25);
-	    			pontoNivelAberta.setX(onda.getTempo() - 0.1);
-	    			graficoAltura.atualizarFilaDeNivelUm(new Ponto(pontoNivelAberta));
+	    			Ponto nivelAberta_one = new Ponto();
+	    			nivelAberta_one.setY(nivel_one*6.25);
+	    			nivelAberta_one.setX(onda.getTempo() - 0.1);
+	    			graficoAltura.atualizarFilaDeNivelUm(new Ponto(nivelAberta_one));
+	    			
+	    			Ponto nivelAberta_two = new Ponto();
+	    			nivelAberta_two.setY(nivel_two*6.25);
+	    			nivelAberta_two.setX(onda.getTempo() - 0.1);
+	    			graficoAltura.atualizarFilaDeNivelUm(new Ponto(nivelAberta_two));
 	    			
 	    			graficoAltura.atualizarGrafico();
 	    			painelAltura.validate();
 	    			
 	    			
 				}else if (dados.getTipoMalha().equals("Malha Fechada")){
-				
-					// plot do set point
-					
 					
 					//sinal de controle do set-point
 					Ponto pontoSet = new Ponto(onda.gerarPonto());
@@ -118,17 +114,28 @@ public class Tanque extends Thread {
 					if(pontoSet.getY() < 0){
 						pontoSet.setY(0);
 					}
-					//Controle dos erros com e sem PID
 					
+					// plot do set point
 					grafico.atualizarFilaDeSetPoint(pontoSet);
 					erro_nivel_one = -nivel_one*6.25 + (grafico.filaDeSetPoint.get(grafico.filaDeSetPoint.size() - 1).getY());
 					erro_nivel_two = -nivel_two*6.25 + (grafico.filaDeSetPoint.get(grafico.filaDeSetPoint.size() - 1).getY());
 					
 					newSetPoint = pontoSet.getY();
+					//Controle dos erros com e sem PID
+					
+					
+					//adaptação para escolha dos niveis
+					if(dados.isTanque1()){
+		    			nivel_coringa = nivel_one;
+		    			erro_coringa = erro_nivel_one;
+		    		}else{
+		    			nivel_coringa = nivel_two;
+		    			erro_coringa = erro_nivel_two;
+		    		}
+					
 					
 	    			if(!dados.getTipoSinal().equals("Dente de serra") && !dados.getTipoSinal().equals("Senoidal")){
-	    				
-					
+
 						if (setPoint != newSetPoint)
 							sp_mudou();
 						
@@ -340,12 +347,17 @@ public class Tanque extends Thread {
 					grafico.atualizarGrafico();
 	    			painelTensao.validate();
 	    			
-	    			//plot de nivel do tanque
+	    			//plots de nivel dos tanques
 	    			
-	    			Ponto nivel = new Ponto();
-	    			nivel.setY(nivel_coringa*6.25);
-	    			nivel.setX(onda.getTempo() - 0.1);
-	    			graficoAltura.atualizarFilaDeNivelUm(new Ponto(nivel));
+	    			Ponto nivel_1= new Ponto();
+	    			nivel_1.setY(nivel_one*6.25);
+	    			nivel_1.setX(onda.getTempo() - 0.1);
+	    			graficoAltura.atualizarFilaDeNivelUm(new Ponto(nivel_1));
+	    			
+	    			Ponto nivel_2 = new Ponto();
+	    			nivel_2.setY(nivel_two*6.25);
+	    			nivel_2.setX(onda.getTempo() - 0.1);
+	    			graficoAltura.atualizarFilaDeNivelUm(new Ponto(nivel_2));
 	    			
 	    			graficoAltura.atualizarGrafico();
 	    			painelAltura.validate();

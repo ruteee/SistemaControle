@@ -171,7 +171,7 @@ public class Tanque extends Thread {
 	    			graficoAltura.atualizarGrafico();
 	    			painelAltura.validate();
 
-					
+					//Passando o sinal por um controlador antes de enviar para a planta
 					switch (dados.getTipoDeControle()){
 					
 						case "P" : 
@@ -233,6 +233,8 @@ public class Tanque extends Thread {
 						break;
 					}
 					
+					
+					//Atualização do painel de tensões
 					grafico.atualizarFilaDeVP(vp);
 					painelTensao.validate();
 					
@@ -240,7 +242,7 @@ public class Tanque extends Thread {
 					Ponto justI;
 					Ponto justD;
 					
-					//set das filas das ações separadas
+					//set das filas para plot das ações separadas
 					switch (dados.getTipoDeControle()){
 					
 						case "P":
@@ -335,19 +337,28 @@ public class Tanque extends Thread {
 						break;
 					}
 	    			
-					graficoAltura.atualizarGrafico();
-	    			painelAltura.validate();
+					//Validação do painel de tensões
+					grafico.atualizarGrafico();
+	    			painelTensao.validate();
 				}
 	    		
-	    		//colocar windup para os dois tanques
-	    		controleWindUP = dados.getVP();
+	    		// Controle windUp para os tanques 1 e 2
+	    		if(dados.isTanque1())
+	    			controleWindUP = dados.getVP();
+	    		else if (dados.isTanque2())
+	    			controleWindUP = dados.getVp_two();
+	    		
+	    		//Validação do sinal dentro das especificações da planta (saturação e travas)
 	    		verificarRegras();
 	    		
 	    		controleAnteriorSaturado = dados.getVP();
 	    		//quanserclient.write(dados.getPinoDeEscrita(), dados.getVP());
 	    		
 	    		if(dados.getTipoMalha().equals("Malha Aberta")){
-	    			//graficos de tensão
+	    			
+	    			
+	    			//Plot de tensão saturada em malha aberta 
+	    			
 		    		Ponto ponto = new Ponto();
 		    		ponto.setX(onda.getTempo() - 0.1); 
 		    		if(dados.isTanque1()){
@@ -357,20 +368,27 @@ public class Tanque extends Thread {
 		    		}
 		    		
 		    		grafico.atualizarDeVPSaturado(ponto);
+		    		
+		    		//Validação do painel de tensões 
 		    		grafico.atualizarGrafico();
 	    			painelTensao.validate();
 	    			
 	    		}else if (dados.getTipoMalha().equals("Malha Fechada")){
+	    			
+	    			
+	    			//Plot da tensão saturada em malha fechada;
 	    			
 	    			Ponto vpSaturado = new Ponto();
 					vpSaturado.setX(onda.getTempo() - 0.1); 
 					vpSaturado.setY(dados.getVP());
 
 					grafico.atualizarDeVPSaturado(new Ponto(vpSaturado));
+					
+					//Validação do painel de tensões 
 					grafico.atualizarGrafico();
 	    			painelTensao.validate();
 	    			
-	    			//plots de nivel dos tanques
+	    			//Plot dos níveis dos tanques 1 e 2, controle de malha fechada
 	    			
 	    			Ponto nivel_1= new Ponto();
 	    			nivel_1.setY(nivel_one*6.25);
@@ -382,6 +400,8 @@ public class Tanque extends Thread {
 	    			nivel_2.setX(onda.getTempo() - 0.1);
 	    			graficoAltura.atualizarFilaDeNivelDois(new Ponto(nivel_2));
 	    			
+	    			
+	    			//Validação do painel de níveis
 	    			graficoAltura.atualizarGrafico();
 	    			painelAltura.validate();
 	    		}

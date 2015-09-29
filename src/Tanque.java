@@ -71,7 +71,7 @@ public class Tanque extends Thread {
 
     public void run() {
     //	int cont = 0;
-        getConexao();
+      //  getConexao();
      //  setPoint = dados.getAmplitude();
     	while(true){
 	       	try {
@@ -84,15 +84,18 @@ public class Tanque extends Thread {
 	    		
 	    		if(dados.getTipoMalha().equals("Malha Aberta")){
 	    			
-	    			//fila de tensão - Sinal de controle
-	    			grafico.atualizarFila(new Ponto(onda.gerarPonto()));    
+	    			//sinal enviado para a planta 
+	    			grafico.atualizarFilaDeVP(new Ponto(onda.gerarPonto()));    
 	    			
+	    			
+	    			//validação do painel de tensões
 	    			grafico.atualizarGrafico();
 	    			painelTensao.validate();
 	    			
-	    			dados.setVP(grafico.filaDePontos.get(grafico.filaDePontos.size() - 1).getY()); 
+	    			dados.setVP(grafico.filaDeVP.get(grafico.filaDeVP.size() - 1).getY()); 
 	    			
-	    			//fila de nivel - nível do tanque
+	    			
+	    			//Níveis dos tanques 1 e 2
 	    			Ponto nivelAberta_one = new Ponto();
 	    			nivelAberta_one.setY(nivel_one*6.25);
 	    			nivelAberta_one.setX(onda.getTempo() - 0.1);
@@ -103,27 +106,31 @@ public class Tanque extends Thread {
 	    			nivelAberta_two.setX(onda.getTempo() - 0.1);
 	    			graficoAltura.atualizarFilaDeNivelDois(new Ponto(nivelAberta_two));
 	    			
+	    			
+	    			//validação dos paineis de nivel
 	    			graficoAltura.atualizarGrafico();
 	    			painelAltura.validate();
 	    			
 	    			
 				}else if (dados.getTipoMalha().equals("Malha Fechada")){
 					
-					//sinal de controle do set-point
-					Ponto pontoSet = new Ponto(onda.gerarPonto());
 					
+					Ponto pontoSet = new Ponto(onda.gerarPonto());				
+					//Tratamento de setPoint negativo
 					if(pontoSet.getY() < 0){
 						pontoSet.setY(0);
 					}
-					
-					// plot do set point
+					//Atualização do gráfico de setPoint
 					graficoAltura.atualizarFilaDeSetPoint(pontoSet);
+					
+					
 					ampSetPoint = graficoAltura.filaDeSetPoint.get(graficoAltura.filaDeSetPoint.size() - 1).getY();
+					
+					//Calculo dos erros -> SinalEnviado - sinalDaPlanta
 					erro_nivel_one = -nivel_one*6.25 + ampSetPoint ;
 					erro_nivel_two = -nivel_two*6.25 + ampSetPoint;
 					
 					newSetPoint = pontoSet.getY();
-					//Controle dos erros com e sem PID
 					
 					
 					//adaptação para escolha dos niveis
@@ -148,19 +155,22 @@ public class Tanque extends Thread {
 						if (!flagSettleTempo)
 							settleTempo();
 
-	    				//}
-	    				nivel_passado = pontoSet.getY(); //??????
+	    				
+	    				nivel_passado = pontoSet.getY(); 	    			
 	    			}
-					//colocar radio button na interface para selcionar 
+				
 					
+	    			
+	    			//Sinal de Erro antes de passar ppor um controlador;
 					Ponto vpSemControle = new Ponto();
 					vpSemControle.setX(onda.getTempo() - 0.1);
 					vpSemControle.setY(erro_coringa);
 					graficoAltura.atualizarFilaDeErroMesmo(vpSemControle);
-
-					//painelAltura.validate();
 					
-					//Ponto vp;
+					//validação do painel de níveis
+	    			graficoAltura.atualizarGrafico();
+	    			painelAltura.validate();
+
 					
 					switch (dados.getTipoDeControle()){
 					
@@ -211,7 +221,10 @@ public class Tanque extends Thread {
 							
 							Ponto erroPonto = new Ponto();
 				    		erroPonto.setX(onda.getTempo() - 0.1); 
-				    		erroPonto.setY(dados.getVP());
+				    		if(dados.isTanque1())
+				    			erroPonto.setY(dados.getVP());
+				    		else if(dados.isTanque2())
+				    			erroPonto.setY(dados.getVp_two());
 				    		graficoAltura.atualizarFilaDeErroMesmo(erroPonto);
 						break;
 						
@@ -325,6 +338,8 @@ public class Tanque extends Thread {
 					graficoAltura.atualizarGrafico();
 	    			painelAltura.validate();
 				}
+	    		
+	    		//colocar windup para os dois tanques
 	    		controleWindUP = dados.getVP();
 	    		verificarRegras();
 	    		
@@ -335,7 +350,12 @@ public class Tanque extends Thread {
 	    			//graficos de tensão
 		    		Ponto ponto = new Ponto();
 		    		ponto.setX(onda.getTempo() - 0.1); 
-		    		ponto.setY(dados.getVP());
+		    		if(dados.isTanque1()){
+		    			ponto.setY(dados.getVP());
+		    		}else if (dados.isTanque2()){
+		    			ponto.setY(dados.getVp_two());
+		    		}
+		    		
 		    		grafico.atualizarDeVPSaturado(ponto);
 		    		grafico.atualizarGrafico();
 	    			painelTensao.validate();

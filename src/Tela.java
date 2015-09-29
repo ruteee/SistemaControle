@@ -422,7 +422,7 @@ public class Tela extends TelaGeral{
 				
 				if(validaDadosDeIO() && validaTipoMalha() && validaOnda() && validaParamsControlador(comboTipoControlador)){
 					
-					dados.setComControle(chckbxComControle.isSelected());
+					//dados.setComControle(chckbxComControle.isSelected());
 					
 					thread.graficoAltura.limparFilaDeErroMesmo();
 					thread.graficoAltura.limparFilaDeNivelDois();
@@ -439,7 +439,7 @@ public class Tela extends TelaGeral{
 					dados.setTensaoSat(chckbxTensaoSat.isSelected());
 					dados.setSetPoint(chckbxSetPoint.isSelected());
 					dados.setErroMesmo(chckbxErro.isSelected());
-					dados.setErro(chckbxControle.isSelected());
+					//dados.setErro(chckbxControle.isSelected());
 					dados.setProporcional(chckbxP.isSelected());
 					dados.setIntegral(chckbxI.isSelected());
 					dados.setDerivativo(chckbxD.isSelected());
@@ -1387,7 +1387,7 @@ public class Tela extends TelaGeral{
 		
 		//novos pos mudanca de chk box para esse grafico do grafico de baixo
 		
-		chckbxControle = new JCheckBox("Controle");
+	/*	chckbxControle = new JCheckBox("Controle");
 		chckbxControle.setBounds(619, 121, 102, 13);
 		chckbxControle.setBackground(Color.WHITE);
 		chckbxControle.setVisible(false);
@@ -1395,7 +1395,7 @@ public class Tela extends TelaGeral{
 		chckbxControle.setToolTipText("Sinal de Controle");
 		chckbxControle.setFont(new Font("Tahoma", Font.PLAIN, 9));
 		chckbxControle.setForeground(Color.CYAN);
-		panelGraficos.add(chckbxControle);
+		panelGraficos.add(chckbxControle);*/
 		
 		
 		
@@ -1451,12 +1451,12 @@ public class Tela extends TelaGeral{
 		
 		
 		
-		chckbxControle.addActionListener(new ActionListener() {
+		/*chckbxControle.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dados.setErro(chckbxControle.isSelected());
 				thread.setDadosGrafico(dados);
 			}
-		});
+		});*/
 		chckbxP.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dados.setProporcional(chckbxP.isSelected());
@@ -1567,7 +1567,7 @@ public class Tela extends TelaGeral{
 					chckbxTensCalc.setVisible(true);
 					chckbxTensaoSat.setVisible(true);
 					
-					chckbxControle.setVisible(true);
+					//chckbxControle.setVisible(true);
 					chckbxP.setVisible(true);
 					chckbxI.setVisible(true);
 					chckbxD.setVisible(true);
@@ -1576,7 +1576,7 @@ public class Tela extends TelaGeral{
 					chckbxTensCalc.setVisible(false);
 					chckbxTensaoSat.setVisible(false);
 					
-					chckbxControle.setVisible(false);
+				//	chckbxControle.setVisible(false);
 					chckbxP.setVisible(false);
 					chckbxI.setVisible(false);
 					chckbxD.setVisible(false);

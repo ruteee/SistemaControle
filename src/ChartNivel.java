@@ -108,13 +108,11 @@ public class ChartNivel {
 		XYSeries serieSetPoint = new XYSeries("SetPoint");
 		
 		
-		//isso trava a thread?
-		
 		for (int i = 0; i < filaDeNivelUm.size(); i++)
 			serieNivelUm.add(filaDeNivelUm.get(i).getX(), filaDeNivelUm.get(i).getY());
 		
 		for (int i = 0; i < filaDeNivelDois.size(); i++)
-			serieNivelUm.add(filaDeNivelDois.get(i).getX(), filaDeNivelDois.get(i).getY());
+			serieNivelDois.add(filaDeNivelDois.get(i).getX(), filaDeNivelDois.get(i).getY());
 		
 		for (int i = 0; i < filaDeErroMesmo.size(); i++)
 			serieErroMesmo.add(filaDeErroMesmo.get(i).getX(), filaDeErroMesmo.get(i).getY());

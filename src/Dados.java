@@ -191,13 +191,14 @@ public class Dados {
 		this.setPoint = setPoint;
 	}
 
-	public boolean isErro() {
+/*	public boolean isErro() {
 		return erro;
 	}
-
-	public void setErro(boolean erro) {
+*/
+	/*public void setErro(boolean erro) {
 		this.erro = erro;
-	}
+	}*/
+	
 	
 	
 	
@@ -308,13 +309,13 @@ public class Dados {
 		this.tipoDeControle = tipoDeControle;
 	}
 
-	public boolean isComControle() {
+	/*public boolean isComControle() {
 		return comControle;
-	}
+	}*/
 
-	public void setComControle(boolean comControle) {
+	/*public void setComControle(boolean comControle) {
 		this.comControle = comControle;
-	}
+	}*/
 
 	public double getTt() {
 		return Tt;

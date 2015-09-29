@@ -10,15 +10,18 @@ public class Tanque extends Thread {
     private int porta;
    
 	public double vps;
-	public double volt = 0;
-	public double volt1 = 0;
+	public double nivel_one = 0;
+	public double nivel_two = 0;
+	public double nivel_coringa;
+	public double erro_coringa;
 	public static  double IntErro = 0;
 	public static  double erroAnterior = 0;
 	public static double derivada = 0;
 	public double controleWindUP;
 	public double controleAnteriorSaturado;
 	public double erroD;
-	public double erro;
+	public double erro_nivel_one;
+	public double erro_nivel_two;
 	
 	public double setPoint;
 	public double newSetPoint;
@@ -72,11 +75,18 @@ public class Tanque extends Thread {
     	while(true){
 	       	try {
 	        		
-	    		dados.setPV( quanserclient.read(dados.getPinoDeLeitura2()));
-	    		volt = dados.getPV();
-	    		volt1 = quanserclient.read(0);
+	    		dados.setPV( quanserclient.read(dados.getPinoDeLeitura1()));
+	    		dados.setPV_two( quanserclient.read(dados.getPinoDeLeitura2()));
+	    		nivel_one = dados.getPV();
+	    		nivel_two = dados.getPV_two();
 	       		       		
-	    		
+	    		if(dados.isTanque1()){
+	    			nivel_coringa = nivel_one;
+	    			erro_coringa = erro_nivel_one;
+	    		}else{
+	    			nivel_coringa = nivel_two;
+	    			erro_coringa = erro_nivel_two;
+	    		}
 	    		if(dados.getTipoMalha().equals("Malha Aberta")){
 	    			
 	    			//fila de tensão - Sinal de controle
@@ -89,7 +99,7 @@ public class Tanque extends Thread {
 	    			
 	    			//fila de nivel - nível do tanque
 	    			Ponto pontoNivelAberta = new Ponto();
-	    			pontoNivelAberta.setY(volt*6.25);
+	    			pontoNivelAberta.setY(nivel_coringa*6.25);
 	    			pontoNivelAberta.setX(onda.getTempo() - 0.1);
 	    			graficoAltura.atualizarFilaDeNivelUm(new Ponto(pontoNivelAberta));
 	    			
@@ -111,7 +121,8 @@ public class Tanque extends Thread {
 					//Controle dos erros com e sem PID
 					
 					grafico.atualizarFilaDeSetPoint(pontoSet);
-					erro = -volt*6.25 + (grafico.filaDeSetPoint.get(grafico.filaDeSetPoint.size() - 1).getY());
+					erro_nivel_one = -nivel_one*6.25 + (grafico.filaDeSetPoint.get(grafico.filaDeSetPoint.size() - 1).getY());
+					erro_nivel_two = -nivel_two*6.25 + (grafico.filaDeSetPoint.get(grafico.filaDeSetPoint.size() - 1).getY());
 					
 					newSetPoint = pontoSet.getY();
 					
@@ -135,7 +146,7 @@ public class Tanque extends Thread {
 					
 					Ponto vpSemControle = new Ponto();
 					vpSemControle.setX(onda.getTempo() - 0.1);
-					vpSemControle.setY(erro);
+					vpSemControle.setY(erro_coringa);
 					graficoAltura.atualizarFilaDeErroMesmo(vpSemControle);
 
 					//painelAltura.validate();
@@ -145,14 +156,14 @@ public class Tanque extends Thread {
 					switch (dados.getTipoDeControle()){
 					
 						case "P" : 
-							dados.setVP(acaoP(erro));
+							dados.setVP(acaoP(erro_coringa));
 							vp = new Ponto();
 				    		vp.setX(onda.getTempo() - 0.1); 
 				    		vp.setY(dados.getVP());
 						break;
 						
 						case "PI":
-							dados.setVP(acaoP(erro) + acaoI(erro));
+							dados.setVP(acaoP(erro_coringa) + acaoI(erro_coringa));
 							
 							vp = new Ponto();
 				    		vp.setX(onda.getTempo() - 0.1); 
@@ -160,8 +171,8 @@ public class Tanque extends Thread {
 						break;
 						
 						case "PD":
-							derivada = acaoD(erro);
-							dados.setVP(acaoP(erro) + derivada);
+							derivada = acaoD(erro_coringa);
+							dados.setVP(acaoP(erro_coringa) + derivada);
 							
 							vp = new Ponto();
 				    		vp.setX(onda.getTempo() - 0.1); 
@@ -169,8 +180,8 @@ public class Tanque extends Thread {
 						break;
 						
 						case "PID":
-							derivada = acaoD(erro);
-							dados.setVP(acaoP(erro) + acaoI(erro) + derivada);
+							derivada = acaoD(erro_coringa);
+							dados.setVP(acaoP(erro_coringa) + acaoI(erro_coringa) + derivada);
 							
 							vp = new Ponto();
 				    		vp.setX(onda.getTempo() - 0.1); 
@@ -178,8 +189,8 @@ public class Tanque extends Thread {
 						break;
 						
 						case "PI-D":
-							derivada = acaoD(volt);
-							dados.setVP(acaoP(erro) + acaoI(erro) + derivada);
+							derivada = acaoD(nivel_coringa);
+							dados.setVP(acaoP(erro_coringa) + acaoI(erro_coringa) + derivada);
 							
 							vp = new Ponto();
 							vp.setX(onda.getTempo() - 0.1); 
@@ -187,7 +198,7 @@ public class Tanque extends Thread {
 						break;
 						
 						case "Sem Controle":
-							dados.setVP(erro);
+							dados.setVP(erro_coringa);
 							
 							Ponto erroPonto = new Ponto();
 				    		erroPonto.setX(onda.getTempo() - 0.1); 
@@ -217,7 +228,7 @@ public class Tanque extends Thread {
 							
 							justP = new Ponto();
 							justP.setX(onda.getTempo() - 0.1);
-							justP.setY(acaoP(erro));
+							justP.setY(acaoP(erro_coringa));
 							grafico.atualizarFilaDeErroP(justP);
 							grafico.atualizarFilaDeErroD(base);
 							grafico.atualizarFilaDeErroI(base);
@@ -231,11 +242,11 @@ public class Tanque extends Thread {
 							
 							justP = new Ponto();
 							justP.setX(onda.getTempo() - 0.1);
-							justP.setY(acaoP(erro));
+							justP.setY(acaoP(erro_coringa));
 							
 							justI = new Ponto();
 							justI.setX(onda.getTempo() - 0.1);
-							justI.setY(acaoI(erro));
+							justI.setY(acaoI(erro_coringa));
 							
 							grafico.atualizarFilaDeErroP((justP));
 							grafico.atualizarFilaDeErroI((justI));
@@ -251,7 +262,7 @@ public class Tanque extends Thread {
 							
 							justP = new Ponto();
 							justP.setX(onda.getTempo() - 0.1);
-							justP.setY(acaoP(erro));
+							justP.setY(acaoP(erro_coringa));
 							
 							justD = new Ponto();
 							justD.setX(onda.getTempo() - 0.1);
@@ -266,11 +277,11 @@ public class Tanque extends Thread {
 							
 							justP = new Ponto();
 							justP.setX(onda.getTempo() - 0.1);
-							justP.setY(acaoP(erro));
+							justP.setY(acaoP(erro_coringa));
 							
 							justI = new Ponto();
 							justI.setX(onda.getTempo() - 0.1);
-							justI.setY(acaoI(erro));
+							justI.setY(acaoI(erro_coringa));
 							
 							justD = new Ponto();
 							justD.setX(onda.getTempo() - 0.1);
@@ -285,11 +296,11 @@ public class Tanque extends Thread {
 							
 							justP = new Ponto();
 							justP.setX(onda.getTempo() - 0.1);
-							justP.setY(acaoP(erro));
+							justP.setY(acaoP(erro_coringa));
 							
 							justI = new Ponto();
 							justI.setX(onda.getTempo() - 0.1);
-							justI.setY(acaoI(erro));
+							justI.setY(acaoI(erro_coringa));
 							
 							justD = new Ponto();
 							justD.setX(onda.getTempo() - 0.1);
@@ -332,7 +343,7 @@ public class Tanque extends Thread {
 	    			//plot de nivel do tanque
 	    			
 	    			Ponto nivel = new Ponto();
-	    			nivel.setY(volt*6.25);
+	    			nivel.setY(nivel_coringa*6.25);
 	    			nivel.setX(onda.getTempo() - 0.1);
 	    			graficoAltura.atualizarFilaDeNivelUm(new Ponto(nivel));
 	    			
@@ -342,7 +353,7 @@ public class Tanque extends Thread {
 	    		
 				Thread.sleep(100);
 				//System.out.println(cont++);
-				System.out.println(volt);
+				System.out.println(nivel_coringa);
 			} catch (QuanserClientException | InterruptedException e) {e.printStackTrace();}
 		}
     	
@@ -359,15 +370,15 @@ public class Tanque extends Thread {
 			    vps = -4;
 			
 			//LH
-			if (volt1*6.25 > 28 && dados.getVP() > 3.15)
+			if (nivel_one*6.25 > 28 && dados.getVP() > 3.15)
 			    vps = 3.15;
 
 			//LHH
-			if (volt1*6.25 > 29 && dados.getVP() > 0) 
+			if (nivel_one*6.25 > 29 && dados.getVP() > 0) 
 			    vps = 0;
 	
 			//LL
-			if (volt1*6.25 < 4 && dados.getVP()< 0)
+			if (nivel_one*6.25 < 4 && dados.getVP()< 0)
 			    vps = 0;
 			
 			dados.setVP(vps);
@@ -465,13 +476,13 @@ public class Tanque extends Thread {
 	}
 	
 	void tempoSubida(){
-		if(/*dados.getPV()*/ volt >= dados.getFatSup() * setPoint)
+		if(/*dados.getPV()*/ nivel_coringa >= dados.getFatSup() * setPoint)
 		{
 			t_subida = onda.getTempo() - t_subida;
 			dados.gettSubida().setText(String.valueOf(t_subida));
 			flagSubida = true;
 		}
-		else if (/*dados.getPV()*/ volt <= dados.getFatInf() * setPoint)
+		else if (/*dados.getPV()*/ nivel_coringa <= dados.getFatInf() * setPoint)
 		{
 			t_subida = onda.getTempo();
 		}
@@ -479,7 +490,7 @@ public class Tanque extends Thread {
 	
 	void tempoPico(){
 		if (setPoint - oldSetPoint > 0){
-			if (/*dados.getPV()*/ volt < nivel_passado)
+			if (/*dados.getPV()*/ nivel_coringa < nivel_passado)
 			{
 				t_pico = onda.getTempo() - t_pico - 0.1;
 				nivel_pico = nivel_passado;
@@ -492,7 +503,7 @@ public class Tanque extends Thread {
 		}
 		else
 		{
-			if (/*dados.getPV()*/ volt > nivel_passado)
+			if (/*dados.getPV()*/ nivel_coringa > nivel_passado)
 			{
 				t_pico = onda.getTempo() - t_pico - 0.1;
 				nivel_pico = nivel_passado;

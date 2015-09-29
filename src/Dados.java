@@ -22,7 +22,8 @@ public class Dados {
 	private String tipoDeControle;
 	
 	private boolean windUP, tensao, tensaoSat, nivel1, nivel2, setPoint, erro, proporcional, integral, derivativo, erroMesmo;
-	private boolean faixa2, faixa5, faixa7, faixa10;
+	private boolean faixa2, faixa5, faixa7, faixa10, tanque1, tanque2;
+	
 
 	private double KP;
 	private double KI;
@@ -30,8 +31,11 @@ public class Dados {
 	private double Tt;
 	
 	private double PV;
+	private double PV_two;
 	private double vp;
 	private double vp1;
+	private double vp_two;
+	
 	
 	private double duracao;
 	
@@ -423,5 +427,37 @@ public class Dados {
 
 	public void setVp1(double vp1) {
 		this.vp1 = vp1;
+	}
+
+	public double getPV_two() {
+		return PV_two;
+	}
+
+	public void setPV_two(double pV_two) {
+		PV_two = pV_two;
+	}
+
+	public double getVp_two() {
+		return vp_two;
+	}
+
+	public void setVp_two(double vp_two) {
+		this.vp_two = vp_two;
+	}
+
+	public boolean isTanque1() {
+		return tanque1;
+	}
+
+	public void setTanque1(boolean tanque1) {
+		this.tanque1 = tanque1;
+	}
+
+	public boolean isTanque2() {
+		return tanque2;
+	}
+
+	public void setTanque2(boolean tanque2) {
+		this.tanque2 = tanque2;
 	}
 }

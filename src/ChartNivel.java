@@ -16,7 +16,7 @@ public class ChartNivel {
 	public LinkedList<Ponto> filaDeNivelUm = new LinkedList<Ponto>();
 	public LinkedList<Ponto> filaDeNivelDois = new LinkedList<Ponto>();
 	public LinkedList<Ponto> filaDeErroMesmo = new LinkedList<Ponto>();
-	
+	public LinkedList<Ponto> filaDeSetPoint = new LinkedList<Ponto>();
 	
 	Ponto ponto = new Ponto();
 	public ChartPanel  painelG2;
@@ -43,6 +43,14 @@ public class ChartNivel {
 			
 			if (filaDeNivelUm.size() > 600) filaDeNivelUm.removeFirst();
 		
+	}
+	
+	public void atualizarFilaDeSetPoint(Ponto ponto){
+		
+		filaDeSetPoint.addLast(ponto);
+		
+		if (filaDeSetPoint.size() > 600) filaDeSetPoint.removeFirst();
+	
 	}
 	
 	public void atualizarFilaDeNivelDois(Ponto ponto){
@@ -82,6 +90,12 @@ public class ChartNivel {
 	
     }
 	
+	public void limparFilaDeSetPoint(){
+		
+		while(!filaDeSetPoint.isEmpty())
+			filaDeSetPoint.remove();
+	
+}
 
 
 		
@@ -91,6 +105,7 @@ public class ChartNivel {
 		XYSeries serieNivelUm = new XYSeries("NivelUm");
 		XYSeries serieNivelDois = new XYSeries("Nivel 2");
 		XYSeries serieErroMesmo = new XYSeries("Erro");
+		XYSeries serieSetPoint = new XYSeries("SetPoint");
 		
 		
 		//isso trava a thread?
@@ -104,11 +119,16 @@ public class ChartNivel {
 		for (int i = 0; i < filaDeErroMesmo.size(); i++)
 			serieErroMesmo.add(filaDeErroMesmo.get(i).getX(), filaDeErroMesmo.get(i).getY());
 		
+
+		for (int i = 0; i < filaDeSetPoint.size(); i++)
+			serieSetPoint.add(filaDeSetPoint.get(i).getX(), filaDeSetPoint.get(i).getY());
+		
 		
 		XYSeriesCollection dataset= new XYSeriesCollection();
 		dataset.addSeries(serieNivelUm);
 		dataset.addSeries(serieNivelDois);
 		dataset.addSeries(serieErroMesmo);
+		dataset.addSeries(serieSetPoint);
 		
 		
 		return dataset;
@@ -132,21 +152,27 @@ public class ChartNivel {
 		renderer.setSeriesPaint(0, Color.BLACK);
 		
 		//Nivel 2
-		renderer.setSeriesShapesVisible(0, false);
+		renderer.setSeriesShapesVisible(1, false);
 		if(dados.isNivel2())
-			renderer.setSeriesLinesVisible(0, true);
-		else{renderer.setSeriesLinesVisible(0, false);}
-		renderer.setSeriesPaint(0, Color.BLUE);
+			renderer.setSeriesLinesVisible(1, true);
+		else{renderer.setSeriesLinesVisible(1, false);}
+		renderer.setSeriesPaint(1, Color.BLUE);
 		
 		//Erro Mesmo
-		renderer.setSeriesShapesVisible(6, false);
+		renderer.setSeriesShapesVisible(2, false);
 			if(dados.isErroMesmo()){
-				renderer.setSeriesLinesVisible(6, true);
-				renderer.setSeriesPaint(6, Color.PINK);
+				renderer.setSeriesLinesVisible(2, true);
+				renderer.setSeriesPaint(2, Color.PINK);
 			}
-			else{renderer.setSeriesLinesVisible(6, false);}
-				
-		
+			else{renderer.setSeriesLinesVisible(2, false);}
+	
+			
+		//SetPoint
+		renderer.setSeriesShapesVisible(3, false);
+		if(dados.isSetPoint())
+			renderer.setSeriesLinesVisible(3, true);
+		else{renderer.setSeriesLinesVisible(3, false);}
+		renderer.setSeriesPaint(3, Color.RED);
 		
         graph.getXYPlot().setRenderer(renderer);
         

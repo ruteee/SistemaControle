@@ -427,7 +427,7 @@ public class Tela extends TelaGeral{
 					thread.graficoAltura.limparFilaDeErroMesmo();
 					thread.graficoAltura.limparFilaDeNivelDois();
 					thread.graficoAltura.limparFilaDeNivelUm();
-					thread.grafico.limparFilaDeSetPoint();
+					thread.graficoAltura.limparFilaDeSetPoint();
 					thread.grafico.limparFilaDeVP();
 					thread.grafico.limparFilaDeP();
 					thread.grafico.limparFilaDeI();
@@ -1566,7 +1566,6 @@ public class Tela extends TelaGeral{
 					lblExibirCheckSinalGrafico1.setIcon(new ImageIcon(Tela.class.getResource("Icons/Chart-Curve-Delete-32.png")));
 					chckbxTensCalc.setVisible(true);
 					chckbxTensaoSat.setVisible(true);
-					chckbxSetPoint.setVisible(true);
 					
 					chckbxControle.setVisible(true);
 					chckbxP.setVisible(true);
@@ -1576,7 +1575,6 @@ public class Tela extends TelaGeral{
 					lblExibirCheckSinalGrafico1.setIcon(new ImageIcon(Tela.class.getResource("Icons/Chart-Curve-Add-32.png")));
 					chckbxTensCalc.setVisible(false);
 					chckbxTensaoSat.setVisible(false);
-					chckbxSetPoint.setVisible(false);
 					
 					chckbxControle.setVisible(false);
 					chckbxP.setVisible(false);
@@ -1599,14 +1597,14 @@ public class Tela extends TelaGeral{
 			public void mouseClicked(MouseEvent arg0) {
 				if(!chckbxNivTanque1.isVisible()){
 					lblExibirCheckSinalGrafico2.setIcon(new ImageIcon(Tela.class.getResource("Icons/Chart-Curve-Delete-32.png")));
-
 					chckbxNivTanque1.setVisible(true);
 					chckbxNivTanque2.setVisible(true);
 					chckbxErro.setVisible(true);
+					chckbxSetPoint.setVisible(true);
 					
 				}else{
 					lblExibirCheckSinalGrafico2.setIcon(new ImageIcon(Tela.class.getResource("Icons/Chart-Curve-Add-32.png")));
-					
+					chckbxSetPoint.setVisible(false);
 					chckbxNivTanque1.setVisible(false);
 					chckbxNivTanque2.setVisible(false);
 					chckbxErro.setVisible(false);

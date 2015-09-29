@@ -22,6 +22,7 @@ public class Tanque extends Thread {
 	public double erroD;
 	public double erro_nivel_one;
 	public double erro_nivel_two;
+	public double ampSetPoint =0;
 	
 	public double setPoint;
 	public double newSetPoint;
@@ -75,10 +76,10 @@ public class Tanque extends Thread {
     	while(true){
 	       	try {
 	        		
-	    		dados.setPV( quanserclient.read(dados.getPinoDeLeitura1()));
+	    		/*dados.setPV( quanserclient.read(dados.getPinoDeLeitura1()));
 	    		dados.setPV_two( quanserclient.read(dados.getPinoDeLeitura2()));
 	    		nivel_one = dados.getPV();
-	    		nivel_two = dados.getPV_two();
+	    		nivel_two = dados.getPV_two();*/
 	       		       		
 	    		
 	    		if(dados.getTipoMalha().equals("Malha Aberta")){
@@ -100,7 +101,7 @@ public class Tanque extends Thread {
 	    			Ponto nivelAberta_two = new Ponto();
 	    			nivelAberta_two.setY(nivel_two*6.25);
 	    			nivelAberta_two.setX(onda.getTempo() - 0.1);
-	    			graficoAltura.atualizarFilaDeNivelUm(new Ponto(nivelAberta_two));
+	    			graficoAltura.atualizarFilaDeNivelDois(new Ponto(nivelAberta_two));
 	    			
 	    			graficoAltura.atualizarGrafico();
 	    			painelAltura.validate();
@@ -116,9 +117,10 @@ public class Tanque extends Thread {
 					}
 					
 					// plot do set point
-					grafico.atualizarFilaDeSetPoint(pontoSet);
-					erro_nivel_one = -nivel_one*6.25 + (grafico.filaDeSetPoint.get(grafico.filaDeSetPoint.size() - 1).getY());
-					erro_nivel_two = -nivel_two*6.25 + (grafico.filaDeSetPoint.get(grafico.filaDeSetPoint.size() - 1).getY());
+					graficoAltura.atualizarFilaDeSetPoint(pontoSet);
+					ampSetPoint = graficoAltura.filaDeSetPoint.get(graficoAltura.filaDeSetPoint.size() - 1).getY();
+					erro_nivel_one = -nivel_one*6.25 + ampSetPoint ;
+					erro_nivel_two = -nivel_two*6.25 + ampSetPoint;
 					
 					newSetPoint = pontoSet.getY();
 					//Controle dos erros com e sem PID
@@ -219,6 +221,7 @@ public class Tanque extends Thread {
 					}
 					
 					grafico.atualizarFilaDeVP(vp);
+					painelTensao.validate();
 					
 					Ponto justP;
 					Ponto justI;
@@ -326,7 +329,7 @@ public class Tanque extends Thread {
 	    		verificarRegras();
 	    		
 	    		controleAnteriorSaturado = dados.getVP();
-	    		quanserclient.write(dados.getPinoDeEscrita(), dados.getVP());
+	    		//quanserclient.write(dados.getPinoDeEscrita(), dados.getVP());
 	    		
 	    		if(dados.getTipoMalha().equals("Malha Aberta")){
 	    			//graficos de tensão
@@ -366,7 +369,7 @@ public class Tanque extends Thread {
 				Thread.sleep(100);
 				//System.out.println(cont++);
 				System.out.println(nivel_coringa);
-			} catch (QuanserClientException | InterruptedException e) {e.printStackTrace();}
+			} catch (/*QuanserClientException | */InterruptedException e) {e.printStackTrace();}
 		}
     	
     }

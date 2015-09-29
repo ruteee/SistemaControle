@@ -19,7 +19,7 @@ public class Chart{
 	
 	//novas
 	
-	public LinkedList<Ponto> filaDeSetPoint = new LinkedList<Ponto>();
+	
 	public LinkedList<Ponto> filaDeVP = new LinkedList<Ponto>();
 	public LinkedList<Ponto> filaDeErroP = new LinkedList<Ponto>();
 	public LinkedList<Ponto> filaDeErroI = new LinkedList<Ponto>();
@@ -61,13 +61,7 @@ public class Chart{
 	
 	//novass
 	
-	public void atualizarFilaDeSetPoint(Ponto ponto){
-		
-		filaDeSetPoint.addLast(ponto);
-		
-		if (filaDeSetPoint.size() > 600) filaDeSetPoint.removeFirst();
-	
-	}
+
 
 	public void atualizarFilaDeVP(Ponto ponto){
 		
@@ -102,12 +96,7 @@ public class Chart{
 	
 	}
 	
-	public void limparFilaDeSetPoint(){
-			
-			while(!filaDeSetPoint.isEmpty())
-				filaDeSetPoint.remove();
-		
-	}
+	
 	
 	public void limparFilaDeVP(){
 		
@@ -143,7 +132,7 @@ public class Chart{
 		XYSeries serieSaturada = new XYSeries("Tensão saturada");
 		
 		//novas
-		XYSeries serieSetPoint = new XYSeries("SetPoint");
+	
 		XYSeries serieErro = new XYSeries("VP não saturado");
 		XYSeries serieErroP = new XYSeries("Erro Proporcional");
 		XYSeries serieErroI = new XYSeries("Erro Integral");
@@ -160,8 +149,6 @@ public class Chart{
 		
 		//novass
 		
-		for (int i = 0; i < filaDeSetPoint.size(); i++)
-			serieSetPoint.add(filaDeSetPoint.get(i).getX(), filaDeSetPoint.get(i).getY());
 		
 		for (int i = 0; i < filaDeVP.size(); i++)
 			serieErro.add(filaDeVP.get(i).getX(), filaDeVP.get(i).getY());
@@ -174,19 +161,11 @@ public class Chart{
 		
 		for (int i = 0; i < filaDeErroD.size(); i++)
 			serieErroD.add(filaDeErroD.get(i).getX(), filaDeErroD.get(i).getY());
-		
-		
-		
-		
-		/*for (int i = 0; i < filaDeVPSaturado.size(); i++)
-			serieErroSaturado.add(filaDeVPSaturado.get(i).getX(), filaDeVPSaturado.get(i).getY());
-		*/
+				
 		XYSeriesCollection dataset= new XYSeriesCollection();
 		dataset.addSeries(serieDePlot);
 		dataset.addSeries(serieSaturada);
 		//novas
-		
-		dataset.addSeries(serieSetPoint);
 		dataset.addSeries(serieErro);
 		dataset.addSeries(serieErroP);
 		dataset.addSeries(serieErroI);
@@ -202,7 +181,7 @@ public class Chart{
 		
 		JFreeChart graph = null;
 		
-		graph = ChartFactory.createXYLineChart("Gráfico de Tensão", "segundos", "volts", dataset, PlotOrientation.VERTICAL, true, false, false);
+		graph = ChartFactory.createXYLineChart("Gráfico de Tensão", "segundos", "volts", dataset, PlotOrientation.VERTICAL, false, false, false);
 		graph.getXYPlot().setBackgroundPaint(Color.white);
 			
 		
@@ -214,7 +193,6 @@ public class Chart{
 		
 		if(dados.isTensao()){
 			renderer.setSeriesPaint(0, Color.BLUE);
-			//renderer.setSeriesFillPaint(0, Color.BLUE);
 			renderer.setSeriesLinesVisible(0, true);
 		}
 		else{renderer.setSeriesLinesVisible(0, false);}
@@ -222,34 +200,17 @@ public class Chart{
 		
 		
 		
-		//tensao saturada, malha aberta
+		//tensao saturada, malha aberta ??
 		renderer.setSeriesShapesVisible(1, false);
 		if(dados.isTensaoSat()){
 			renderer.setSeriesPaint(1, Color.RED);
-			//renderer.setSeriesFillPaint(1, Color.RED);
 			renderer.setSeriesLinesVisible(1, true);
 		}
 		else{renderer.setSeriesLinesVisible(1, false);}
-		
-		
-		
-		//tensao saturada malha fechada, rever na interface
-		
-		/*renderer.setSeriesShapesVisible(2, false);
-		///if(dados.isTensaoSat() && dados.getTipoMalha().equals("Malha Fechada"))
-			renderer.setSeriesLinesVisible(2, true);
-	//	else{renderer.setSeriesLinesVisible(2, false);}
-		renderer.setSeriesFillPaint(2, Color.MAGENTA);*/
-		
 		//novas
 		
 
-		//SetPoint
-		renderer.setSeriesShapesVisible(1, false);
-		if(dados.isSetPoint())
-			renderer.setSeriesLinesVisible(1, true);
-		else{renderer.setSeriesLinesVisible(1, false);}
-		renderer.setSeriesPaint(1, Color.RED);
+		
 		
 		//Erro
 		renderer.setSeriesShapesVisible(2, false);

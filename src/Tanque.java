@@ -11,7 +11,7 @@ public class Tanque extends Thread {
    
 	public double vps;
 	public double nivel_one = 0;
-	public double nivel_two = 0;
+	public double nivel_two = 5;
 	public double nivel_coringa;
 	public double erro_coringa;
 	public static  double IntErro = 0;
@@ -360,7 +360,7 @@ public class Tanque extends Thread {
 	    			Ponto nivel_2 = new Ponto();
 	    			nivel_2.setY(nivel_two*6.25);
 	    			nivel_2.setX(onda.getTempo() - 0.1);
-	    			graficoAltura.atualizarFilaDeNivelUm(new Ponto(nivel_2));
+	    			graficoAltura.atualizarFilaDeNivelDois(new Ponto(nivel_2));
 	    			
 	    			graficoAltura.atualizarGrafico();
 	    			painelAltura.validate();

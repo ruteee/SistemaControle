@@ -1366,7 +1366,7 @@ public class Tela extends TelaGeral{
 	
 	private void inicializaCheckSinaisGrafico1(){
 		chckbxTensaoSat = new JCheckBox("Tens\u00E3o Sat. ");
-		chckbxTensaoSat.setBounds(619, 185, 79, 13);		
+		chckbxTensaoSat.setBounds(619, 201, 79, 13);		
 		chckbxTensaoSat.setBackground(Color.WHITE);
 		chckbxTensaoSat.setVisible(false);
 		chckbxTensaoSat.setEnabled(false);
@@ -1388,7 +1388,7 @@ public class Tela extends TelaGeral{
 		//novos pos mudanca de chk box para esse grafico do grafico de baixo
 		
 		chckbxControle = new JCheckBox("Controle");
-		chckbxControle.setBounds(619, 118, 102, 13);
+		chckbxControle.setBounds(619, 121, 102, 13);
 		chckbxControle.setBackground(Color.WHITE);
 		chckbxControle.setVisible(false);
 		chckbxControle.setEnabled(false);
@@ -1397,19 +1397,11 @@ public class Tela extends TelaGeral{
 		chckbxControle.setForeground(Color.CYAN);
 		panelGraficos.add(chckbxControle);
 		
-		chckbxSetPoint = new JCheckBox("Set-Point");
-		chckbxSetPoint.setBounds(619, 102, 102, 13);		
-		chckbxSetPoint.setBackground(Color.WHITE);
-		chckbxSetPoint.setVisible(false);
-		chckbxSetPoint.setEnabled(false);
-		chckbxSetPoint.setToolTipText("Sinal do Set-Point");
-		chckbxSetPoint.setFont(new Font("Tahoma", Font.PLAIN, 9));
-		chckbxSetPoint.setForeground(Color.RED);
-		panelGraficos.add(chckbxSetPoint);
+		
 		
 		chckbxP = new JCheckBox("Ação P");
 		chckbxP.setEnabled(false);
-		chckbxP.setBounds(619, 134, 102, 13);
+		chckbxP.setBounds(619, 137, 102, 13);
 		chckbxP.setBackground(Color.WHITE);
 		chckbxP.setHorizontalAlignment(SwingConstants.LEFT);
 		chckbxP.setVisible(false);
@@ -1420,7 +1412,7 @@ public class Tela extends TelaGeral{
 		
 		chckbxI = new JCheckBox("Ação I");
 		chckbxI.setEnabled(false);
-		chckbxI.setBounds(619, 150, 102, 13);
+		chckbxI.setBounds(619, 153, 102, 13);
 		chckbxI.setBackground(Color.WHITE);
 		chckbxI.setHorizontalAlignment(SwingConstants.LEFT);
 		chckbxI.setVisible(false);
@@ -1431,7 +1423,7 @@ public class Tela extends TelaGeral{
 		
 		chckbxD = new JCheckBox("Ação D");
 		chckbxD.setEnabled(false);
-		chckbxD.setBounds(619, 166, 102, 13);
+		chckbxD.setBounds(619, 169, 102, 13);
 		chckbxD.setBackground(Color.WHITE);
 		chckbxD.setHorizontalAlignment(SwingConstants.LEFT);
 		chckbxD.setVisible(false);
@@ -1457,12 +1449,7 @@ public class Tela extends TelaGeral{
 		
 		//novos pos mudança
 		
-		chckbxSetPoint.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				dados.setSetPoint(chckbxSetPoint.isSelected());
-				thread.setDadosGrafico(dados);
-			}
-		});
+		
 		
 		chckbxControle.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -1523,6 +1510,16 @@ public class Tela extends TelaGeral{
 		chckbxErro.setForeground(Color.PINK);
 		panelGraficos.add(chckbxErro);
 		
+		chckbxSetPoint = new JCheckBox("Set-Point");
+		chckbxSetPoint.setBounds(600, 379, 102, 13);		
+		chckbxSetPoint.setBackground(Color.WHITE);
+		chckbxSetPoint.setVisible(false);
+		chckbxSetPoint.setEnabled(false);
+		chckbxSetPoint.setToolTipText("Sinal do Set-Point");
+		chckbxSetPoint.setFont(new Font("Tahoma", Font.PLAIN, 9));
+		chckbxSetPoint.setForeground(Color.RED);
+		panelGraficos.add(chckbxSetPoint);
+		
 		
 		chckbxNivTanque1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -1540,6 +1537,13 @@ public class Tela extends TelaGeral{
 		chckbxErro.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dados.setErroMesmo(chckbxErro.isSelected());
+				thread.setDadosGrafico(dados);
+			}
+		});
+		
+		chckbxSetPoint.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dados.setSetPoint(chckbxSetPoint.isSelected());
 				thread.setDadosGrafico(dados);
 			}
 		});

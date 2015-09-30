@@ -158,7 +158,7 @@ public class Chart{
 		
 		
 		//tensão calculada;
-		renderer.setSeriesShapesVisible(1, false);
+		renderer.setSeriesShapesVisible(0, false);
 		
 		if(dados.isTensao()){
 			renderer.setSeriesPaint(0, Color.BLUE);

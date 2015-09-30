@@ -64,7 +64,6 @@ public class Tela extends TelaGeral{
 	private JCheckBox chckbxNivTanque2;
 	private JCheckBox chckbxSetPoint;
 	private JCheckBox chckbxErro;
-	private JCheckBox chckbxControle; 
 	
 	private JCheckBox chckbxP, chckbxI, chckbxD;
 	
@@ -1264,7 +1263,7 @@ public class Tela extends TelaGeral{
 			chckbxNivTanque2.setEnabled(true);
 			chckbxSetPoint.setEnabled(true);
 			chckbxErro.setEnabled(true);
-			chckbxControle.setEnabled(true);
+			//chckbxControle.setEnabled(true);
 			chckbxP.setEnabled(true);
 			chckbxD.setEnabled(true);
 			chckbxI.setEnabled(true);

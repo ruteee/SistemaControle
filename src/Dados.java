@@ -18,10 +18,9 @@ public class Dados {
 	
 	private String tipoSinal;
 	private String tipoMalha;
-	private boolean comControle;
 	private String tipoDeControle;
 	
-	private boolean windUP, tensao, tensaoSat, nivel1, nivel2, setPoint, erro, proporcional, integral, derivativo, erroMesmo;
+	private boolean windUP, tensao, tensaoSat, nivel1, nivel2, setPoint, proporcional, integral, derivativo, erroMesmo;
 	private boolean faixa2, faixa5, faixa7, faixa10, tanque1, tanque2;
 	
 
@@ -191,16 +190,6 @@ public class Dados {
 		this.setPoint = setPoint;
 	}
 
-/*	public boolean isErro() {
-		return erro;
-	}
-*/
-	/*public void setErro(boolean erro) {
-		this.erro = erro;
-	}*/
-	
-	
-	
 	
 	public boolean isErroMesmo() {
 		return erroMesmo;

@@ -12,15 +12,9 @@ import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
 public class Chart{
-	
-	/*public LinkedList<Ponto> filaDePontos = new LinkedList<Ponto>();*/
-	//public LinkedList<Ponto> filaSaturada = new LinkedList<Ponto>();
-	public LinkedList<Ponto> filaDeVPSaturado = new LinkedList<Ponto>();
-	
-	//novas
-	
-	
+
 	public LinkedList<Ponto> filaDeVP = new LinkedList<Ponto>();
+	public LinkedList<Ponto> filaDeVPSaturado = new LinkedList<Ponto>();
 	public LinkedList<Ponto> filaDeErroP = new LinkedList<Ponto>();
 	public LinkedList<Ponto> filaDeErroI = new LinkedList<Ponto>();
 	public LinkedList<Ponto> filaDeErroD = new LinkedList<Ponto>();
@@ -43,14 +37,6 @@ public class Chart{
 		painel.setChart(criarGrafico(criarDataset()));
 	}
 	
-	/*public void atualizarFila(Ponto ponto){
-		
-			filaDePontos.addLast(ponto);
-			
-			if (filaDePontos.size() > 600) filaDePontos.removeFirst();
-		
-	}*/
-	
 	public void atualizarDeVPSaturado(Ponto ponto){
 		
 		filaDeVPSaturado.addLast(ponto);
@@ -61,7 +47,6 @@ public class Chart{
 	
 	//novass
 	
-
 
 	public void atualizarFilaDeVP(Ponto ponto){
 		
@@ -129,30 +114,19 @@ public class Chart{
 	{
 
 		//XYSeries serieDePlot = new XYSeries("Tensão calculada");
-		XYSeries serieSaturada = new XYSeries("Tensão saturada");
-		
-		//novas
-	
 		XYSeries serieTensaoCalc = new XYSeries("Tensao Calculada");
+		XYSeries serieSaturada = new XYSeries("Tensão saturada");	
 		XYSeries serieErroP = new XYSeries("Erro Proporcional");
 		XYSeries serieErroI = new XYSeries("Erro Integral");
 		XYSeries serieErroD = new XYSeries("Erro Derivativo");
-		
-		//erro saturado de malha fechada
-		//XYSeries VPsaturado = new XYSeries("VP Saturado");
-	
-		/*for (int i = 0; i < filaDePontos.size(); i++)
-			serieDePlot.add(filaDePontos.get(i).getX(), filaDePontos.get(i).getY());*/
-		
-		for (int i = 0; i < filaDeVPSaturado.size(); i++)
-			serieSaturada.add(filaDeVPSaturado.get(i).getX(), filaDeVPSaturado.get(i).getY());
-		
-		//novass
-		
+
 		
 		for (int i = 0; i < filaDeVP.size(); i++)
 			serieTensaoCalc.add(filaDeVP.get(i).getX(), filaDeVP.get(i).getY());
 		
+		for (int i = 0; i < filaDeVPSaturado.size(); i++)
+			serieSaturada.add(filaDeVPSaturado.get(i).getX(), filaDeVPSaturado.get(i).getY());
+					
 		for (int i = 0; i < filaDeErroP.size(); i++)
 			serieErroP.add(filaDeErroP.get(i).getX(), filaDeErroP.get(i).getY());
 		
@@ -163,17 +137,11 @@ public class Chart{
 			serieErroD.add(filaDeErroD.get(i).getX(), filaDeErroD.get(i).getY());
 				
 		XYSeriesCollection dataset= new XYSeriesCollection();
-		//dataset.addSeries(serieDePlot);
 		dataset.addSeries(serieTensaoCalc);
 		dataset.addSeries(serieSaturada);
-		//novas
-		
 		dataset.addSeries(serieErroP);
 		dataset.addSeries(serieErroI);
 		dataset.addSeries(serieErroD);
-		
-		//dataset.addSeries(serieErroSaturado);
-		
 		
 		return dataset;
 	}
@@ -199,17 +167,13 @@ public class Chart{
 		else{renderer.setSeriesLinesVisible(0, false);}
 		
 		
-		//tensao saturada, malha aberta ??
+		//tensão saturada
 		renderer.setSeriesShapesVisible(1, false);
 		if(dados.isTensaoSat()){
 			renderer.setSeriesPaint(1, Color.RED);
 			renderer.setSeriesLinesVisible(1, true);
 		}
 		else{renderer.setSeriesLinesVisible(1, false);}
-		//novas
-		
-
-		
 		
 		//Erro ///ajeitar
 		/*renderer.setSeriesShapesVisible(2, false);

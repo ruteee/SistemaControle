@@ -85,15 +85,23 @@ public class Tanque extends Thread {
 	    		if(dados.getTipoMalha().equals("Malha Aberta")){
 	    			
 	    			//sinal enviado para a planta 
-	    			grafico.atualizarFilaDeVP(new Ponto(onda.gerarPonto()));    
+	    			//grafico.atualizarFilaDeVP(new Ponto(onda.gerarPonto())); 
+	    			Ponto p = new Ponto();
+	    			p.setY(2);
+	    			grafico.atualizarFilaDeVP(p); 
 	    			
 	    			
 	    			//validação do painel de tensões
 	    			grafico.atualizarGrafico();
 	    			painelTensao.validate();
 	    			
-	    			dados.setVP(grafico.filaDeVP.get(grafico.filaDeVP.size() - 1).getY()); 
 	    			
+	    			if(dados.isTanque1()){
+	    				dados.setVP(grafico.filaDeVP.get(grafico.filaDeVP.size() - 1).getY()); 
+	    			}
+	    			else if (dados.isTanque2()){
+	    				dados.setVp_two(grafico.filaDeVP.get(grafico.filaDeVP.size() - 1).getY()); 
+	    			}
 	    			
 	    			//Níveis dos tanques 1 e 2
 	    			Ponto nivelAberta_one = new Ponto();

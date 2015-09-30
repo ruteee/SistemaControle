@@ -9,9 +9,10 @@ public class Tanque extends Thread {
     
     private int porta;
    
-	public double vps;
+	public double vps1;
+	public double vps2;
 	public double nivel_one = 0;
-	public double nivel_two = 5;
+	public double nivel_two = 2;
 	public double nivel_coringa;
 	public double erro_coringa;
 	public static  double IntErro = 0;
@@ -20,8 +21,8 @@ public class Tanque extends Thread {
 	public double controleWindUP;
 	public double controleAnteriorSaturado;
 	public double erroD;
-	public double erro_nivel_one;
-	public double erro_nivel_two;
+	public double erro_nivel_one = 0;
+	public double erro_nivel_two = 0;
 	public double ampSetPoint =0;
 	
 	public double setPoint;
@@ -85,10 +86,10 @@ public class Tanque extends Thread {
 	    		if(dados.getTipoMalha().equals("Malha Aberta")){
 	    			
 	    			//sinal enviado para a planta 
-	    			//grafico.atualizarFilaDeVP(new Ponto(onda.gerarPonto())); 
-	    			Ponto p = new Ponto();
-	    			p.setY(2);
-	    			grafico.atualizarFilaDeVP(p); 
+	    			grafico.atualizarFilaDeVP(new Ponto(onda.gerarPonto())); 
+	    			//Ponto p = new Ponto();
+	    		
+	    			//grafico.atualizarFilaDeVP(p); 
 	    			
 	    			
 	    			//validação do painel de tensões
@@ -96,12 +97,11 @@ public class Tanque extends Thread {
 	    			painelTensao.validate();
 	    			
 	    			
-	    			if(dados.isTanque1()){
-	    				dados.setVP(grafico.filaDeVP.get(grafico.filaDeVP.size() - 1).getY()); 
-	    			}
-	    			else if (dados.isTanque2()){
-	    				dados.setVp_two(grafico.filaDeVP.get(grafico.filaDeVP.size() - 1).getY()); 
-	    			}
+	    			double a = grafico.filaDeVP.get(grafico.filaDeVP.size() - 1).getY();
+	    			
+	    				dados.setVP(a); 
+	    				dados.setVp_two(a); 
+	    			
 	    			
 	    			//Níveis dos tanques 1 e 2
 	    			Ponto nivelAberta_one = new Ponto();
@@ -424,27 +424,38 @@ public class Tanque extends Thread {
     
     public void verificarRegras(){
             //SaturaÃ§Ã£o
-    	vps = dados.getVP();
+    	vps1 = dados.getVP();
+    	vps2 = dados.getVp_two();
     	
-    	if (dados.getVP() > 4)
-			    vps = 4;
-
+		if (dados.getVP() > 4)
+			    vps1 = 4;
+		
 		if (dados.getVP() < -4)
-			    vps = -4;
+			    vps1 = -4;
+	
+	
+		if (dados.getVp_two() > 4)
+		    vps2 = 4;
+		
+		if (dados.getVp_two()< -4)
+		    vps2 = -4;
+    	
 			
 			//LH
 			if (nivel_one*6.25 > 28 && dados.getVP() > 3.15)
-			    vps = 3.15;
+			    vps1 = 3.15;
 
 			//LHH
 			if (nivel_one*6.25 > 29 && dados.getVP() > 0) 
-			    vps = 0;
+			    vps1 = 0;
 	
 			//LL
 			if (nivel_one*6.25 < 4 && dados.getVP()< 0)
-			    vps = 0;
+			    vps1 = 0;
 			
-			dados.setVP(vps);
+			dados.setVP(vps1);
+			dados.setVp_two(vps2);
+			
 			
 		
 			

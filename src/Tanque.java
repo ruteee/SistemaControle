@@ -454,16 +454,19 @@ public class Tanque extends Thread {
     	
 			
 			//LH
-			if (nivel_one*6.25 > 28 && dados.getVP() > 3.15)
+			if (nivel_one*6.25 > 28 && dados.getVP() > 3.15){
 			    vps1 = 3.15;
+				vps2 = 0;}
 
 			//LHH
-			if (nivel_one*6.25 > 29 && dados.getVP() > 0) 
+			if (nivel_one*6.25 > 29 && dados.getVP() > 0) {
 			    vps1 = 0;
+				vps2 = 0;}
 	
 			//LL
-			if (nivel_one*6.25 < 4 && dados.getVP()< 0)
+			if (nivel_one*6.25 < 4 && dados.getVP()< 0){
 			    vps1 = 0;
+			    vps2 = 0;}
 			
 			dados.setVP(vps1);
 			dados.setVp_two(vps2);

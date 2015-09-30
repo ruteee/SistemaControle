@@ -24,13 +24,14 @@ public class Tanque extends Thread {
 	public double erro_nivel_one = 0;
 	public double erro_nivel_two = 0;
 	public double ampSetPoint =0;
+	public double tSetPoint = 0;
 	
 	public double setPoint;
 	public double newSetPoint;
-	public double oldSetPoint;
+	public double oldSetPoint = 0;
 	public double settleTempo;
 	
-	public double nivel_passado;
+	public double nivel_passado = 0;
 	public double nivel_pico = 0;
 	
 	private Dados dados = new Dados();
@@ -72,15 +73,18 @@ public class Tanque extends Thread {
 
     public void run() {
     //	int cont = 0;
-      //  getConexao();
+        getConexao();
      //  setPoint = dados.getAmplitude();
     	while(true){
 	       	try {
 	        		
-	    		/*dados.setPV( quanserclient.read(dados.getPinoDeLeitura1()));
+	    		dados.setPV( quanserclient.read(dados.getPinoDeLeitura1()));
 	    		dados.setPV_two( quanserclient.read(dados.getPinoDeLeitura2()));
 	    		nivel_one = dados.getPV();
-	    		nivel_two = dados.getPV_two();*/
+	    		nivel_two = dados.getPV_two();
+	       		
+	       		/*nivel_one = (3.2)* (1 - (Math.exp(-2*onda.getTempo()))*Math.cos(5*onda.getTempo()+45));
+	    		nivel_two = (3.2)*(1 - (Math.exp(-0.2*onda.getTempo()))*Math.cos(5*onda.getTempo()+45));*/
 	       		       		
 	    		
 	    		if(dados.getTipoMalha().equals("Malha Aberta")){
@@ -99,8 +103,8 @@ public class Tanque extends Thread {
 	    			
 	    			double a = grafico.filaDeVP.get(grafico.filaDeVP.size() - 1).getY();
 	    			
-	    				dados.setVP(a); 
-	    				dados.setVp_two(a); 
+	    			dados.setVP(a); 
+	    			dados.setVp_two(a); 
 	    			
 	    			
 	    			//Níveis dos tanques 1 e 2
@@ -158,13 +162,12 @@ public class Tanque extends Thread {
 						
 						if (!flagSubida)
 							tempoSubida();
-						if (!flagPico)
-							tempoPico();
-						if (!flagSettleTempo)
-							settleTempo();
+						
+						tempoPico();
+						settleTempo();
 
 	    				
-	    				nivel_passado = pontoSet.getY(); 	    			
+						nivel_passado = nivel_coringa*6.25;
 	    			}
 				
 					
@@ -360,7 +363,7 @@ public class Tanque extends Thread {
 	    		verificarRegras();
 	    		
 	    		controleAnteriorSaturado = dados.getVP();
-	    		//quanserclient.write(dados.getPinoDeEscrita(), dados.getVP());
+	    		quanserclient.write(dados.getPinoDeEscrita(), dados.getVP());
 	    		
 	    		if(dados.getTipoMalha().equals("Malha Aberta")){
 	    			
@@ -416,8 +419,8 @@ public class Tanque extends Thread {
 	    		
 				Thread.sleep(100);
 				//System.out.println(cont++);
-				System.out.println(nivel_coringa);
-			} catch (/*QuanserClientException | */InterruptedException e) {e.printStackTrace();}
+				//System.out.println(nivel_coringa);
+			} catch (QuanserClientException | InterruptedException e) {e.printStackTrace();}
 		}
     	
     }
@@ -526,7 +529,7 @@ public class Tanque extends Thread {
 		if(!dados.isWindUP())
 			IntErro = IntErro + dados.getKI()*erro*0.1;
 		else{
-			IntErro = IntErro + dados.getKI()*erro*0.1 + (1/(dados.getTt()))*(controleAnteriorSaturado - controleWindUP);
+			IntErro = IntErro + dados.getKI()*erro*0.1 + 0.1*(1/(dados.getTt()))*(controleAnteriorSaturado - controleWindUP);
 		}
 		return IntErro;	
 	}
@@ -550,23 +553,45 @@ public class Tanque extends Thread {
 	}
 	
 	void tempoSubida(){
-		if(/*dados.getPV()*/ nivel_coringa >= dados.getFatSup() * setPoint)
+		if(nivel_coringa*6.25 >= dados.getFatSup() * setPoint)
 		{
-			t_subida = onda.getTempo() - t_subida;
+			t_subida = onda.getTempo() - t_subida - 0.2;
 			dados.gettSubida().setText(String.valueOf(t_subida));
 			flagSubida = true;
 		}
-		else if (/*dados.getPV()*/ nivel_coringa <= dados.getFatInf() * setPoint)
+		else if (nivel_coringa*6.25 <= dados.getFatInf() * setPoint)
 		{
 			t_subida = onda.getTempo();
 		}
 	}
 	
 	void tempoPico(){
+		
+		if(!flagPico){
 		if (setPoint - oldSetPoint > 0){
-			if (/*dados.getPV()*/ nivel_coringa < nivel_passado)
+			if (nivel_coringa*6.25 < nivel_passado && nivel_coringa*6.25 > setPoint)
 			{
-				t_pico = onda.getTempo() - t_pico - 0.1;
+				t_pico = onda.getTempo() - tSetPoint- 0.2;
+				dados.gettPico().setText(String.valueOf(t_pico));
+				nivel_pico = nivel_passado;
+				System.out.println("sub");
+				System.out.println(nivel_passado);
+				System.out.println(nivel_coringa*6.25);
+			
+				
+				if (dados.isPicoAbs())
+					dados.getNivelPico().setText(String.valueOf((nivel_pico - setPoint)));
+				else
+					dados.getNivelPico().setText(String.valueOf(100 * (nivel_pico - setPoint)/(setPoint - oldSetPoint)));
+				flagPico = true;
+			}
+		}
+		else
+		{
+			System.out.println("outro");
+			if (nivel_coringa*6.25 > nivel_passado && nivel_coringa*6.25 < setPoint)
+			{
+				t_pico = onda.getTempo() - 0.2 - tSetPoint;
 				nivel_pico = nivel_passado;
 				if (dados.isPicoAbs())
 					dados.getNivelPico().setText(String.valueOf(100 * (nivel_pico - setPoint)/(setPoint - oldSetPoint)));
@@ -575,17 +600,15 @@ public class Tanque extends Thread {
 				flagPico = true;
 			}
 		}
-		else
-		{
-			if (/*dados.getPV()*/ nivel_coringa > nivel_passado)
-			{
-				t_pico = onda.getTempo() - t_pico - 0.1;
-				nivel_pico = nivel_passado;
-				if (dados.isPicoAbs())
-					dados.getNivelPico().setText(String.valueOf(100 * (nivel_pico - setPoint)/(setPoint - oldSetPoint)));
-				else
-					dados.gettPico().setText(String.valueOf(t_pico));
-				flagPico = true;
+		}else{
+			if (setPoint - oldSetPoint > 0){
+				if (nivel_coringa*6.25 > nivel_passado && nivel_coringa*6.25 > setPoint && nivel_coringa*6.25 > nivel_pico){
+					flagPico = false;
+				}
+			}else{
+				if (nivel_coringa*6.25 < nivel_passado && nivel_coringa*6.25 < setPoint && nivel_coringa*6.25 < nivel_pico){
+					flagPico = false;
+				}
 			}
 		}
 	}
@@ -609,9 +632,15 @@ public class Tanque extends Thread {
 			nivelDeComparacao = setPoint*0.1;
 	
 		if(!flagSettleTempo){
-			if(dados.getPV() <= nivelDeComparacao + setPoint && dados.getPV() >= setPoint - nivelDeComparacao ){
+			if(nivel_coringa*6.25 <= nivelDeComparacao + setPoint && nivel_coringa*6.25 >= setPoint - nivelDeComparacao ){
 					settleTempo = onda.getTempo() - 0.1;
 					flagSettleTempo = true; 
+			}
+		}else if(flagSettleTempo){
+			
+			if(!(nivel_coringa*6.25 <= nivelDeComparacao + setPoint && nivel_coringa*6.25 >= setPoint - nivelDeComparacao )){
+				flagSettleTempo = false;
+				
 			}
 		}
 
@@ -623,6 +652,7 @@ public class Tanque extends Thread {
 	
 	void sp_mudou(){
 		//t_pico = t_subida = t_acomoda = 0;
+		tSetPoint = onda.getTempo() - 0.1;
 		flagPico = flagSettleTempo = flagSubida = false;
 		oldSetPoint = setPoint;
 		setPoint = newSetPoint;

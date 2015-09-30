@@ -29,6 +29,7 @@ public class Tanque extends Thread {
 	public double setPoint;
 	public double newSetPoint;
 	public double oldSetPoint = 0;
+	public double deltaSetPoint = 0;
 	public double settleTempo;
 	
 	public double nivel_passado = 0;
@@ -43,12 +44,15 @@ public class Tanque extends Thread {
     public boolean flagPico = false;
     public boolean flagSobreSinal = false;
     public boolean flagSettleTempo = false;
-
+    public boolean flagTrI = false;
+    public boolean flagTrF = false;
+    
     public int faixa;
     
     public Ponto vp;
     
     double t_pico = 0, t_acomoda = 0, t_subida = 0;
+    public double t_subida_i, t_subida_f;
    // boolean t_pico_set = false, t_acomoda_set = false, t_subida_set = false;
 
 	QuanserClient quanserclient;
@@ -362,8 +366,13 @@ public class Tanque extends Thread {
 	    		//Validação do sinal dentro das especificações da planta (saturação e travas)
 	    		verificarRegras();
 	    		
-	    		controleAnteriorSaturado = dados.getVP();
-	    		quanserclient.write(dados.getPinoDeEscrita(), dados.getVP());
+	    		if (dados.isTanque1()){
+		    		controleAnteriorSaturado = dados.getVP();
+		    		quanserclient.write(dados.getPinoDeEscrita(), dados.getVP());
+	    		}else if (dados.isTanque2()){
+	    			controleAnteriorSaturado = dados.getVp_two();
+		    		quanserclient.write(dados.getPinoDeEscrita(), dados.getVp_two());
+	    		}
 	    		
 	    		if(dados.getTipoMalha().equals("Malha Aberta")){
 	    			
@@ -553,15 +562,38 @@ public class Tanque extends Thread {
 	}
 	
 	void tempoSubida(){
-		if(nivel_coringa*6.25 >= dados.getFatSup() * setPoint)
-		{
-			t_subida = onda.getTempo() - t_subida - 0.2;
-			dados.gettSubida().setText(String.valueOf(t_subida));
-			flagSubida = true;
-		}
-		else if (nivel_coringa*6.25 <= dados.getFatInf() * setPoint)
-		{
-			t_subida = onda.getTempo();
+		if (setPoint - oldSetPoint > 0){
+			if(!flagTrI && nivel_coringa*6.25 >= oldSetPoint + dados.getFatInf() * deltaSetPoint)
+			{
+				t_subida_i = onda.getTempo() - tSetPoint - 0.2;
+				flagTrI = true;
+			}
+			if (!flagTrF && nivel_coringa*6.25 >= oldSetPoint + dados.getFatSup() * deltaSetPoint){
+				t_subida_f = onda.getTempo() - tSetPoint - 0.2;
+				flagTrF = true;
+			}
+			if (flagTrI && flagTrF)
+			{
+				t_subida = t_subida_f - t_subida_i;
+				dados.gettSubida().setText(String.valueOf(t_subida));
+				flagSubida = true;
+			}
+		}else{
+			if(!flagTrI && nivel_coringa*6.25 <= oldSetPoint + dados.getFatInf() * deltaSetPoint)
+			{
+				t_subida_i = onda.getTempo() - tSetPoint - 0.2;
+				flagTrI = true;
+			}
+			if (!flagTrF && nivel_coringa*6.25 <= oldSetPoint + dados.getFatSup() * deltaSetPoint){
+				t_subida_f = onda.getTempo() - tSetPoint - 0.2;
+				flagTrF = true;
+			}
+			if (flagTrI && flagTrF)
+			{
+				t_subida = t_subida_f - t_subida_i;
+				dados.gettSubida().setText(String.valueOf(t_subida));
+				flagSubida = true;
+			}
 		}
 	}
 	
@@ -656,6 +688,11 @@ public class Tanque extends Thread {
 		flagPico = flagSettleTempo = flagSubida = false;
 		oldSetPoint = setPoint;
 		setPoint = newSetPoint;
+		deltaSetPoint = setPoint - oldSetPoint;
+		
+		flagTrI = false;
+		flagTrF = false;
+		
 		dados.gettSubida().setText("");
 		dados.gettAcomoda().setText("");
 		dados.gettPico().setText("");

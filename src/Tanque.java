@@ -15,6 +15,7 @@ public class Tanque extends Thread{
 	public double nivel_tanque_dois;
 	public double nivel_coringa;
 	public double erro;
+	public double erro_controlador_dois;
 
 	public double t_pico = 0;
 	public double t_acomoda = 0; 
@@ -127,22 +128,46 @@ public class Tanque extends Thread{
 					if(dados.getTipoDeControle().equals("Sem Controle")){
 						dados.setVP(erro);
 					}else if (dados.getTipoDeControle().equals("Simples")){	
+						
 						if(dados.getTipoDeControlador().equals("PI-D")){
 							dados.setVP(controladorUm.calcularAcao(erro, nivel_coringa));
-						}else{dados.setVP(controladorUm.calcularAcao(erro, 0));}	
+						}else{dados.setVP(controladorUm.calcularAcao(erro, 0));}
+						
 					}else if(dados.getTipoDeControle().equals("Cascata")){
 						
 						double erro_tanque_dois = grafico_nivel.filaDeSetPoint.getFirst().getY() - nivel_tanque_dois;
 						if(dados.getTipoDeControlador().equals("PI-D")){
-							double erro_controlador_dois = controladorUm.calcularAcao(erro_tanque_dois, nivel_tanque_dois) - nivel_tanque_um;
+							erro_controlador_dois = controladorUm.calcularAcao(erro_tanque_dois, nivel_tanque_dois) - nivel_tanque_um;
 							dados.setVP(controladorDois.calcularAcao(erro_controlador_dois, nivel_tanque_um));
 						}else{	
-							double erro_controlador_dois = controladorUm.calcularAcao(erro_tanque_dois, 0) - nivel_tanque_um;
+							erro_controlador_dois = controladorUm.calcularAcao(erro_tanque_dois, 0) - nivel_tanque_um;
 							dados.setVP(controladorDois.calcularAcao(erro_controlador_dois, 0));
 						}
 					}
 					
 				}
+				
+				//para calculo de windUP
+				if(dados.getTipoDeControle().equals("Simples")){
+					
+					controladorUm.setControleNaoSaturado(dados.getVP());
+					
+				}else if(dados.getTipoDeControlador().equals("Cascata")){
+					//controladorUm.setControleNaoSaturado(erro_controlador_dois);
+					controladorDois.setControleNaoSaturado(dados.getVP());
+				}
+				verificarRegras();
+				//para calculo de windUP
+				if(dados.getTipoDeControle().equals("Simples")){
+					
+					controladorUm.setControleAnteriorSaturado(dados.getVP());
+					
+				}else if(dados.getTipoDeControlador().equals("Cascata")){
+					
+					//controladorUm.setControleAnteriorSaturado(erro_controlador_dois);
+					controladorDois.setControleAnteriorSaturado(dados.getVP());
+				}
+				
 				
 				sleep(100);
 			} catch (QuanserClientException | InterruptedException e) {e.printStackTrace();}

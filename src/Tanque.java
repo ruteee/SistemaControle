@@ -1,483 +1,60 @@
 import java.lang.Thread;
-
 import javax.swing.JLayeredPane;
 
+public class Tanque extends Thread{
+	
+	private Dados dados = new Dados();
+	private ChartNivel grafico_nivel = new ChartNivel(dados);
+	private Chart grafico_controle = new Chart(dados);;
+	private Tsunami sinal = new Tsunami(dados.getPeriodo(), dados.getPeriodoMinino(),dados.getOffset(),dados.getAmplitude(),dados.getAmplitudeMinima(),dados.getTipoSinal());;
 
-public class Tanque extends Thread {
+	QuanserClient quanserclient;
 
-    private String servidor;
-    
-    private int porta;
-   
-	public double vps1;
-	public double vps2;
-	public double nivel_one = 0;
-	public double nivel_two = 2;
+	private double vp_sat;
+	private double nivel_tanque_um;
+	private double nivel_tanque_dois;
 	public double nivel_coringa;
-	public double erro_coringa;
-	public static  double IntErro = 0;
-	public static  double erroAnterior = 0;
-	public static double derivada = 0;
-	public double controleWindUP;
-	public double controleAnteriorSaturado;
-	public double erroD;
-	public double erro_nivel_one = 0;
-	public double erro_nivel_two = 0;
-	public double ampSetPoint =0;
-	public double tSetPoint = 0;
+
+	public double t_pico = 0;
+	public double t_acomoda = 0; 
+	public double t_subida = 0;
+    public double t_subida_i;
+    public double t_subida_f;
+
+	private String servidor;
+
+	private int porta;
+	private int faixa; //?
+
+	JLayeredPane painelTensao, painelAltura;
 	
 	public double setPoint;
 	public double newSetPoint;
 	public double oldSetPoint = 0;
 	public double deltaSetPoint = 0;
 	public double settleTempo;
-	
+	public double tSetPoint = 0;
 	public double nivel_passado = 0;
 	public double nivel_pico = 0;
-	
-	private Dados dados = new Dados();
-    public Chart grafico = new Chart(dados);
-    public ChartNivel graficoAltura = new ChartNivel(dados);
-    
-    public boolean controle = true;
+
+	public boolean controle = true;
     public boolean flagSubida = false;
     public boolean flagPico = false;
     public boolean flagSobreSinal = false;
     public boolean flagSettleTempo = false;
     public boolean flagTrI = false;
     public boolean flagTrF = false;
-    
-    public int faixa;
-    
-    public Ponto vp;
-    
-    double t_pico = 0, t_acomoda = 0, t_subida = 0;
-    public double t_subida_i, t_subida_f;
-   // boolean t_pico_set = false, t_acomoda_set = false, t_subida_set = false;
 
-	QuanserClient quanserclient;
-	JLayeredPane painelTensao, painelAltura;
-	Tsunami onda = new Tsunami(dados.getPeriodo(), dados.getPeriodoMinino(),dados.getOffset(),dados.getAmplitude(),dados.getAmplitudeMinima(),dados.getTipoSinal());
+	public Tanque(String servidor, int porta){
+		this.servidor = servidor;
+		this.porta = porta;
+	}
 
-	
+	public Tanque(Dados dados){
+		this.dados = dados;
+	}
 
-	
-	public Tanque() {}
-	
-    public Tanque(String servidor, int porta) {
-        this.servidor = servidor;
-        this.porta = porta;
-
-    }
-    
-    public Tanque(Dados dados) {
-        this.dados = dados;
-    }
-    
-
-    public void run() {
-    //	int cont = 0;
-        getConexao();
-     //  setPoint = dados.getAmplitude();
-    	while(true){
-	       	try {
-	        		
-	    		dados.setPV( quanserclient.read(dados.getPinoDeLeitura1()));
-	    		dados.setPV_two( quanserclient.read(dados.getPinoDeLeitura2()));
-	    		nivel_one = dados.getPV();
-	    		nivel_two = dados.getPV_two();
-	       		
-	       		/*nivel_one = (3.2)* (1 - (Math.exp(-2*onda.getTempo()))*Math.cos(5*onda.getTempo()+45));
-	    		nivel_two = (3.2)*(1 - (Math.exp(-0.2*onda.getTempo()))*Math.cos(5*onda.getTempo()+45));*/
-	       		       		
-	    		
-	    		if(dados.getTipoMalha().equals("Malha Aberta")){
-	    			
-	    			//sinal enviado para a planta 
-	    			grafico.atualizarFilaDeVP(new Ponto(onda.gerarPonto())); 
-	    			//Ponto p = new Ponto();
-	    		
-	    			//grafico.atualizarFilaDeVP(p); 
-	    			
-	    			
-	    			//validação do painel de tensões
-	    			grafico.atualizarGrafico();
-	    			painelTensao.validate();
-	    			
-	    			
-	    			double a = grafico.filaDeVP.get(grafico.filaDeVP.size() - 1).getY();
-	    			
-	    			dados.setVP(a); 
-	    			dados.setVp_two(a); 
-	    			
-	    			
-	    			//Níveis dos tanques 1 e 2
-	    			Ponto nivelAberta_one = new Ponto();
-	    			nivelAberta_one.setY(nivel_one*6.25);
-	    			nivelAberta_one.setX(onda.getTempo() - 0.1);
-	    			graficoAltura.atualizarFilaDeNivelUm(new Ponto(nivelAberta_one));
-	    			
-	    			Ponto nivelAberta_two = new Ponto();
-	    			nivelAberta_two.setY(nivel_two*6.25);
-	    			nivelAberta_two.setX(onda.getTempo() - 0.1);
-	    			graficoAltura.atualizarFilaDeNivelDois(new Ponto(nivelAberta_two));
-	    			
-	    			
-	    			//validação dos paineis de nivel
-	    			graficoAltura.atualizarGrafico();
-	    			painelAltura.validate();
-	    			
-	    			
-				}else if (dados.getTipoMalha().equals("Malha Fechada")){
-					
-					
-					Ponto pontoSet = new Ponto(onda.gerarPonto());				
-					//Tratamento de setPoint negativo
-					if(pontoSet.getY() < 0){
-						pontoSet.setY(0);
-					}
-					//Atualização do gráfico de setPoint
-					graficoAltura.atualizarFilaDeSetPoint(pontoSet);
-					
-					
-					ampSetPoint = graficoAltura.filaDeSetPoint.get(graficoAltura.filaDeSetPoint.size() - 1).getY();
-					
-					//Calculo dos erros -> SinalEnviado - sinalDaPlanta
-					erro_nivel_one = -nivel_one*6.25 + ampSetPoint ;
-					erro_nivel_two = -nivel_two*6.25 + ampSetPoint;
-					
-					newSetPoint = pontoSet.getY();
-					
-					
-					//adaptação para escolha dos niveis
-					if(dados.isTanque1()){
-		    			nivel_coringa = nivel_one;
-		    			erro_coringa = erro_nivel_one;
-		    		}else{
-		    			nivel_coringa = nivel_two;
-		    			erro_coringa = erro_nivel_two;
-		    		}
-					
-					
-	    			if(!dados.getTipoSinal().equals("Dente de serra") && !dados.getTipoSinal().equals("Senoidal")){
-
-						if (setPoint != newSetPoint)
-							sp_mudou();
-						
-						if (!flagSubida)
-							tempoSubida();
-						
-						tempoPico();
-						settleTempo();
-
-	    				
-						nivel_passado = nivel_coringa*6.25;
-	    			}
-				
-					
-	    			
-	    			//Sinal de Erro antes de passar ppor um controlador;
-					Ponto vpSemControle = new Ponto();
-					vpSemControle.setX(onda.getTempo() - 0.1);
-					vpSemControle.setY(erro_coringa);
-					graficoAltura.atualizarFilaDeErroMesmo(vpSemControle);
-					
-					//validação do painel de níveis
-	    			graficoAltura.atualizarGrafico();
-	    			painelAltura.validate();
-
-					//Passando o sinal por um controlador antes de enviar para a planta
-					switch (dados.getTipoDeControle()){
-					
-						case "P" : 
-							dados.setVP(acaoP(erro_coringa));
-							vp = new Ponto();
-				    		vp.setX(onda.getTempo() - 0.1); 
-				    		vp.setY(dados.getVP());
-						break;
-						
-						case "PI":
-							dados.setVP(acaoP(erro_coringa) + acaoI(erro_coringa));
-							
-							vp = new Ponto();
-				    		vp.setX(onda.getTempo() - 0.1); 
-				    		vp.setY(dados.getVP());
-						break;
-						
-						case "PD":
-							derivada = acaoD(erro_coringa);
-							dados.setVP(acaoP(erro_coringa) + derivada);
-							
-							vp = new Ponto();
-				    		vp.setX(onda.getTempo() - 0.1); 
-				    		vp.setY(dados.getVP());
-						break;
-						
-						case "PID":
-							derivada = acaoD(erro_coringa);
-							dados.setVP(acaoP(erro_coringa) + acaoI(erro_coringa) + derivada);
-							
-							vp = new Ponto();
-				    		vp.setX(onda.getTempo() - 0.1); 
-				    		vp.setY(dados.getVP());
-						break;
-						
-						case "PI-D":
-							derivada = acaoD(nivel_coringa);
-							dados.setVP(acaoP(erro_coringa) + acaoI(erro_coringa) + derivada);
-							
-							vp = new Ponto();
-							vp.setX(onda.getTempo() - 0.1); 
-				    		vp.setY(dados.getVP());
-						break;
-						
-						case "Sem Controle":
-							dados.setVP(erro_coringa);
-							
-							Ponto erroPonto = new Ponto();
-				    		erroPonto.setX(onda.getTempo() - 0.1); 
-				    		if(dados.isTanque1())
-				    			erroPonto.setY(dados.getVP());
-				    		else if(dados.isTanque2())
-				    			erroPonto.setY(dados.getVp_two());
-				    		graficoAltura.atualizarFilaDeErroMesmo(erroPonto);
-						break;
-						
-						default:
-							vp = new Ponto();
-						break;
-					}
-					
-					
-					//Atualização do painel de tensões
-					grafico.atualizarFilaDeVP(vp);
-					painelTensao.validate();
-					
-					Ponto justP;
-					Ponto justI;
-					Ponto justD;
-					
-					//set das filas para plot das ações separadas
-					switch (dados.getTipoDeControle()){
-					
-						case "P":
-							
-							Ponto base = new Ponto();
-							base.setX(onda.getTempo() - 0.1);
-							base.setY(0);
-							
-							justP = new Ponto();
-							justP.setX(onda.getTempo() - 0.1);
-							justP.setY(acaoP(erro_coringa));
-							grafico.atualizarFilaDeErroP(justP);
-							grafico.atualizarFilaDeErroD(base);
-							grafico.atualizarFilaDeErroI(base);
-						break;
-						
-						case "PI":
-							
-							Ponto base1 = new Ponto();
-							base1.setX(onda.getTempo() - 0.1);
-							base1.setY(0);
-							
-							justP = new Ponto();
-							justP.setX(onda.getTempo() - 0.1);
-							justP.setY(acaoP(erro_coringa));
-							
-							justI = new Ponto();
-							justI.setX(onda.getTempo() - 0.1);
-							justI.setY(acaoI(erro_coringa));
-							
-							grafico.atualizarFilaDeErroP((justP));
-							grafico.atualizarFilaDeErroI((justI));
-							grafico.atualizarFilaDeErroD(base1);
-						break;
-						
-						case "PD":
-							
-							Ponto base2 = new Ponto();
-							base2.setY(0);
-							base2.setX(onda.getTempo() - 0.1);
-							
-							
-							justP = new Ponto();
-							justP.setX(onda.getTempo() - 0.1);
-							justP.setY(acaoP(erro_coringa));
-							
-							justD = new Ponto();
-							justD.setX(onda.getTempo() - 0.1);
-							justD.setY(derivada);
-							
-							grafico.atualizarFilaDeErroP(justP);
-							grafico.atualizarFilaDeErroD(justD);
-							grafico.atualizarFilaDeErroI(base2);
-						break;
-						
-						case "PID":
-							
-							justP = new Ponto();
-							justP.setX(onda.getTempo() - 0.1);
-							justP.setY(acaoP(erro_coringa));
-							
-							justI = new Ponto();
-							justI.setX(onda.getTempo() - 0.1);
-							justI.setY(acaoI(erro_coringa));
-							
-							justD = new Ponto();
-							justD.setX(onda.getTempo() - 0.1);
-							justD.setY(derivada);
-							
-							grafico.atualizarFilaDeErroP(justP);
-							grafico.atualizarFilaDeErroI(justI);
-							grafico.atualizarFilaDeErroD(justD);
-						break;
-						
-						case "PI-D":
-							
-							justP = new Ponto();
-							justP.setX(onda.getTempo() - 0.1);
-							justP.setY(acaoP(erro_coringa));
-							
-							justI = new Ponto();
-							justI.setX(onda.getTempo() - 0.1);
-							justI.setY(acaoI(erro_coringa));
-							
-							justD = new Ponto();
-							justD.setX(onda.getTempo() - 0.1);
-							justD.setY(derivada);
-							
-							grafico.atualizarFilaDeErroP(justP);
-							grafico.atualizarFilaDeErroI(justI);
-							grafico.atualizarFilaDeErroD(justD);
-						break;
-					}
-	    			
-					//Validação do painel de tensões
-					grafico.atualizarGrafico();
-	    			painelTensao.validate();
-				}
-	    		
-	    		// Controle windUp para os tanques 1 e 2
-	    		if(dados.isTanque1())
-	    			controleWindUP = dados.getVP();
-	    		else if (dados.isTanque2())
-	    			controleWindUP = dados.getVp_two();
-	    		
-	    		//Validação do sinal dentro das especificações da planta (saturação e travas)
-	    		verificarRegras();
-	    		
-	    		if (dados.isTanque1()){
-		    		controleAnteriorSaturado = dados.getVP();
-		    		quanserclient.write(dados.getPinoDeEscrita(), dados.getVP());
-	    		}else if (dados.isTanque2()){
-	    			controleAnteriorSaturado = dados.getVp_two();
-		    		quanserclient.write(dados.getPinoDeEscrita(), dados.getVp_two());
-	    		}
-	    		
-	    		if(dados.getTipoMalha().equals("Malha Aberta")){
-	    			
-	    			
-	    			//Plot de tensão saturada em malha aberta 
-	    			
-		    		Ponto ponto = new Ponto();
-		    		ponto.setX(onda.getTempo() - 0.1); 
-		    		if(dados.isTanque1()){
-		    			ponto.setY(dados.getVP());
-		    		}else if (dados.isTanque2()){
-		    			ponto.setY(dados.getVp_two());
-		    		}
-		    		
-		    		grafico.atualizarDeVPSaturado(ponto);
-		    		
-		    		//Validação do painel de tensões 
-		    		grafico.atualizarGrafico();
-	    			painelTensao.validate();
-	    			
-	    		}else if (dados.getTipoMalha().equals("Malha Fechada")){
-	    			
-	    			
-	    			//Plot da tensão saturada em malha fechada;
-	    			
-	    			Ponto vpSaturado = new Ponto();
-					vpSaturado.setX(onda.getTempo() - 0.1); 
-					vpSaturado.setY(dados.getVP());
-
-					grafico.atualizarDeVPSaturado(new Ponto(vpSaturado));
-					
-					//Validação do painel de tensões 
-					grafico.atualizarGrafico();
-	    			painelTensao.validate();
-	    			
-	    			//Plot dos níveis dos tanques 1 e 2, controle de malha fechada
-	    			
-	    			Ponto nivel_1= new Ponto();
-	    			nivel_1.setY(nivel_one*6.25);
-	    			nivel_1.setX(onda.getTempo() - 0.1);
-	    			graficoAltura.atualizarFilaDeNivelUm(new Ponto(nivel_1));
-	    			
-	    			Ponto nivel_2 = new Ponto();
-	    			nivel_2.setY(nivel_two*6.25);
-	    			nivel_2.setX(onda.getTempo() - 0.1);
-	    			graficoAltura.atualizarFilaDeNivelDois(new Ponto(nivel_2));
-	    			
-	    			
-	    			//Validação do painel de níveis
-	    			graficoAltura.atualizarGrafico();
-	    			painelAltura.validate();
-	    		}
-	    		
-				Thread.sleep(100);
-				//System.out.println(cont++);
-				//System.out.println(nivel_coringa);
-			} catch (QuanserClientException | InterruptedException e) {e.printStackTrace();}
-		}
-    	
-    }
-    
-    public void verificarRegras(){
-            //SaturaÃ§Ã£o
-    	vps1 = dados.getVP();
-    	vps2 = dados.getVp_two();
-    	
-		if (dados.getVP() > 4)
-			    vps1 = 4;
-		
-		if (dados.getVP() < -4)
-			    vps1 = -4;
-	
-	
-		if (dados.getVp_two() > 4)
-		    vps2 = 4;
-		
-		if (dados.getVp_two()< -4)
-		    vps2 = -4;
-    	
-			
-			//LH
-			if (nivel_one*6.25 > 28 && dados.getVP() > 3.15){
-			    vps1 = 3.15;
-				vps2 = 0;}
-
-			//LHH
-			if (nivel_one*6.25 > 29 && dados.getVP() > 0) {
-			    vps1 = 0;
-				vps2 = 0;}
-	
-			//LL
-			if (nivel_one*6.25 < 4 && dados.getVP()< 0){
-			    vps1 = 0;
-			    vps2 = 0;}
-			
-			dados.setVP(vps1);
-			dados.setVp_two(vps2);
-			
-			
-		
-			
-			
-   }
-    
-    public QuanserClient getConexao(){
+	public QuanserClient getConexao(){
         try {
            quanserclient = new QuanserClient(servidor, porta);
         } catch (QuanserClientException ex) {
@@ -491,20 +68,72 @@ public class Tanque extends Thread {
         return quanserclient;
     }
 
+	public void run(){
+		while(true){
+
+			try {
+				
+				getConexao();
+				
+				dados.setPV(quanserclient.read(dados.getPinoDeLeitura1()));
+				dados.setPV_two(quanserclient.read(dados.getPinoDeLeitura2()));
+				
+				if(dados.getTipoMalha().equals("Malha Aberta")){
+					
+					dados.setVp(sinal.gerarPonto().getY());
+					
+				}
+				
+				sleep(100);
+			} catch (QuanserClientException | InterruptedException e) {e.printStackTrace();}
+		}
+	}
+
+	public void verificarRegras(){
+    	
+
+    	setVp_sat(dados.getVP());
+    	
+		if (dados.getVP() > 4)
+			    setVp_sat(4);
+		
+		if (dados.getVP() < -4)
+			    setVp_sat(-4);
+			
+		//LH
+		if (nivel_tanque_um*6.25 > 28 && dados.getVP() > 3.15){
+		   setVp_sat(3.15);
+		}
+
+		//LHH
+		if (nivel_tanque_um*6.25 > 29 && dados.getVP() > 0) {
+		    
+		}
+
+		//LL
+		if (nivel_tanque_um*6.25 < 4 && dados.getVP()< 0){
+		    setVp_sat(0);
+		}
+		
+			dados.setVP(gettVp_sat());
+	}
+
+	//metódos que eu não mexi (ainda) pra não dar treta com a tela
+
 	public Dados getDados() {
 		return dados;
 	}
 
 	public void setDados(Dados dados) {
 		this.dados = dados;
-		this.onda = new Tsunami(this.dados.getPeriodo(), this.dados.getPeriodoMinino(),this.dados.getOffset(),this.dados.getAmplitude(),this.dados.getAmplitudeMinima(),this.dados.getTipoSinal());
-		this.grafico.dados = dados;
-		this.graficoAltura.dados = dados;
+		this.sinal = new Tsunami(this.dados.getPeriodo(), this.dados.getPeriodoMinino(),this.dados.getOffset(),this.dados.getAmplitude(),this.dados.getAmplitudeMinima(),this.dados.getTipoSinal());
+		this.grafico_controle.dados = dados;
+		this.grafico_nivel.dados = dados;
 	}
 	
 	public void setDadosGrafico(Dados dados) {
-		this.grafico.dados = dados;
-		this.graficoAltura.dados = dados;
+		this.grafico_controle.dados = dados;
+		this.grafico_nivel.dados = dados;
 	}
     
     public JLayeredPane getPainelTensao() {
@@ -513,8 +142,8 @@ public class Tanque extends Thread {
 
 	public void setPainelTensao(JLayeredPane graficoTensao) {
 		this.painelTensao = graficoTensao;
-		this.painelTensao.add(grafico.painel, new Integer(0));
-		grafico.painel.setBounds(painelTensao.getVisibleRect());
+		this.painelTensao.add(grafico_controle.painel, new Integer(0));
+		grafico_controle.painel.setBounds(painelTensao.getVisibleRect());
 	
 	}
 
@@ -524,55 +153,19 @@ public class Tanque extends Thread {
 
 	public void setPainelAltura(JLayeredPane painelAltura) {
 		this.painelAltura = painelAltura;
-		this.painelAltura.add(graficoAltura.painelG2, new Integer(0));
-		graficoAltura.painelG2.setBounds(painelAltura.getVisibleRect());
+		this.painelAltura.add(grafico_nivel.painelG2, new Integer(0));
+		grafico_nivel.painelG2.setBounds(painelAltura.getVisibleRect());
 	}
-	
-	public void setServer(String servidor, int porta){
-		this.servidor = servidor;
-        this.porta = porta;
-	}
-	
-	public double acaoP(double erro){
-		return dados.getKP()*erro;
-	}
-	
-	public double acaoI(double erro){
-		if(!dados.isWindUP())
-			IntErro = IntErro + dados.getKI()*erro*0.1;
-		else{
-			IntErro = IntErro + dados.getKI()*erro*0.1 + 0.1*(1/(dados.getTt()))*(controleAnteriorSaturado - controleWindUP);
-		}
-		return IntErro;	
-	}
-	
-	public double acaoD(double erro){
-		
-		erroD = dados.getKD()*((erro - erroAnterior)/(0.1));
-		erroAnterior = erro;
-		
-		return erroD;
-	}
-
-	void tempoAcomoda(){
-		if (true)
-		{
-			t_acomoda = onda.getTempo() - t_acomoda - 0.1;
-
-			dados.gettAcomoda().setText(String.valueOf(t_acomoda));
-			flagSettleTempo = true;
-		}
-	}
-	
+//tempos
 	void tempoSubida(){
 		if (setPoint - oldSetPoint > 0){
 			if(!flagTrI && nivel_coringa*6.25 >= oldSetPoint + dados.getFatInf() * deltaSetPoint)
 			{
-				t_subida_i = onda.getTempo() - tSetPoint - 0.2;
+				t_subida_i = sinal.getTempo() - tSetPoint - 0.2;
 				flagTrI = true;
 			}
 			if (!flagTrF && nivel_coringa*6.25 >= oldSetPoint + dados.getFatSup() * deltaSetPoint){
-				t_subida_f = onda.getTempo() - tSetPoint - 0.2;
+				t_subida_f = sinal.getTempo() - tSetPoint - 0.2;
 				flagTrF = true;
 			}
 			if (flagTrI && flagTrF)
@@ -584,11 +177,11 @@ public class Tanque extends Thread {
 		}else{
 			if(!flagTrI && nivel_coringa*6.25 <= oldSetPoint + dados.getFatInf() * deltaSetPoint)
 			{
-				t_subida_i = onda.getTempo() - tSetPoint - 0.2;
+				t_subida_i = sinal.getTempo() - tSetPoint - 0.2;
 				flagTrI = true;
 			}
 			if (!flagTrF && nivel_coringa*6.25 <= oldSetPoint + dados.getFatSup() * deltaSetPoint){
-				t_subida_f = onda.getTempo() - tSetPoint - 0.2;
+				t_subida_f = sinal.getTempo() - tSetPoint - 0.2;
 				flagTrF = true;
 			}
 			if (flagTrI && flagTrF)
@@ -599,14 +192,14 @@ public class Tanque extends Thread {
 			}
 		}
 	}
-	
+
 	void tempoPico(){
 		
 		if(!flagPico){
 		if (setPoint - oldSetPoint > 0){
 			if (nivel_coringa*6.25 < nivel_passado && nivel_coringa*6.25 > setPoint)
 			{
-				t_pico = onda.getTempo() - tSetPoint- 0.2;
+				t_pico = sinal.getTempo() - tSetPoint- 0.2;
 				dados.gettPico().setText(String.valueOf(t_pico));
 				nivel_pico = nivel_passado;
 				System.out.println("sub");
@@ -626,7 +219,7 @@ public class Tanque extends Thread {
 			System.out.println("outro");
 			if (nivel_coringa*6.25 > nivel_passado && nivel_coringa*6.25 < setPoint)
 			{
-				t_pico = onda.getTempo() - 0.2 - tSetPoint;
+				t_pico = sinal.getTempo() - 0.2 - tSetPoint;
 				nivel_pico = nivel_passado;
 				if (dados.isPicoAbs())
 					dados.getNivelPico().setText(String.valueOf(100 * (nivel_pico - setPoint)/(setPoint - oldSetPoint)));
@@ -651,9 +244,6 @@ public class Tanque extends Thread {
 	void settleTempo(){
 		
 		double nivelDeComparacao = 0; 
-		
-
-
 		if (dados.isFaixa2())
 			nivelDeComparacao = setPoint*0.02; 
 
@@ -668,7 +258,7 @@ public class Tanque extends Thread {
 	
 		if(!flagSettleTempo){
 			if(nivel_coringa*6.25 <= nivelDeComparacao + setPoint && nivel_coringa*6.25 >= setPoint - nivelDeComparacao ){
-					settleTempo = onda.getTempo() - 0.1;
+					settleTempo = sinal.getTempo() - 0.1;
 					flagSettleTempo = true; 
 			}
 		}else if(flagSettleTempo){
@@ -684,10 +274,10 @@ public class Tanque extends Thread {
 			dados.gettAcomoda().setText(String.valueOf(settleTempo));
 		else{dados.gettAcomoda().setText("");}
 	}
-	
+
 	void sp_mudou(){
 		//t_pico = t_subida = t_acomoda = 0;
-		tSetPoint = onda.getTempo() - 0.1;
+		tSetPoint = sinal.getTempo() - 0.1;
 		flagPico = flagSettleTempo = flagSubida = false;
 		oldSetPoint = setPoint;
 		setPoint = newSetPoint;
@@ -702,5 +292,34 @@ public class Tanque extends Thread {
 		dados.getNivelPico().setText("");
 	}
 	
-	
+//Getters and Setters
+	void setVp_sat(double vp_sat){
+		this.vp_sat = vp_sat;
+	}
+
+	double gettVp_sat(){
+
+		return vp_sat;
+	}
+
+	void setNivel_tanque_um( double nivel_tanque_um){
+
+		this.nivel_tanque_um = nivel_tanque_um;
+	}
+
+	double getNivel_tanque_um(){
+
+		return nivel_tanque_um;
+	}
+
+	void setNivel_tanque_dois( double nivel_tanque_dois){
+
+		this.nivel_tanque_dois = nivel_tanque_dois;
+	}
+
+	double getNivel_tanque_dois(){
+
+		return nivel_tanque_dois;
+	}
+
 }

@@ -19,6 +19,7 @@ public class Dados {
 	private String tipoSinal;
 	private String tipoMalha;
 	private String tipoDeControle;
+	private String tipoDeControlador;
 	
 	private boolean windUP, tensao, tensaoSat, nivel1, nivel2, setPoint, proporcional, integral, derivativo, erroMesmo;
 	private boolean faixa2, faixa5, faixa7, faixa10, tanque1, tanque2;
@@ -344,14 +345,6 @@ public class Dados {
 		this.settleTempo = settleTempo;
 	}
 
-	public double getVp() {
-		return VP;
-	}
-
-	public void setVp(double vp) {
-		this.VP = vp;
-	}
-
 	public JTextPane gettPico() {
 		return tPico;
 	}
@@ -431,5 +424,13 @@ public class Dados {
 
 	public void setTanque2(boolean tanque2) {
 		this.tanque2 = tanque2;
+	}
+
+	public String getTipoDeControlador() {
+		return tipoDeControlador;
+	}
+
+	public void setTipoDeControlador(String tipoDeControlador) {
+		this.tipoDeControlador = tipoDeControlador;
 	}
 }

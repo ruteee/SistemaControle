@@ -6,23 +6,18 @@ public class Controlador {
 	private double integral, derivada, erroAnterior, proporcional;
 	
 	
-	public Controlador(double kI, double kD, double kP, double td, double ti, double tt,
-			double controleAnteriorSaturado, double controleNaoSaturado, boolean windUP, 
-			double derivada, double proporcional){
+	public Controlador( double kP, double kI, double kD, double tt, boolean windUP){
 	
 		KI = kI;
 		KD = kD;
 		KP = kP;
-		Td = td;
-		Ti = ti;
 		Tt = tt;
-		this.controleAnteriorSaturado = controleAnteriorSaturado;
-		this.controleNaoSaturado = controleNaoSaturado;
+		this.controleAnteriorSaturado = 0;
+		this.controleNaoSaturado = 0;
 		this.windUP = windUP;
 		this.integral = 0;
-		this.derivada = derivada;
 		this.erroAnterior = 0;
-		this.proporcional = proporcional;
+	
 	}
 	
 	public void acaoP(double erro){
@@ -120,6 +115,22 @@ public class Controlador {
 
 	public double getDerivada() {
 		return derivada;
+	}
+
+	public double getControleAnteriorSaturado() {
+		return controleAnteriorSaturado;
+	}
+
+	public void setControleAnteriorSaturado(double controleAnteriorSaturado) {
+		this.controleAnteriorSaturado = controleAnteriorSaturado;
+	}
+
+	public double getControleNaoSaturado() {
+		return controleNaoSaturado;
+	}
+
+	public void setControleNaoSaturado(double controleNaoSaturado) {
+		this.controleNaoSaturado = controleNaoSaturado;
 	}
 }
 

@@ -11,9 +11,10 @@ public class Tanque extends Thread{
 	QuanserClient quanserclient;
 
 	private double vp_sat;
-	private double nivel_tanque_um;
-	private double nivel_tanque_dois;
+	public double nivel_tanque_um;
+	public double nivel_tanque_dois;
 	public double nivel_coringa;
+	public double erro;
 
 	public double t_pico = 0;
 	public double t_acomoda = 0; 
@@ -68,6 +69,13 @@ public class Tanque extends Thread{
         return quanserclient;
     }
 
+	//setar todos os atributos na interface como zero se não for ser utilizado;
+	public Controlador  controladorUm = new Controlador(dados.getKP(), dados.getKI(),
+			dados.getKD(), dados.getTt(), dados.isWindUP()); 
+	
+	public Controlador  controladorDois = new Controlador(dados.getKP(), dados.getKI(),
+			dados.getKD(), dados.getTt(), dados.isWindUP()); 
+	
 	public void run(){
 		while(true){
 
@@ -78,10 +86,61 @@ public class Tanque extends Thread{
 				dados.setPV(quanserclient.read(dados.getPinoDeLeitura1()));
 				dados.setPV_two(quanserclient.read(dados.getPinoDeLeitura2()));
 				
+				nivel_tanque_um = 6.25*dados.getPV();
+				nivel_tanque_dois = 6.25*dados.getPV_two();
+				
+				if(dados.isTanque1()){
+					nivel_coringa = nivel_tanque_um;
+				}else{
+					nivel_coringa = nivel_tanque_dois;
+				}
+				
 				if(dados.getTipoMalha().equals("Malha Aberta")){
 					
-					dados.setVp(sinal.gerarPonto().getY());
+					dados.setVP(sinal.gerarPonto().getY());
+					Ponto nivelTanque = new Ponto();
+					Ponto vp = new Ponto();
 					
+					nivelTanque.setX(sinal.getTempo() - 0.1);
+					nivelTanque.setY(nivel_coringa);
+					grafico_nivel.atualizarFilaDeNivelUm(nivelTanque);
+					
+					vp.setX(sinal.getTempo() - 0.1);
+					vp.setY(dados.getVP());
+					grafico_controle.atualizarFilaDeVP(vp);
+
+					grafico_nivel.atualizarGrafico();
+					grafico_controle.atualizarGrafico();
+					painelAltura.validate();
+					painelTensao.validate();
+					
+				}else if(dados.getTipoMalha().equals("Malha Fechada")){
+					
+					//Ponto que irá popular o gráfico do setPoint.
+					Ponto setPoint = new Ponto();
+					setPoint = sinal.gerarPonto();
+					setPoint.setX(setPoint.getX() - 0.1);
+					setPoint.setY(setPoint.getY());
+					grafico_nivel.atualizarFilaDeSetPoint(setPoint);
+					erro = nivel_coringa - grafico_nivel.filaDeSetPoint.getFirst().getY();
+					
+					if(dados.getTipoDeControle().equals("Sem Controle")){
+						dados.setVP(erro);
+					}else if (dados.getTipoDeControle().equals("Simples")){	
+						if(dados.getTipoDeControlador().equals("PI-D")){
+							dados.setVP(controladorUm.calcularAcao(erro, nivel_coringa));
+						}else{dados.setVP(controladorUm.calcularAcao(erro, 0));}	
+					}else if(dados.getTipoDeControle().equals("Cascata")){
+						
+						double erro_tanque_dois = grafico_nivel.filaDeSetPoint.getFirst().getY() - nivel_tanque_dois;
+						if(dados.getTipoDeControlador().equals("PI-D")){
+							double erro_controlador_dois = controladorUm.calcularAcao(erro_tanque_dois, nivel_tanque_dois) - nivel_tanque_um;
+							dados.setVP(controladorDois.calcularAcao(erro_controlador_dois, nivel_tanque_um));
+						}else{	
+							double erro_controlador_dois = controladorUm.calcularAcao(erro_tanque_dois, 0) - nivel_tanque_um;
+							dados.setVP(controladorDois.calcularAcao(erro_controlador_dois, 0));
+						}
+					}
 					
 				}
 				
@@ -303,25 +362,7 @@ public class Tanque extends Thread{
 		return vp_sat;
 	}
 
-	void setNivel_tanque_um( double nivel_tanque_um){
-
-		this.nivel_tanque_um = nivel_tanque_um;
-	}
-
-	double getNivel_tanque_um(){
-
-		return nivel_tanque_um;
-	}
-
-	void setNivel_tanque_dois( double nivel_tanque_dois){
-
-		this.nivel_tanque_dois = nivel_tanque_dois;
-	}
-
-	double getNivel_tanque_dois(){
-
-		return nivel_tanque_dois;
-	}
+	
 
 	
 	//lembrar de redatorar;

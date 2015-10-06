@@ -423,14 +423,14 @@ public class Tela extends TelaGeral{
 					
 					//dados.setComControle(chckbxComControle.isSelected());
 					
-					thread.graficoAltura.limparFilaDeErroMesmo();
+					/*thread.graficoAltura.limparFilaDeErroMesmo();
 					thread.graficoAltura.limparFilaDeNivelDois();
 					thread.graficoAltura.limparFilaDeNivelUm();
 					thread.graficoAltura.limparFilaDeSetPoint();
 					thread.grafico.limparFilaDeVP();
 					thread.grafico.limparFilaDeP();
 					thread.grafico.limparFilaDeI();
-					thread.grafico.limparFilaDeD();
+					thread.grafico.limparFilaDeD();*/
 					
 					
 					// Setar na dados os checkBox dos gráficos

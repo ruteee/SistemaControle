@@ -24,7 +24,7 @@ public class Tanque extends Thread{
 	private String servidor;
 
 	private int porta;
-	private int faixa; //?
+//	private int faixa; //?
 
 	JLayeredPane painelTensao, painelAltura;
 	
@@ -81,6 +81,7 @@ public class Tanque extends Thread{
 				if(dados.getTipoMalha().equals("Malha Aberta")){
 					
 					dados.setVp(sinal.gerarPonto().getY());
+					
 					
 				}
 				
@@ -322,4 +323,12 @@ public class Tanque extends Thread{
 		return nivel_tanque_dois;
 	}
 
+	
+	//lembrar de redatorar;
+	public void setServer(String servidor, int porta){
+		this.servidor = servidor;
+        this.porta = porta;
+	}
+	
+	public Tanque() {}
 }

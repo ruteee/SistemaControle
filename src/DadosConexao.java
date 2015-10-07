@@ -1,7 +1,6 @@
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
 
-
 public class DadosConexao {
 
 	private JTextField ip;
@@ -44,5 +43,29 @@ public class DadosConexao {
 	@SuppressWarnings("rawtypes")
 	public void setEscrita(JComboBox escrita) {
 		this.escrita = escrita;
-	}	
+	}
+	
+	public String getTextLeitura1(){
+		if(leitura1 == null){
+			return leitura1.getSelectedItem() + "";
+		}else{
+			return "";
+		}
+	}
+	
+	public String getTextLeitura2(){
+		if(leitura2 == null){
+			return leitura2.getSelectedItem() + "";
+		}else{
+			return "";
+		}
+	}
+	
+	public String getTextEscrita(){
+		if(escrita == null){
+			return escrita.getSelectedItem() + "";
+		}else{
+			return "";
+		}
+	}
 }

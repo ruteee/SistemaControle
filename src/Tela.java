@@ -63,13 +63,6 @@ public class Tela extends TelaGeral{
 	private JLabel lblExibirCheckSinalGrafico1;
 	private JLabel lblExibirCheckSinalGrafico2;
 	
-	@SuppressWarnings("rawtypes")
-	private JComboBox leitura1;
-	@SuppressWarnings("rawtypes")
-	private JComboBox leitura2;
-	@SuppressWarnings("rawtypes")
-	private JComboBox escrita;
-	
 	private JRadioButton rdbtnDegrau;
 	private JRadioButton rdbtnSenoidal;
 	private JRadioButton rdbtnQuadrada;
@@ -176,8 +169,17 @@ public class Tela extends TelaGeral{
 	/**
 	 * Initialize the contents of the frame.
 	 */
+	@SuppressWarnings("rawtypes")
 	private void initialize() {
 		dados = new Dados();
+		dadosConexao = new DadosConexao();
+		JComboBox init = new JComboBox();
+		init.setSelectedItem("");
+		dadosConexao.setEscrita(init);
+		dadosConexao.setLeitura1(init);
+		dadosConexao.setLeitura2(init);
+		dadosConexao.setIp(new JTextField());
+		dadosConexao.setPorta(new JTextFieldAlterado());
 		
 		frmSupervisrioDeTanques = new JFrame();
 		frmSupervisrioDeTanques.setTitle("Supervis\u00F3rio de Tanques de \u00C1gua");
@@ -197,18 +199,21 @@ public class Tela extends TelaGeral{
 		
 		labelLeitura1 = new JLabel();
 		labelLeitura1.setBounds(176, 20, 26, 14);
+		labelLeitura1.setText(dadosConexao.getTextLeitura1());
 		panelDadosServidor.add(labelLeitura1);
 		
 		JLabel lblLeitura_2 = new JLabel("Leitura 2:");
-		lblLeitura_2.setBounds(229, 20, 46, 14);
+		lblLeitura_2.setBounds(229, 20, 46, 14);		
 		panelDadosServidor.add(lblLeitura_2);
 		
 		labelEscrita = new JLabel();
 		labelEscrita.setBounds(176, 50, 26, 14);
+		labelEscrita.setText(dadosConexao.getTextEscrita());
 		panelDadosServidor.add(labelEscrita);
 		
 		labelLeitura2 = new JLabel();
 		labelLeitura2.setBounds(281, 20, 26, 14);
+		labelLeitura2.setText(dadosConexao.getTextLeitura2());
 		panelDadosServidor.add(labelLeitura2);
 		
 		JLabel lblEscrita = new JLabel("Escrita:");
@@ -240,11 +245,8 @@ public class Tela extends TelaGeral{
 		
 		menuConfig = new JMenuItem("Configurar");
 		menuConfig.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				dadosConexao = new DadosConexao();
-				
+			public void actionPerformed(ActionEvent arg0) {				
 				ConfigConexao conf = new ConfigConexao(dadosConexao);
-
 				conf.show();
 				conf.setDefaultCloseOperation(JInternalFrame.EXIT_ON_CLOSE);
 				frmSupervisrioDeTanques.getContentPane().add(conf);
@@ -650,6 +652,7 @@ public class Tela extends TelaGeral{
 		
 		labelIp = new JLabel();
 		labelIp.setBounds(31, 20, 88, 14);
+		labelIp.setText(dadosConexao.getIp().getText());
 		panelDadosServidor.add(labelIp);
 		
 		JLabel lblPorta = new JLabel("Porta:");
@@ -658,6 +661,7 @@ public class Tela extends TelaGeral{
 		
 		labelPorta = new JLabel();
 		labelPorta.setBounds(51, 50, 68, 14);
+		labelPorta.setText(dadosConexao.getPorta().getText());
 		panelDadosServidor.add(labelPorta);
 		
 		final JButton btnConectarDesconectar = new JButton("Conectar");
@@ -846,28 +850,28 @@ public class Tela extends TelaGeral{
 	 * Valida campos e Popula os parâmetros de Leitura(1 e 2) e Escrita na classe Dados.
 	 */
 	public boolean validaDadosDeIO(){			
-		if(leitura1.getSelectedIndex() == 0){
+		if(dadosConexao.getLeitura1().getSelectedIndex() == 0){
 				JOptionPane.showMessageDialog(frmSupervisrioDeTanques, "Informe o porta de Leitura 1.");
-			dados.setPinoDeLeitura1((int)((Integer)leitura1.getSelectedItem()));
+			dados.setPinoDeLeitura1((int)((Integer)dadosConexao.getLeitura1().getSelectedItem()));
 			return false;
 		}else{
-			dados.setPinoDeLeitura1((int)((Integer)leitura1.getSelectedItem()));
+			dados.setPinoDeLeitura1((int)((Integer)dadosConexao.getLeitura1().getSelectedItem()));
 		}
 		
-		if(leitura2.getSelectedIndex() == 0){
+		if(dadosConexao.getLeitura2().getSelectedIndex() == 0){
 		
 			JOptionPane.showMessageDialog(frmSupervisrioDeTanques, "Informe o porta de Leitura 2.");
-			dados.setPinoDeLeitura2((int)((Integer)leitura2.getSelectedItem()));
+			dados.setPinoDeLeitura2((int)((Integer)dadosConexao.getLeitura2().getSelectedItem()));
 			return false;
 		}else{
-			dados.setPinoDeLeitura2((int)((Integer)leitura2.getSelectedItem()));
+			dados.setPinoDeLeitura2((int)((Integer)dadosConexao.getLeitura2().getSelectedItem()));
 		}
 			
-		if(escrita.getSelectedIndex() == 0){
+		if(dadosConexao.getEscrita().getSelectedIndex() == 0){
 			JOptionPane.showMessageDialog(frmSupervisrioDeTanques, "Informe a porta de Escrita.");
 			return false;
 		}else{
-			dados.setPinoDeEscrita((int)((Integer)escrita.getSelectedItem()));
+			dados.setPinoDeEscrita((int)((Integer)dadosConexao.getEscrita().getSelectedItem()));
 		}
 		
 		return true;
@@ -1081,10 +1085,6 @@ public class Tela extends TelaGeral{
 		if(acao.equals("Conectar")){			
 			habilitarComponentesPainelTipoMalha(true);
 			
-			leitura1.setEnabled(true);
-			leitura2.setEnabled(true);
-			escrita.setEnabled(true);
-			
 			//rdbtnTanque1.setEnabled(true);
 			//rdbtnTanque2.setEnabled(true);
 			
@@ -1127,14 +1127,6 @@ public class Tela extends TelaGeral{
 			periodo.setEnabled(false);
 			periodoMin.setEnabled(false);
 			offSet.setEnabled(false);
-			
-			escrita.setEnabled(false);
-			leitura1.setEnabled(false);
-			leitura2.setEnabled(false);
-			
-			escrita.setSelectedItem("Selecione");
-			leitura1.setSelectedItem("Selecione");
-			leitura2.setSelectedItem("Selecione");
 			
 	//		rdbtnTanque1.setEnabled(false);
 		//	rdbtnTanque1.setSelected(false);

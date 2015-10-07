@@ -1,4 +1,4 @@
-import javax.swing.JTextPane;
+import javax.swing.JLabel;
 
 public class Dados {
 
@@ -38,7 +38,7 @@ public class Dados {
 	
 	private double duracao;
 	
-	private JTextPane tPico, tSubida, tAcomoda, nivelPico;
+	private JLabel tPico, tSubida, tAcomoda, nivelPico;
 
 	private double fatSup = 1, fatInf = 0; 
 	private boolean picoAbs;
@@ -354,35 +354,35 @@ public class Dados {
 		this.vp = vp;
 	}
 
-	public JTextPane gettPico() {
+	public JLabel gettPico() {
 		return tPico;
 	}
 
-	public void settPico(JTextPane tPico) {
+	public void settPico(JLabel tPico) {
 		this.tPico = tPico;
 	}
 
-	public JTextPane gettSubida() {
+	public JLabel gettSubida() {
 		return tSubida;
 	}
 
-	public void settSubida(JTextPane tSubida) {
+	public void settSubida(JLabel tSubida) {
 		this.tSubida = tSubida;
 	}
 
-	public JTextPane gettAcomoda() {
+	public JLabel gettAcomoda() {
 		return tAcomoda;
 	}
 
-	public void settAcomoda(JTextPane tAcomoda) {
+	public void settAcomoda(JLabel tAcomoda) {
 		this.tAcomoda = tAcomoda;
 	}
 
-	public JTextPane getNivelPico() {
+	public JLabel getNivelPico() {
 		return nivelPico;
 	}
 
-	public void setNivelPico(JTextPane nivelPico) {
+	public void setNivelPico(JLabel nivelPico) {
 		this.nivelPico = nivelPico;
 	}
 

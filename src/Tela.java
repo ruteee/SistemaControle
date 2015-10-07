@@ -7,7 +7,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
-import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -38,8 +37,9 @@ import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenuItem;
 
 public class Tela extends TelaGeral{
-	private JFrame frmSupervisrioDeTanques;
+	private JFrame frmSupervisorioDeTanques;
 	
+	private JMenu menuEstatisticas;
 	private JCheckBoxMenuItem menu2porcento, menu5porcento, menu7porcento, menu10porcento;
 	private JCheckBoxMenuItem menuPorcentagem, menuAbs;
 	private JCheckBoxMenuItem menu0a100, menu5a95, menu10a90;	
@@ -54,16 +54,14 @@ public class Tela extends TelaGeral{
 	private JCheckBox chckbxTensaoSat, chckbxTensCalc, chckbxNivTanque1, chckbxNivTanque2, chckbxSetPoint, chckbxErro;
 	private JCheckBox chckbxP, chckbxI, chckbxD;
 	
-	private JRadioButton rdbtnTempoSubida1, rdbtnTempoSubida2, rdbtnTempoSubida3;
+	private Integer tempoAcomodacao;
 	
-	private JSpinner spinnerTs;
-	
-	private JLabel textPaneTr, textPaneMp, textPaneTp, textPaneTs;
+	private JLabel lblValorTr, lblValorMp, lblValorTp, lblValorTs;
 	
 	public String onda_limpa_tanque;
 	public double amplitude_limpa_tanque;
 	
-	private JRadioButton rdbtnTanque2, rdbtnTanque1;
+	private JRadioButton rdbtnTanque1, rdbtnTanque2;
 	private JRadioButton rdbtnAberta, rdbtnFechada;
 	private JLabel lblPeriodo, lblAmplitude;
 	
@@ -107,7 +105,7 @@ public class Tela extends TelaGeral{
 				} 
 				
 				Tela window = new Tela();
-				window.frmSupervisrioDeTanques.setVisible(true);
+				window.frmSupervisorioDeTanques.setVisible(true);
 			}
 		});
 	}
@@ -122,7 +120,14 @@ public class Tela extends TelaGeral{
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize() {
+	private void initialize() {		
+		frmSupervisorioDeTanques = new JFrame();
+		frmSupervisorioDeTanques.setTitle("Supervis\u00F3rio de Tanques de \u00C1gua");
+		frmSupervisorioDeTanques.getContentPane().setLocation(0, -113);
+		frmSupervisorioDeTanques.setBounds(100, 100, 1169, 721);
+		frmSupervisorioDeTanques.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmSupervisorioDeTanques.getContentPane().setLayout(null);
+		
 		dados = new Dados();
 		dadosConexao = new DadosConexao();
 		dadosConexao.setLblIp(labelIp);
@@ -131,64 +136,58 @@ public class Tela extends TelaGeral{
 		dadosConexao.setLblLeitura2(labelLeitura2);
 		dadosConexao.setLblEscrita(labelEscrita);
 		
-		frmSupervisrioDeTanques = new JFrame();
-		frmSupervisrioDeTanques.setTitle("Supervis\u00F3rio de Tanques de \u00C1gua");
-		frmSupervisrioDeTanques.getContentPane().setLocation(0, -113);
-		frmSupervisrioDeTanques.setBounds(100, 100, 1169, 721);
-		frmSupervisrioDeTanques.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frmSupervisrioDeTanques.getContentPane().setLayout(null);
-		
 		inicializarMenuBar();
 		
 		inicializarPainelDadosServidor();
-		frmSupervisrioDeTanques.getContentPane().add(panelDadosServidor);
+		frmSupervisorioDeTanques.getContentPane().add(panelDadosServidor);
 		
-		JLabel lblLeitura_1 = new JLabel("Leitura 1:");
-		lblLeitura_1.setBounds(129, 20, 46, 14);
-		panelDadosServidor.add(lblLeitura_1);
+		inicializarPainelTipoOnda();
 		
-		labelLeitura1 = new JLabel();
-		labelLeitura1.setBounds(176, 20, 26, 14);
-		labelLeitura1.setText(" ");
-		panelDadosServidor.add(labelLeitura1);
+		chckbxComControle = new JCheckBox("Acionar Controlador");
+		chckbxComControle.setBounds(45, 235, 124, 23);
+		frmSupervisorioDeTanques.getContentPane().add(chckbxComControle);
+		chckbxComControle.setEnabled(false);
 		
-		JLabel lblLeitura_2 = new JLabel("Leitura 2:");
-		lblLeitura_2.setBounds(229, 20, 46, 14);		
-		panelDadosServidor.add(lblLeitura_2);
+		chckbxWindUp = new JCheckBox("Acionar Wind Up");
+		chckbxWindUp.setBounds(190, 235, 113, 23);
+		frmSupervisorioDeTanques.getContentPane().add(chckbxWindUp);
+		chckbxWindUp.setEnabled(false);
 		
-		labelEscrita = new JLabel();
-		labelEscrita.setBounds(176, 50, 26, 14);
-		labelEscrita.setText(" ");
-		panelDadosServidor.add(labelEscrita);
-		
-		labelLeitura2 = new JLabel();
-		labelLeitura2.setBounds(281, 20, 26, 14);
-		labelLeitura2.setText(" ");
-		panelDadosServidor.add(labelLeitura2);
-		
-		JLabel lblEscrita = new JLabel("Escrita:");
-		lblEscrita.setBounds(129, 50, 40, 14);
-		panelDadosServidor.add(lblEscrita);
-		
-		inicializeBotõesPainelPrincipal();
+		inicializeBotõesPainelPrincipal();		
 		
 		inicializePainelOpcoesEntrada();
 		
 		inicializaPainelGraficos();
-		frmSupervisrioDeTanques.getContentPane().add(panelGraficos);
+		frmSupervisorioDeTanques.getContentPane().add(panelGraficos);
 		
-		inicializarPainelEstatísticas();
+		inicializarPainelValoresAtuais();
 		
 		inicializaPainelCheckSinaisGraficos();
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public void inicializarPainelTipoOnda(){
+		JPanel painelTipoOnda = new JPanel();
+		painelTipoOnda.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		painelTipoOnda.setLayout(null);
+		painelTipoOnda.setBounds(6, 194, 336, 34);
+		frmSupervisorioDeTanques.getContentPane().add(painelTipoOnda);
 		
-//		redimensionarPainelGrafico2(panelGrafico1, panelGrafico2);
+		JLabel label_TipoOnda = new JLabel("Tipo de Onda:");
+		label_TipoOnda.setBounds(52, 5, 78, 23);
+		painelTipoOnda.add(label_TipoOnda);
+		
+		comboTipoOnda = new JComboBox(getItensComboTiposOnda());
+		comboTipoOnda.setBounds(131, 5, 151, 23);
+		painelTipoOnda.add(comboTipoOnda);
+		comboTipoOnda.setEnabled(false);
 	}
 	
 	private void inicializarMenuBar(){
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.setForeground(Color.LIGHT_GRAY);
 		menuBar.setBounds(0, 0, 1153, 21);
-		frmSupervisrioDeTanques.getContentPane().add(menuBar);
+		frmSupervisorioDeTanques.getContentPane().add(menuBar);
 		
 		JMenu menuConexao = new JMenu("Conex\u00E3o");
 		menuBar.add(menuConexao);
@@ -202,7 +201,8 @@ public class Tela extends TelaGeral{
 		});
 		menuConexao.add(menuConfig);
 		
-		JMenu menuEstatisticas = new JMenu("Estat\u00EDsticas");
+		menuEstatisticas = new JMenu("Estat\u00EDsticas");
+		menuEstatisticas.setEnabled(false);
 		menuBar.add(menuEstatisticas);
 		
 		JMenu menuTr = new JMenu("Tempo de Subida");
@@ -242,13 +242,12 @@ public class Tela extends TelaGeral{
 		menuMp.add(menuAbs);
 	}
 	
-	@SuppressWarnings({ "unchecked", "rawtypes"})
-	private void inicializarPainelEstatísticas(){
+	private void inicializarPainelValoresAtuais(){
 		//Inicializando Painel Painel de exibição dos Valores
 		JPanel panelValores = new JPanel();
 		panelValores.setBorder(new TitledBorder(null, "Valores Atuais", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panelValores.setBounds(343, 608, 800, 56);
-		frmSupervisrioDeTanques.getContentPane().add(panelValores);
+		frmSupervisorioDeTanques.getContentPane().add(panelValores);
 		panelValores.setLayout(null);
 		
 		JLabel lblTr = new JLabel("Tr:");
@@ -256,89 +255,452 @@ public class Tela extends TelaGeral{
 		lblTr.setBounds(31, 12, 24, 36);
 		panelValores.add(lblTr);
 		
-		textPaneTr = new JLabel();
-		textPaneTr.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		textPaneTr.setBounds(59, 12, 101, 36);
-		panelValores.add(textPaneTr);
+		lblValorTr = new JLabel();
+		lblValorTr.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		lblValorTr.setBounds(59, 12, 101, 36);
+		panelValores.add(lblValorTr);
 		
 		JLabel lblMp = new JLabel("Mp:");
 		lblMp.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		lblMp.setBounds(360, 12, 30, 36);
 		panelValores.add(lblMp);
 		
-		textPaneMp = new JLabel();
-		textPaneMp.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		textPaneMp.setBounds(394, 12, 101, 36);
-		panelValores.add(textPaneMp);
+		lblValorMp = new JLabel();
+		lblValorMp.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		lblValorMp.setBounds(394, 12, 101, 36);
+		panelValores.add(lblValorMp);
 		
 		JLabel lblTp = new JLabel("Tp:");
 		lblTp.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		lblTp.setBounds(194, 12, 28, 36);
 		panelValores.add(lblTp);
 		
-		textPaneTp = new JLabel();
-		textPaneTp.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		textPaneTp.setBounds(225, 12, 101, 36);
-		panelValores.add(textPaneTp);
+		lblValorTp = new JLabel();
+		lblValorTp.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		lblValorTp.setBounds(225, 12, 101, 36);
+		panelValores.add(lblValorTp);
 		
 		JLabel lblTs = new JLabel("Ts:");
 		lblTs.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		lblTs.setBounds(529, 12, 28, 36);
 		panelValores.add(lblTs);
 		
-		textPaneTs = new JLabel();
-		textPaneTs.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		textPaneTs.setBounds(560, 12, 101, 36);
-		panelValores.add(textPaneTs);	
+		lblValorTs = new JLabel();
+		lblValorTs.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		lblValorTs.setBounds(560, 12, 101, 36);
+		panelValores.add(lblValorTs);	
+	}
+	
+	private void inicializarPainelDadosServidor(){
+		panelDadosServidor = new JPanel();
+		panelDadosServidor.setBounds(6, 25, 336, 83);
+		panelDadosServidor.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Dados do Servidor", TitledBorder.LEFT, TitledBorder.TOP, null, new Color(0, 0, 0)));
+		panelDadosServidor.setLayout(null);
 		
-		JPanel painelTipoOnda = new JPanel();
-		painelTipoOnda.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		painelTipoOnda.setLayout(null);
-		painelTipoOnda.setBounds(6, 194, 336, 34);
-		frmSupervisrioDeTanques.getContentPane().add(painelTipoOnda);
+		JLabel lblIPServidor = new JLabel("IP:");
+		lblIPServidor.setBounds(10, 20, 20, 14);
+		panelDadosServidor.add(lblIPServidor);
 		
-		JLabel label_TipoOnda = new JLabel("Tipo de Onda:");
-		label_TipoOnda.setBounds(52, 5, 78, 23);
-		painelTipoOnda.add(label_TipoOnda);
+		labelIp = new JLabel();
+		labelIp.setBounds(31, 20, 88, 14);
+		labelIp.setText(" ");
+		panelDadosServidor.add(labelIp);
 		
-		comboTipoOnda = new JComboBox(getItensComboTiposOnda());
-		comboTipoOnda.setBounds(131, 5, 151, 23);
-		painelTipoOnda.add(comboTipoOnda);
-		comboTipoOnda.setEnabled(false);
+		JLabel lblPorta = new JLabel("Porta:");
+		lblPorta.setBounds(10, 50, 46, 14);
+		panelDadosServidor.add(lblPorta);
 		
+		labelPorta = new JLabel();
+		labelPorta.setBounds(51, 50, 68, 14);
+		labelPorta.setText(" ");
+		panelDadosServidor.add(labelPorta);
+		
+		JLabel lblLeitura_1 = new JLabel("Leitura 1:");
+		lblLeitura_1.setBounds(129, 20, 46, 14);
+		panelDadosServidor.add(lblLeitura_1);
+		
+		labelLeitura1 = new JLabel();
+		labelLeitura1.setBounds(176, 20, 26, 14);
+		labelLeitura1.setText(" ");
+		panelDadosServidor.add(labelLeitura1);
+		
+		JLabel lblLeitura_2 = new JLabel("Leitura 2:");
+		lblLeitura_2.setBounds(229, 20, 46, 14);		
+		panelDadosServidor.add(lblLeitura_2);
+		
+		labelLeitura2 = new JLabel();
+		labelLeitura2.setBounds(281, 20, 26, 14);
+		labelLeitura2.setText(" ");
+		panelDadosServidor.add(labelLeitura2);
+		
+		JLabel lblEscrita = new JLabel("Escrita:");
+		lblEscrita.setBounds(129, 50, 40, 14);
+		panelDadosServidor.add(lblEscrita);
+		
+		labelEscrita = new JLabel();
+		labelEscrita.setBounds(176, 50, 26, 14);
+		labelEscrita.setText(" ");
+		panelDadosServidor.add(labelEscrita);
+		
+		final JButton btnConectarDesconectar = new JButton("Conectar");
+		btnConectarDesconectar.setIcon(new ImageIcon(Tela.class.getResource("/Icons/1439269447_gtk-apply.png")));
+		btnConectarDesconectar.setForeground(new Color(0, 128, 0));
+		btnConectarDesconectar.setBackground(new Color(0, 128, 0));
+		btnConectarDesconectar.setBounds(229, 42, 97, 30);
+		btnConectarDesconectar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				if(dadosConexao.getIp().getText().equals("") || dadosConexao.getPorta().equals("")){
+					JOptionPane.showMessageDialog(frmSupervisorioDeTanques, "                          Conexão não Realizada! " +
+							"\nInforme o Ip do Servidor e/ou a Porta e tente novamente.");
+				}else{					
+					thread = new Tanque();
+					thread.setServer(labelIp.getText(), Integer.parseInt(labelPorta.getText()));
+					
+					//Muda nome (conectar ou desconectar) e cor (verde ou vermelho) do botão.
+					//Também desabilita alguns componentes da tela.			
+					if(btnConectarDesconectar.getText().equals("Conectar")){
+						JOptionPane.showMessageDialog(frmSupervisorioDeTanques, "Conexão Realizada com Sucesso!");
+						
+						labelIp.setText(dadosConexao.getIp().getText());
+						labelPorta.setText(dadosConexao.getPorta().getText());
+						labelLeitura1.setText(dadosConexao.getLeitura1().getSelectedItem() + "");
+						labelLeitura2.setText(dadosConexao.getLeitura2().getSelectedItem() + "");
+						labelEscrita.setText(dadosConexao.getEscrita().getSelectedItem() + "");
+						
+						menuEstatisticas.setEnabled(true);
+						
+						btnConectarDesconectar.setForeground(Color.RED);
+						btnConectarDesconectar.setBackground(Color.RED);
+						btnConectarDesconectar.setText("Desconectar");
+						btnConectarDesconectar.setIcon(new ImageIcon(Tela.class.getResource("/Icons/1439269745_gtk-dialog-error.png")));
+						mudarPropriedadesBotoes("Conectar");
+					}else{
+						menuEstatisticas.setEnabled(false);
+						
+						btnConectarDesconectar.setForeground(new Color(0, 128, 0));
+						btnConectarDesconectar.setBackground(new Color(0, 128, 0));
+						btnConectarDesconectar.setText("Conectar");
+						btnConectarDesconectar.setIcon(new ImageIcon(Tela.class.getResource("/Icons/1439269447_gtk-apply.png")));
+						mudarPropriedadesBotoes("Desconectar");
+					}
+				}
+			}
+		});
+		panelDadosServidor.add(btnConectarDesconectar);
+	}
+	
+	private void inicializeBotõesPainelPrincipal(){
 		botaoAtualizar = new JButton("Atualizar");
 		botaoAtualizar.setBounds(45, 640, 101, 23);
-		frmSupervisrioDeTanques.getContentPane().add(botaoAtualizar);
-		botaoAtualizar.setEnabled(false);
+		botaoAtualizar.setEnabled(false);			
+		botaoAtualizar.setIcon(new ImageIcon(Tela.class.getResource("/Icons/1439269378_gtk-refresh.png")));		
+		botaoAtualizar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) { 
+				dados = new Dados();					
+				
+				if(validaDadosDeIO() && validaTipoMalha() && validaOnda() && validaParamsControlador(comboTipoControladorMestre)){
+					
+					//dados.setComControle(chckbxComControle.isSelected());
+					
+					/*thread.graficoAltura.limparFilaDeErroMesmo();
+					thread.graficoAltura.limparFilaDeNivelDois();
+					thread.graficoAltura.limparFilaDeNivelUm();
+					thread.graficoAltura.limparFilaDeSetPoint();
+					thread.grafico.limparFilaDeVP();
+					thread.grafico.limparFilaDeP();
+					thread.grafico.limparFilaDeI();
+					thread.grafico.limparFilaDeD();*/
+					
+					
+					// Setar na dados os checkBox dos gráficos
+					dados.setTensao(chckbxTensCalc.isSelected());
+					dados.setTensaoSat(chckbxTensaoSat.isSelected());
+					dados.setSetPoint(chckbxSetPoint.isSelected());
+					dados.setErroMesmo(chckbxErro.isSelected());
+					//dados.setErro(chckbxControle.isSelected());
+					dados.setProporcional(chckbxP.isSelected());
+					dados.setIntegral(chckbxI.isSelected());
+					dados.setDerivativo(chckbxD.isSelected());
+					dados.setNivel1(chckbxNivTanque1.isSelected());
+					dados.setWindUP(chckbxWindUp.isSelected());
+					
+					dados.settPico(lblValorTp);
+					dados.settAcomoda(lblValorTs);
+					dados.settSubida(lblValorTr);
+					dados.setNivelPico(lblValorMp);
+					
+					dados.setPicoAbs(menuAbs.isSelected());
+					
+					if (menu0a100.isSelected())
+					{
+						dados.setFatInf(0);
+						dados.setFatSup(1);
+					}
+					else if (menu5a95.isSelected())
+					{
+						dados.setFatInf(0.05);
+						dados.setFatSup(0.95);
+					}
+					else if (menu10a90.isSelected())
+					{
+						dados.setFatInf(0.1);
+						dados.setFatSup(0.9);
+					}
+					if(chckbxWindUp.isSelected()){
+						dados.setTt(Double.parseDouble(taltMestre.getText()));
+					}
+					
+					if(rdbtnTanque1.isSelected()){
+						dados.setTanque1(true);
+					}					
+					if(rdbtnTanque2.isSelected()){
+						dados.setTanque2(true);
+					}
+					
+					switch(tempoAcomodacao){ //TODO
+						case 2: 
+							dados.setFaixa2(true);
+						break;
+						
+						case 5: 
+							dados.setFaixa5(true);
+						break;
+						
+						case 7: 
+							dados.setFaixa7(true);
+						break;
+						
+						case 10: 
+							dados.setFaixa10(true);
+						break;
+					}					
+					
+					//grafico
+					thread.setDados(dados);
+					thread.setDadosGrafico(dados);
+					if (!thread.isAlive()) {		
+						thread.setPainelTensao(panelGrafico1);
+						thread.setPainelAltura(panelGrafico2);
+						thread.start();
+					}
+				}
+			}
+		});
+		frmSupervisorioDeTanques.getContentPane().add(botaoAtualizar);
 		
 		btnReset = new JButton("Reset");
-		btnReset.setBounds(186, 640, 101, 23);
-		frmSupervisrioDeTanques.getContentPane().add(btnReset);
-		btnReset.setEnabled(false);
+		btnReset.setBounds(186, 640, 101, 23);		
+		btnReset.setEnabled(false);	
+		btnReset.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				//onda_limpa_tanque = "Degrau";
+				//amplitude_limpa_tanque = 0;				
+			}
+		});
+		frmSupervisorioDeTanques.getContentPane().add(btnReset);
+	}
+	
+	/** 
+	 * Valida o tanque que será controlado. Depois, Popula os parâmetros de Leitura e Escrita na classe Dados.
+	 */
+	public boolean validaTanque(){
+		if(!rdbtnTanque1.isSelected() && !rdbtnTanque2.isSelected()){
+			JOptionPane.showMessageDialog(frmSupervisorioDeTanques, "Informe a planta que você deseja controlar.");
 		
-		JPanel painelTipoMalha = new JPanel();
-		painelTipoMalha.setBounds(6, 108, 336, 42);
-		frmSupervisrioDeTanques.getContentPane().add(painelTipoMalha);
-		painelTipoMalha.setLayout(null);
-		painelTipoMalha.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Tipo de Malha", TitledBorder.LEADING, TitledBorder.TOP, null, Color.GRAY));
+			return false;
+		}
 		
-		rdbtnAberta = new JRadioButton("Aberta");
-		rdbtnAberta.setEnabled(false);
-		rdbtnAberta.setBounds(63, 16, 67, 16);
-		painelTipoMalha.add(rdbtnAberta);
+		if(rdbtnTanque1.isSelected()){		
+			dados.setPinoDeLeitura1(0);
 		
-		JRadioButton rdbtnFechada = new JRadioButton("Fechada");
-		rdbtnFechada.setEnabled(false);
-		rdbtnFechada.setBounds(193, 16, 68, 16);
-		painelTipoMalha.add(rdbtnFechada);
+			return true;
+		}
 		
+		if(rdbtnTanque2.isSelected()){
+			dados.setPinoDeLeitura2(1);
+			
+			return true;
+		}
+		
+		return true;
+	}	
+
+	/** 
+	 * Valida campos e Popula os parâmetros de Leitura(1 e 2) e Escrita na classe Dados.
+	 */
+	public boolean validaDadosDeIO(){			
+		if(dadosConexao.getLeitura1().getSelectedIndex() == 0){
+				JOptionPane.showMessageDialog(frmSupervisorioDeTanques, "Informe o porta de Leitura 1.");
+			dados.setPinoDeLeitura1((int)((Integer)dadosConexao.getLeitura1().getSelectedItem()));
+			return false;
+		}else{
+			dados.setPinoDeLeitura1((int)((Integer)dadosConexao.getLeitura1().getSelectedItem()));
+		}
+		
+		if(dadosConexao.getLeitura2().getSelectedIndex() == 0){
+		
+			JOptionPane.showMessageDialog(frmSupervisorioDeTanques, "Informe o porta de Leitura 2.");
+			dados.setPinoDeLeitura2((int)((Integer)dadosConexao.getLeitura2().getSelectedItem()));
+			return false;
+		}else{
+			dados.setPinoDeLeitura2((int)((Integer)dadosConexao.getLeitura2().getSelectedItem()));
+		}
+			
+		if(dadosConexao.getEscrita().getSelectedIndex() == 0){
+			JOptionPane.showMessageDialog(frmSupervisorioDeTanques, "Informe a porta de Escrita.");
+			return false;
+		}else{
+			dados.setPinoDeEscrita((int)((Integer)dadosConexao.getEscrita().getSelectedItem()));
+		}
+		
+		return true;
+	}
+	
+	/** 
+	 * Valida campos e Popula o tipo de malha na classe Dados.
+	 */
+	public boolean validaTipoMalha(){
+		if(!rdbtnAberta.isSelected() && !rdbtnFechada.isSelected()){
+			JOptionPane.showMessageDialog(frmSupervisorioDeTanques, "Informe o Tipo de Malha.");
+			
+			return false;
+		}else{
+			dados.setTipoMalha(rdbtnAberta.isSelected() ? "Malha Aberta" : "Malha Fechada");
+		}
+		
+		return true;
+	}
+	
+	/** 
+	 * Valida campos e Popula os parâmetros do sinal na classe Dados.
+	 */
+	public boolean validaOnda(){
+		
+		if(comboTipoOnda.getSelectedIndex() == 0){
+			JOptionPane.showMessageDialog(frmSupervisorioDeTanques, "Informe o Tipo de Onda.");
+			
+			return false;
+		}else {
+			dados.setTipoSinal(comboTipoOnda.getSelectedItem().toString());
+			
+			if(amplitude.getValue().equals("")){
+				String amplitude = comboTipoOnda.getSelectedItem().equals("Degrau") ? "Amplitude (Máx)" : "Amplitude";  
+
+				JOptionPane.showMessageDialog(frmSupervisorioDeTanques, "Informe a " + amplitude + " do sinal.");
+				
+				return false;
+			}else{
+				dados.setAmplitude((double)amplitude.getValue());
+			}
+			
+			if(comboTipoOnda.getSelectedItem().equals("Quadrada") || 
+					comboTipoOnda.getSelectedItem().equals("Senoidal") || comboTipoOnda.getSelectedItem().equals("Dente de Serra")){
+				
+				if(periodo.getValue().equals("")){
+					JOptionPane.showMessageDialog(frmSupervisorioDeTanques, "Informe o Período do sinal.");
+					
+					return false;
+				}else{
+					dados.setPeriodo((double)periodo.getValue());
+				}
+				
+				if(offSet.getValue().equals("")){
+					JOptionPane.showMessageDialog(frmSupervisorioDeTanques, "Informe a OffSet do sinal.");
+					
+					return false;
+				}else{
+					dados.setOffset((double)offSet.getValue());
+				}
+			}
+			
+			if(comboTipoOnda.getSelectedItem().equals("Aleatória")){
+				
+				if(amplitudeMin.getValue().equals("")){
+					JOptionPane.showMessageDialog(frmSupervisorioDeTanques, "Informe a Amplitude (Mín) do sinal.");
+				
+					return false;
+				}else{
+					dados.setAmplitudeMinima(((double) amplitudeMin.getValue()));
+				}
+
+				if(periodo.getValue().equals("")){
+					JOptionPane.showMessageDialog(frmSupervisorioDeTanques, "Informe o Período do sinal.");
+				
+					return false;
+				}else{
+					dados.setPeriodo((double)periodo.getValue());
+				}
+				
+				if(periodoMin.getValue().equals("")){
+					JOptionPane.showMessageDialog(frmSupervisorioDeTanques, "Informe o Período (Mín) do sinal.");
+					
+					return false;
+				}else{
+					dados.setPeriodoMinino((double) periodoMin.getValue());
+				}
+			}
+		}
+		
+		return true;
+	}
+	
+		
+	@SuppressWarnings("rawtypes")
+	private boolean validaParamsControlador(JComboBox tipoControlador){
+		if(!rdbtnAberta.isSelected() && chckbxComControle.isSelected()){
+			if(tipoControlador.getSelectedIndex() == 0){
+				JOptionPane.showMessageDialog(frmSupervisorioDeTanques, "Informe o tipo de controlador!");
+				
+				return false;
+			}else{
+				dados.setTipoDeControle(tipoControlador.getSelectedItem().toString());
+				
+				if(kpMestre.getText().equals("")){
+					JOptionPane.showMessageDialog(frmSupervisorioDeTanques, "Informe o valor de Kp.");
+					
+					return false;
+				}else{
+					dados.setKP(Double.parseDouble(kpMestre.getText()));
+					
+					if((tipoControlador.getSelectedItem().equals("PI") || tipoControlador.getSelectedItem().equals("PID") || tipoControlador.getSelectedItem().equals("PI-D"))
+							&& (kiMestre.getText().equals("") || taliMestre.getText().equals(""))){
+						
+						JOptionPane.showMessageDialog(frmSupervisorioDeTanques, "Informe todos os parâmetros do controlador integrativo (Ki e Ti).");
+						
+						return false;
+					}else if((tipoControlador.getSelectedItem().equals("PI") || tipoControlador.getSelectedItem().equals("PID") || tipoControlador.getSelectedItem().equals("PI-D"))
+							&& !(kiMestre.getText().equals("") || taliMestre.getText().equals(""))){
+				
+						dados.setKI(Double.parseDouble(kiMestre.getText()));
+					}
+					
+					if((tipoControlador.getSelectedItem().equals("PD") || tipoControlador.getSelectedItem().equals("PID") || tipoControlador.getSelectedItem().equals("PI-D"))
+							&& (kdMestre.getText().equals("") || taldMestre.getText().equals(""))){
+						
+						JOptionPane.showMessageDialog(frmSupervisorioDeTanques, "Informe todos os parâmetros do controlador derivativo (Kd e Td).");
+						
+						return false;
+					}else if((tipoControlador.getSelectedItem().equals("PD") || tipoControlador.getSelectedItem().equals("PID") || tipoControlador.getSelectedItem().equals("PI-D"))
+							&& !(kdMestre.getText().equals("") || taldMestre.getText().equals(""))){
+						
+						dados.setKD(Double.parseDouble(kdMestre.getText()));
+					}
+				}
+			}
+		}
+		
+		return true;
+	}
+	
+	private void inicializePainelOpcoesTanque(){
 		JPanel painelOpcoesTanque = new JPanel();
 		painelOpcoesTanque.setBounds(6, 150, 336, 42);
-		frmSupervisrioDeTanques.getContentPane().add(painelOpcoesTanque);
 		painelOpcoesTanque.setLayout(null);
 		painelOpcoesTanque.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Opções de Tanque", TitledBorder.LEADING, TitledBorder.TOP, null, Color.GRAY));
+		frmSupervisorioDeTanques.getContentPane().add(painelOpcoesTanque);
 		
-		JRadioButton rdbtnTanque1 = new JRadioButton("Tanque 1");
+		rdbtnTanque1 = new JRadioButton("Tanque 1");
 		rdbtnTanque1.setSelected(false);
 		rdbtnTanque1.setEnabled(false);
 		rdbtnTanque1.setBounds(61, 19, 71, 16);
@@ -349,10 +711,101 @@ public class Tela extends TelaGeral{
 		rdbtnTanque2.setEnabled(false);
 		rdbtnTanque2.setBounds(193, 19, 71, 16);
 		painelOpcoesTanque.add(rdbtnTanque2);
+	}
+	
+	private void inicializePainelOpcoesEntrada(){
 		
+		inicializePainelOpcoesTanque();
+		
+		inicializarPainelTiposMalha();
+		
+		inicializarPainelDadosSinal();
+		
+		inicializarPainelParamsControlador();
+		
+		inicializarOutrosComponentesPainelOpcoesEntrada();
+		
+		inicializeBotõesPainelPrincipal();
+		
+	}
+	
+	private void inicializarPainelTiposMalha(){
+		JPanel painelTipoMalha = new JPanel();
+		painelTipoMalha.setBounds(6, 108, 336, 42);
+		painelTipoMalha.setLayout(null);
+		painelTipoMalha.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Tipo de Malha", TitledBorder.LEADING, TitledBorder.TOP, null, Color.GRAY));
+		frmSupervisorioDeTanques.getContentPane().add(painelTipoMalha);
+		
+		rdbtnAberta = new JRadioButton("Aberta");
+		rdbtnAberta.setEnabled(false);
+		rdbtnAberta.setBounds(63, 16, 67, 16);
+		painelTipoMalha.add(rdbtnAberta);
+		
+		rdbtnFechada = new JRadioButton("Fechada");
+		rdbtnFechada.setEnabled(false);
+		rdbtnFechada.setBounds(193, 16, 68, 16);
+		painelTipoMalha.add(rdbtnFechada);
+	}
+	
+	private void inicializarPainelDadosSinal(){
+		JPanel painelParamsSinal = new JPanel();
+		painelParamsSinal.setBounds(6, 260, 336, 115);
+		frmSupervisorioDeTanques.getContentPane().add(painelParamsSinal);
+		painelParamsSinal.setLayout(null);
+		painelParamsSinal.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Par\u00E2metros do Sinal", TitledBorder.RIGHT, TitledBorder.TOP, null, Color.GRAY));
+		
+		lblAmplitude = new JLabel("Amplitude:");
+		lblAmplitude.setBounds(9, 27, 84, 20);
+		painelParamsSinal.add(lblAmplitude);
+		
+		amplitude = new JSpinner();
+		amplitude.setEnabled(false);
+		amplitude.setBounds(94, 27, 51, 20);
+		painelParamsSinal.add(amplitude);
+		
+		JLabel lblAmplitudeMin = new JLabel("Amplitude (M\u00EDn):");
+		lblAmplitudeMin.setBounds(155, 27, 85, 20);
+		painelParamsSinal.add(lblAmplitudeMin);
+		
+		amplitudeMin = new JSpinner();
+		amplitudeMin.setEnabled(false);
+		amplitudeMin.setBounds(256, 27, 51, 20);
+		painelParamsSinal.add(amplitudeMin);
+		
+		JLabel lblPeriodo = new JLabel("Per\u00EDodo:");
+		lblPeriodo.setBounds(8, 56, 85, 20);
+		painelParamsSinal.add(lblPeriodo);
+		
+		periodo = new JSpinner();
+		periodo.setEnabled(false);
+		periodo.setBounds(94, 56, 51, 20);
+		painelParamsSinal.add(periodo);
+		
+		JLabel lblPeriodoMin = new JLabel("Per\u00EDodo (M\u00EDn):");
+		lblPeriodoMin.setBounds(155, 56, 85, 20);
+		painelParamsSinal.add(lblPeriodoMin);
+		
+		periodoMin = new JSpinner();
+		periodoMin.setEnabled(false);
+		periodoMin.setBounds(256, 56, 51, 20);
+		painelParamsSinal.add(periodoMin);
+		
+		JLabel lblOffSet = new JLabel("Off-Set:");
+		lblOffSet.setBounds(8, 85, 67, 20);
+		painelParamsSinal.add(lblOffSet);
+		
+		offSet = new JSpinner();
+		offSet.setEnabled(false);
+		offSet.setBounds(94, 85, 51, 20);
+		painelParamsSinal.add(offSet);
+	}
+		
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private void inicializarPainelParamsControlador(){
+		//Inicialização dos componentes do painel do controlador mestre
 		JPanel painelParamsMestre = new JPanel();
 		painelParamsMestre.setBounds(6, 382, 336, 118);
-		frmSupervisrioDeTanques.getContentPane().add(painelParamsMestre);
+		frmSupervisorioDeTanques.getContentPane().add(painelParamsMestre);
 		painelParamsMestre.setLayout(null);
 		painelParamsMestre.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Par\u00E2metros do Controlador Mestre", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(128, 128, 128)));
 		
@@ -419,9 +872,9 @@ public class Tela extends TelaGeral{
 				DadosControlador dadosControlador = new DadosControlador();
 				ConfigControlador conf = new ConfigControlador("Configuração do Mestre", dadosControlador);
 				
-				conf.show();
+				conf.setVisible(true);
 				conf.setDefaultCloseOperation(JInternalFrame.EXIT_ON_CLOSE);
-				frmSupervisrioDeTanques.getContentPane().add(conf);
+				frmSupervisorioDeTanques.getContentPane().add(conf);
 			}
 		});
 		lblConfMestre.setIcon(new ImageIcon(Tela.class.getResource("/Icons/1444113669_Pinion.png")));
@@ -438,62 +891,13 @@ public class Tela extends TelaGeral{
 		painelParamsMestre.add(comboTipoControladorMestre);
 		comboTipoControladorMestre.setEnabled(false);
 		
-		JPanel painelParamsSinal = new JPanel();
-		painelParamsSinal.setBounds(6, 260, 336, 115);
-		frmSupervisrioDeTanques.getContentPane().add(painelParamsSinal);
-		painelParamsSinal.setLayout(null);
-		painelParamsSinal.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Par\u00E2metros do Sinal", TitledBorder.RIGHT, TitledBorder.TOP, null, Color.GRAY));
 		
-		lblAmplitude = new JLabel("Amplitude:");
-		lblAmplitude.setBounds(9, 27, 84, 20);
-		painelParamsSinal.add(lblAmplitude);
-		
-		amplitude = new JSpinner();
-		amplitude.setEnabled(false);
-		amplitude.setBounds(94, 27, 51, 20);
-		painelParamsSinal.add(amplitude);
-		
-		JLabel lblAmplitudeMin = new JLabel("Amplitude (M\u00EDn):");
-		lblAmplitudeMin.setBounds(155, 27, 85, 20);
-		painelParamsSinal.add(lblAmplitudeMin);
-		
-		amplitudeMin = new JSpinner();
-		amplitudeMin.setEnabled(false);
-		amplitudeMin.setBounds(256, 27, 51, 20);
-		painelParamsSinal.add(amplitudeMin);
-		
-		JLabel lblPeriodo = new JLabel("Per\u00EDodo:");
-		lblPeriodo.setBounds(8, 56, 85, 20);
-		painelParamsSinal.add(lblPeriodo);
-		
-		periodo = new JSpinner();
-		periodo.setEnabled(false);
-		periodo.setBounds(94, 56, 51, 20);
-		painelParamsSinal.add(periodo);
-		
-		JLabel lblPeriodoMin = new JLabel("Per\u00EDodo (M\u00EDn):");
-		lblPeriodoMin.setBounds(155, 56, 85, 20);
-		painelParamsSinal.add(lblPeriodoMin);
-		
-		periodoMin = new JSpinner();
-		periodoMin.setEnabled(false);
-		periodoMin.setBounds(256, 56, 51, 20);
-		painelParamsSinal.add(periodoMin);
-		
-		JLabel lblOffSet = new JLabel("Off-Set:");
-		lblOffSet.setBounds(8, 85, 67, 20);
-		painelParamsSinal.add(lblOffSet);
-		
-		offSet = new JSpinner();
-		offSet.setEnabled(false);
-		offSet.setBounds(94, 85, 51, 20);
-		painelParamsSinal.add(offSet);
-		
+		//Inicialização dos componentes do painel do controlador escravo
 		JPanel painelParamsEscravo = new JPanel();
 		painelParamsEscravo.setLayout(null);
 		painelParamsEscravo.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Par\u00E2metros do Controlador Escravo", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(128, 128, 128)));
 		painelParamsEscravo.setBounds(6, 501, 336, 118);
-		frmSupervisrioDeTanques.getContentPane().add(painelParamsEscravo);
+		frmSupervisorioDeTanques.getContentPane().add(painelParamsEscravo);
 		
 		JLabel labelEscravo_Kp = new JLabel("Kp:");
 		labelEscravo_Kp.setBounds(29, 53, 22, 14);
@@ -558,9 +962,9 @@ public class Tela extends TelaGeral{
 				DadosControlador dadosControlador = new DadosControlador();
 				ConfigControlador conf = new ConfigControlador("Configuração do Escravo", dadosControlador);
 				
-				conf.show();
+				conf.setVisible(true);
 				conf.setDefaultCloseOperation(JInternalFrame.EXIT_ON_CLOSE);
-				frmSupervisrioDeTanques.getContentPane().add(conf);
+				frmSupervisorioDeTanques.getContentPane().add(conf);
 			}
 		});
 		lblConfEscravo.setIcon(new ImageIcon(Tela.class.getResource("/Icons/1444113669_Pinion.png")));
@@ -576,423 +980,8 @@ public class Tela extends TelaGeral{
 		comboTipoControladorEscravo.setEnabled(false);
 		comboTipoControladorEscravo.setBounds(111, 19, 151, 23);
 		painelParamsEscravo.add(comboTipoControladorEscravo);
-		
-		chckbxComControle = new JCheckBox("Acionar Controlador");
-		chckbxComControle.setBounds(45, 235, 124, 23);
-		frmSupervisrioDeTanques.getContentPane().add(chckbxComControle);
-		chckbxComControle.setEnabled(false);
-		
-		chckbxWindUp = new JCheckBox("Acionar Wind Up");
-		chckbxWindUp.setBounds(190, 235, 113, 23);
-		frmSupervisrioDeTanques.getContentPane().add(chckbxWindUp);
-		chckbxWindUp.setEnabled(false);
 	}
 	
-	private void inicializarPainelDadosServidor(){
-		panelDadosServidor = new JPanel();
-		panelDadosServidor.setBounds(6, 25, 336, 83);
-		panelDadosServidor.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Dados do Servidor", TitledBorder.LEFT, TitledBorder.TOP, null, new Color(0, 0, 0)));
-		panelDadosServidor.setLayout(null);
-		
-		JLabel lblIPServidor = new JLabel("IP:");
-		lblIPServidor.setBounds(10, 20, 20, 14);
-		panelDadosServidor.add(lblIPServidor);
-		
-		labelIp = new JLabel();
-		labelIp.setBounds(31, 20, 88, 14);
-		labelIp.setText(" ");
-		panelDadosServidor.add(labelIp);
-		
-		JLabel lblPorta = new JLabel("Porta:");
-		lblPorta.setBounds(10, 50, 46, 14);
-		panelDadosServidor.add(lblPorta);
-		
-		labelPorta = new JLabel();
-		labelPorta.setBounds(51, 50, 68, 14);
-		labelPorta.setText(" ");
-		panelDadosServidor.add(labelPorta);
-		
-		final JButton btnConectarDesconectar = new JButton("Conectar");
-		btnConectarDesconectar.setIcon(new ImageIcon(Tela.class.getResource("/Icons/1439269447_gtk-apply.png")));
-		btnConectarDesconectar.setForeground(new Color(0, 128, 0));
-		btnConectarDesconectar.setBackground(new Color(0, 128, 0));
-		btnConectarDesconectar.setBounds(229, 42, 97, 30);
-		btnConectarDesconectar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				
-				if(dadosConexao.getIp().getText().equals("") || dadosConexao.getPorta().equals("")){
-					JOptionPane.showMessageDialog(frmSupervisrioDeTanques, "                          Conexão não Realizada! " +
-							"\nInforme o Ip do Servidor e/ou a Porta e tente novamente.");
-				}else{
-					thread = new Tanque();
-					thread.setServer(labelIp.getText(), Integer.parseInt(labelPorta.getText()));
-					
-					//Muda nome (conectar ou desconectar) e cor (verde ou vermelho) do botão.
-					//Também desabilita alguns componentes da tela.			
-					if(btnConectarDesconectar.getText().equals("Conectar")){
-						JOptionPane.showMessageDialog(frmSupervisrioDeTanques, "Conexão Realizada com Sucesso!");
-						
-						labelIp.setText(dadosConexao.getIp().getText());
-						labelPorta.setText(dadosConexao.getPorta().getText());
-						labelLeitura1.setText(dadosConexao.getLeitura1().getSelectedItem() + "");
-						labelLeitura2.setText(dadosConexao.getLeitura2().getSelectedItem() + "");
-						labelEscrita.setText(dadosConexao.getEscrita().getSelectedItem() + "");
-												
-						btnConectarDesconectar.setForeground(Color.RED);
-						btnConectarDesconectar.setBackground(Color.RED);
-						btnConectarDesconectar.setText("Desconectar");
-						btnConectarDesconectar.setIcon(new ImageIcon(Tela.class.getResource("/Icons/1439269745_gtk-dialog-error.png")));
-						mudarPropriedadesBotoes("Conectar");
-					}else{
-						
-						btnConectarDesconectar.setForeground(new Color(0, 128, 0));
-						btnConectarDesconectar.setBackground(new Color(0, 128, 0));
-						btnConectarDesconectar.setText("Conectar");
-						btnConectarDesconectar.setIcon(new ImageIcon(Tela.class.getResource("/Icons/1439269447_gtk-apply.png")));
-						mudarPropriedadesBotoes("Desconectar");
-					}
-				}
-			}
-		});
-		panelDadosServidor.add(btnConectarDesconectar);
-	}
-	
-	private void inicializeBotõesPainelPrincipal(){
-		botaoAtualizar = new JButton("Atualizar");
-		botaoAtualizar.setBounds(37, 482, 101, 23);
-		botaoAtualizar.setIcon(new ImageIcon(Tela.class.getResource("/Icons/1439269378_gtk-refresh.png")));		
-		botaoAtualizar.setEnabled(false);
-		
-		btnReset = new JButton("Reset");
-		btnReset.setBounds(178, 482, 101, 23);
-		btnReset.setEnabled(false);
-		btnReset.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				//onda_limpa_tanque = "Degrau";
-				//amplitude_limpa_tanque = 0;
-				
-			}
-		});
-		botaoAtualizar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) { 
-				dados = new Dados();					
-				
-				if(validaDadosDeIO() && validaTipoMalha() && validaOnda() && validaParamsControlador(comboTipoControladorMestre)){
-					
-					//dados.setComControle(chckbxComControle.isSelected());
-					
-					/*thread.graficoAltura.limparFilaDeErroMesmo();
-					thread.graficoAltura.limparFilaDeNivelDois();
-					thread.graficoAltura.limparFilaDeNivelUm();
-					thread.graficoAltura.limparFilaDeSetPoint();
-					thread.grafico.limparFilaDeVP();
-					thread.grafico.limparFilaDeP();
-					thread.grafico.limparFilaDeI();
-					thread.grafico.limparFilaDeD();*/
-					
-					
-					// Setar na dados os checkBox dos gráficos
-					dados.setTensao(chckbxTensCalc.isSelected());
-					dados.setTensaoSat(chckbxTensaoSat.isSelected());
-					dados.setSetPoint(chckbxSetPoint.isSelected());
-					dados.setErroMesmo(chckbxErro.isSelected());
-					//dados.setErro(chckbxControle.isSelected());
-					dados.setProporcional(chckbxP.isSelected());
-					dados.setIntegral(chckbxI.isSelected());
-					dados.setDerivativo(chckbxD.isSelected());
-					dados.setNivel1(chckbxNivTanque1.isSelected());
-					dados.setWindUP(chckbxWindUp.isSelected());
-					
-					dados.settPico(textPaneTp);
-					dados.settAcomoda(textPaneTs);
-					dados.settSubida(textPaneTr);
-					dados.setNivelPico(textPaneMp);
-					
-					dados.setPicoAbs(menuAbs.isSelected());
-					
-					if (rdbtnTempoSubida1.isSelected())
-					{
-						dados.setFatInf(0);
-						dados.setFatSup(1);
-					}
-					else if (rdbtnTempoSubida2.isSelected())
-					{
-						dados.setFatInf(0.05);
-						dados.setFatSup(0.95);
-					}
-					else if (rdbtnTempoSubida3.isSelected())
-					{
-						dados.setFatInf(0.1);
-						dados.setFatSup(0.9);
-					}
-					if(chckbxWindUp.isSelected()){
-						dados.setTt(Double.parseDouble(taltMestre.getText()));
-					}
-					
-					if(rdbtnTanque1.isSelected()){
-						dados.setTanque1(true);
-					}					
-					if(rdbtnTanque2.isSelected()){
-						dados.setTanque2(true);
-					}
-					
-					int a = (int) spinnerTs.getValue();
-					switch(a){
-					
-						case 2: 
-							dados.setFaixa2(true);
-						break;
-						
-						case 5: 
-							dados.setFaixa5(true);
-						break;
-						
-						case 7: 
-							dados.setFaixa7(true);
-						break;
-						
-						case 10: 
-							dados.setFaixa10(true);
-						break;
-					}					
-					
-					//grafico
-					thread.setDados(dados);
-					thread.setDadosGrafico(dados);
-					if (!thread.isAlive()) {		
-						thread.setPainelTensao(panelGrafico1);
-						thread.setPainelAltura(panelGrafico2);
-						thread.start();
-					}
-				}
-			}
-		});
-	}
-	
-	/** 
-	 * Valida o tanque que será controlado. Depois, Popula os parâmetros de Leitura e Escrita na classe Dados.
-	 */
-	public boolean validaTanque(){
-		if(!rdbtnTanque1.isSelected() && !rdbtnTanque2.isSelected()){
-			JOptionPane.showMessageDialog(frmSupervisrioDeTanques, "Informe a planta que você deseja controlar.");
-		
-			return false;
-		}
-		
-		if(rdbtnTanque1.isSelected()){		
-			dados.setPinoDeLeitura1(0);
-		
-			return true;
-		}
-		
-		if(rdbtnTanque2.isSelected()){
-			dados.setPinoDeLeitura2(1);
-			
-			return true;
-		}
-		
-		return true;
-	}	
-
-	/** 
-	 * Valida campos e Popula os parâmetros de Leitura(1 e 2) e Escrita na classe Dados.
-	 */
-	public boolean validaDadosDeIO(){			
-		if(dadosConexao.getLeitura1().getSelectedIndex() == 0){
-				JOptionPane.showMessageDialog(frmSupervisrioDeTanques, "Informe o porta de Leitura 1.");
-			dados.setPinoDeLeitura1((int)((Integer)dadosConexao.getLeitura1().getSelectedItem()));
-			return false;
-		}else{
-			dados.setPinoDeLeitura1((int)((Integer)dadosConexao.getLeitura1().getSelectedItem()));
-		}
-		
-		if(dadosConexao.getLeitura2().getSelectedIndex() == 0){
-		
-			JOptionPane.showMessageDialog(frmSupervisrioDeTanques, "Informe o porta de Leitura 2.");
-			dados.setPinoDeLeitura2((int)((Integer)dadosConexao.getLeitura2().getSelectedItem()));
-			return false;
-		}else{
-			dados.setPinoDeLeitura2((int)((Integer)dadosConexao.getLeitura2().getSelectedItem()));
-		}
-			
-		if(dadosConexao.getEscrita().getSelectedIndex() == 0){
-			JOptionPane.showMessageDialog(frmSupervisrioDeTanques, "Informe a porta de Escrita.");
-			return false;
-		}else{
-			dados.setPinoDeEscrita((int)((Integer)dadosConexao.getEscrita().getSelectedItem()));
-		}
-		
-		return true;
-	}
-	
-	/** 
-	 * Valida campos e Popula o tipo de malha na classe Dados.
-	 */
-	public boolean validaTipoMalha(){
-		if(!rdbtnAberta.isSelected() && !rdbtnFechada.isSelected()){
-			JOptionPane.showMessageDialog(frmSupervisrioDeTanques, "Informe o Tipo de Malha.");
-			
-			return false;
-		}else{
-			dados.setTipoMalha(rdbtnAberta.isSelected() ? "Malha Aberta" : "Malha Fechada");
-		}
-		
-		return true;
-	}
-	
-	/** 
-	 * Valida campos e Popula os parâmetros do sinal na classe Dados.
-	 */
-	public boolean validaOnda(){
-		
-		if(comboTipoOnda.getSelectedIndex() == 0){
-			JOptionPane.showMessageDialog(frmSupervisrioDeTanques, "Informe o Tipo de Onda.");
-			
-			return false;
-		}else {
-			dados.setTipoSinal(comboTipoOnda.getSelectedItem().toString());
-			
-			if(amplitude.getValue().equals("")){
-				String amplitude = comboTipoOnda.getSelectedItem().equals("Degrau") ? "Amplitude (Máx)" : "Amplitude";  
-
-				JOptionPane.showMessageDialog(frmSupervisrioDeTanques, "Informe a " + amplitude + " do sinal.");
-				
-				return false;
-			}else{
-				dados.setAmplitude((double)amplitude.getValue());
-			}
-			
-			if(comboTipoOnda.getSelectedItem().equals("Quadrada") || 
-					comboTipoOnda.getSelectedItem().equals("Senoidal") || comboTipoOnda.getSelectedItem().equals("Dente de Serra")){
-				
-				if(periodo.getValue().equals("")){
-					JOptionPane.showMessageDialog(frmSupervisrioDeTanques, "Informe o Período do sinal.");
-					
-					return false;
-				}else{
-					dados.setPeriodo((double)periodo.getValue());
-				}
-				
-				if(offSet.getValue().equals("")){
-					JOptionPane.showMessageDialog(frmSupervisrioDeTanques, "Informe a OffSet do sinal.");
-					
-					return false;
-				}else{
-					dados.setOffset((double)offSet.getValue());
-				}
-			}
-			
-			if(comboTipoOnda.getSelectedItem().equals("Aleatória")){
-				
-				if(amplitudeMin.getValue().equals("")){
-					JOptionPane.showMessageDialog(frmSupervisrioDeTanques, "Informe a Amplitude (Mín) do sinal.");
-				
-					return false;
-				}else{
-					dados.setAmplitudeMinima(((double) amplitudeMin.getValue()));
-				}
-
-				if(periodo.getValue().equals("")){
-					JOptionPane.showMessageDialog(frmSupervisrioDeTanques, "Informe o Período do sinal.");
-				
-					return false;
-				}else{
-					dados.setPeriodo((double)periodo.getValue());
-				}
-				
-				if(periodoMin.getValue().equals("")){
-					JOptionPane.showMessageDialog(frmSupervisrioDeTanques, "Informe o Período (Mín) do sinal.");
-					
-					return false;
-				}else{
-					dados.setPeriodoMinino((double) periodoMin.getValue());
-				}
-			}
-		}
-		
-		return true;
-	}
-	
-		
-	@SuppressWarnings("rawtypes")
-	private boolean validaParamsControlador(JComboBox tipoControlador){
-		if(!rdbtnAberta.isSelected() && chckbxComControle.isSelected()){
-			if(tipoControlador.getSelectedIndex() == 0){
-				JOptionPane.showMessageDialog(frmSupervisrioDeTanques, "Informe o tipo de controlador!");
-				
-				return false;
-			}else{
-				dados.setTipoDeControle(tipoControlador.getSelectedItem().toString());
-				
-				if(kpMestre.getText().equals("")){
-					JOptionPane.showMessageDialog(frmSupervisrioDeTanques, "Informe o valor de Kp.");
-					
-					return false;
-				}else{
-					dados.setKP(Double.parseDouble(kpMestre.getText()));
-					
-					if((tipoControlador.getSelectedItem().equals("PI") || tipoControlador.getSelectedItem().equals("PID") || tipoControlador.getSelectedItem().equals("PI-D"))
-							&& (kiMestre.getText().equals("") || taliMestre.getText().equals(""))){
-						
-						JOptionPane.showMessageDialog(frmSupervisrioDeTanques, "Informe todos os parâmetros do controlador integrativo (Ki e Ti).");
-						
-						return false;
-					}else if((tipoControlador.getSelectedItem().equals("PI") || tipoControlador.getSelectedItem().equals("PID") || tipoControlador.getSelectedItem().equals("PI-D"))
-							&& !(kiMestre.getText().equals("") || taliMestre.getText().equals(""))){
-				
-						dados.setKI(Double.parseDouble(kiMestre.getText()));
-					}
-					
-					if((tipoControlador.getSelectedItem().equals("PD") || tipoControlador.getSelectedItem().equals("PID") || tipoControlador.getSelectedItem().equals("PI-D"))
-							&& (kdMestre.getText().equals("") || taldMestre.getText().equals(""))){
-						
-						JOptionPane.showMessageDialog(frmSupervisrioDeTanques, "Informe todos os parâmetros do controlador derivativo (Kd e Td).");
-						
-						return false;
-					}else if((tipoControlador.getSelectedItem().equals("PD") || tipoControlador.getSelectedItem().equals("PID") || tipoControlador.getSelectedItem().equals("PI-D"))
-							&& !(kdMestre.getText().equals("") || taldMestre.getText().equals(""))){
-						
-						dados.setKD(Double.parseDouble(kdMestre.getText()));
-					}
-				}
-			}
-		}
-		
-		return true;
-	}
-	
-	private void inicializePainelOpcoesTanque(){
-	}
-	
-	private void inicializePainelOpcoesEntrada(){
-		
-		inicializePainelOpcoesTanque();
-		
-		inicializarPainelTiposMalha();
-		
-		inicializarPainelDadosSinal();
-		
-//		inicializarPainelTipoControlador();
-//		panelOpcoesEntrada.add(panelTipoControlador);
-		
-		inicializarPainelParamsControlador();
-		
-		inicializarOutrosComponentesPainelOpcoesEntrada();
-		
-		inicializeBotõesPainelPrincipal();
-		
-	}
-	
-	private void inicializarPainelTiposMalha(){
-	}
-	
-	private void inicializarPainelDadosSinal(){
-	}
-		
-	private void inicializarPainelParamsControlador(){
-	}
-	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void inicializarOutrosComponentesPainelOpcoesEntrada(){
 	}
 	
@@ -1018,9 +1007,6 @@ public class Tela extends TelaGeral{
 		panelGrafico1.setLayout(null);
 		
 //		redimensionarPainelGrafico1(panelGrafico1, panelGrafico2);
-		
-//		inicializaPainelTipoSinal();
-//		panelGrafico1.add(panelTipoSinal);
 	}
 	
 	private void inicializaPainelGrafico2(){
@@ -1036,16 +1022,12 @@ public class Tela extends TelaGeral{
 			//rdbtnTanque1.setEnabled(true);
 			//rdbtnTanque2.setEnabled(true);
 			
+			getTempoAcomodacao();
+			
 			comboTipoOnda.setEnabled(true);
 			
 			botaoAtualizar.setEnabled(true);
 			btnReset.setEnabled(true);
-			
-			rdbtnTempoSubida1.setEnabled(true);
-			rdbtnTempoSubida2.setEnabled(true);
-			rdbtnTempoSubida3.setEnabled(true);
-			
-			spinnerTs.setEnabled(true);
 			
 			chckbxTensCalc.setEnabled(true);
 			chckbxTensaoSat.setEnabled(true);
@@ -1056,13 +1038,7 @@ public class Tela extends TelaGeral{
 			//chckbxControle.setEnabled(true);
 			chckbxP.setEnabled(true);
 			chckbxD.setEnabled(true);
-			chckbxI.setEnabled(true);
-						
-//			rdbtnAleatorio.setEnabled(true);
-//			rdbtnDegrau.setEnabled(true);
-//			rdbtnDenteSerra.setEnabled(true);
-//			rdbtnQuadrada.setEnabled(true);
-//			rdbtnSenoidal.setEnabled(true);
+			chckbxI.setEnabled(true);						
 		}else{			
 			rdbtnAberta.setEnabled(false);			
 			rdbtnFechada.setEnabled(false);
@@ -1093,16 +1069,6 @@ public class Tela extends TelaGeral{
 			botaoAtualizar.setEnabled(false);
 			btnReset.setEnabled(false);
 			
-			rdbtnTempoSubida1.setEnabled(false);
-			rdbtnTempoSubida1.setSelected(false);
-			rdbtnTempoSubida2.setEnabled(false);
-			rdbtnTempoSubida2.setSelected(false);
-			rdbtnTempoSubida3.setEnabled(false);
-			rdbtnTempoSubida3.setSelected(false);
-			
-			spinnerTs.setEnabled(false);
-			spinnerTs.setValue(5);
-			
 			chckbxTensCalc.setEnabled(false);
 			chckbxTensaoSat.setEnabled(false);
 			chckbxNivTanque1.setEnabled(false);
@@ -1121,19 +1087,19 @@ public class Tela extends TelaGeral{
 			
 			habilitarComponentesPainelTipoMalha(false);
 			
-			desabilitarParamsControle();
-			
-//			rdbtnAleatorio.setSelected(false);
-//			rdbtnDenteSerra.setSelected(false);
-//			rdbtnDegrau.setSelected(false);
-//			rdbtnQuadrada.setSelected(false);
-//			rdbtnSenoidal.setSelected(false);
-
-//			rdbtnAleatorio.setEnabled(false);
-//			rdbtnDegrau.setEnabled(false);
-//			rdbtnDenteSerra.setEnabled(false);
-//			rdbtnQuadrada.setEnabled(false);
-//			rdbtnSenoidal.setEnabled(false);						
+			desabilitarParamsControle();						
+		}
+	}
+	
+	public void getTempoAcomodacao(){
+		if(menu2porcento.isSelected()){
+			tempoAcomodacao = 2;
+		}else if(menu5porcento.isSelected()){
+			tempoAcomodacao = 5;
+		}else if(menu7porcento.isSelected()){
+			tempoAcomodacao = 7;
+		}else if(menu10porcento.isSelected()){
+			tempoAcomodacao = 10;
 		}
 	}
 	
@@ -1390,9 +1356,7 @@ public class Tela extends TelaGeral{
 	}
 	
 	private void inicializaPainelCheckSinaisGraficos(){		
-		
 		inicializaCheckSinaisGrafico1();
-		
 		inicializaCheckSinaisGrafico2();
 	}
 	

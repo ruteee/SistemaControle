@@ -19,6 +19,7 @@ public class Dados {
 	private String tipoSinal;
 	private String tipoMalha;
 	private String tipoDeControle;
+	private String tipoDeControlador;
 	
 	private boolean windUP, tensao, tensaoSat, nivel1, nivel2, setPoint, proporcional, integral, derivativo, erroMesmo;
 	private boolean faixa2, faixa5, faixa7, faixa10, tanque1, tanque2;
@@ -31,9 +32,7 @@ public class Dados {
 	
 	private double PV;
 	private double PV_two;
-	private double vp;
-	private double vp1;
-	private double vp_two;
+	private double VP;
 	
 	
 	private double duracao;
@@ -55,11 +54,11 @@ public class Dados {
 	}
 
 	public double getVP() {
-		return vp;
+		return VP;
 	}
 
-	public void setVP(double vp) {
-		this.vp = vp;
+	public void setVP(double VP) {
+		this.VP = VP;
 	}
 
 	public String getTipoSinal() {
@@ -347,11 +346,11 @@ public class Dados {
 	}
 
 	public double getVp() {
-		return vp;
+		return VP;
 	}
 
 	public void setVp(double vp) {
-		this.vp = vp;
+		this.VP = vp;
 	}
 
 	public JLabel gettPico() {
@@ -411,28 +410,12 @@ public class Dados {
 		this.picoAbs = picoAbs;
 	}
 
-	public double getVp1() {
-		return vp1;
-	}
-
-	public void setVp1(double vp1) {
-		this.vp1 = vp1;
-	}
-
 	public double getPV_two() {
 		return PV_two;
 	}
 
 	public void setPV_two(double pV_two) {
 		PV_two = pV_two;
-	}
-
-	public double getVp_two() {
-		return vp_two;
-	}
-
-	public void setVp_two(double vp_two) {
-		this.vp_two = vp_two;
 	}
 
 	public boolean isTanque1() {
@@ -449,5 +432,13 @@ public class Dados {
 
 	public void setTanque2(boolean tanque2) {
 		this.tanque2 = tanque2;
+	}
+
+	public String getTipoDeControlador() {
+		return tipoDeControlador;
+	}
+
+	public void setTipoDeControlador(String tipoDeControlador) {
+		this.tipoDeControlador = tipoDeControlador;
 	}
 }

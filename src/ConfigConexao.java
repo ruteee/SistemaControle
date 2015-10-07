@@ -101,6 +101,9 @@ public class ConfigConexao extends JDialog {
 						dadosConexao.setLeitura1(leitura1);
 						dadosConexao.setLeitura2(leitura2);
 						dadosConexao.setEscrita(escrita);
+						dadosConexao.getLblIp().setText(textField_ip.getText());
+						dadosConexao.getLblPorta().setText(textField_porta.getText());
+						
 					}
 				});
 				okButton.setActionCommand("OK");

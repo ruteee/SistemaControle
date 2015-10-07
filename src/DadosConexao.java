@@ -1,4 +1,5 @@
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 public class DadosConexao {
@@ -7,6 +8,8 @@ public class DadosConexao {
 	private JTextFieldAlterado porta;
 	@SuppressWarnings("rawtypes")
 	private JComboBox leitura1, leitura2, escrita;
+	
+	private JLabel lblIp, lblPorta, lblLeitura1, lblLeitura2, lblEscrita;
 	
 	public JTextFieldAlterado getPorta() {
 		return porta;
@@ -43,8 +46,37 @@ public class DadosConexao {
 	@SuppressWarnings("rawtypes")
 	public void setEscrita(JComboBox escrita) {
 		this.escrita = escrita;
+	}	
+	public JLabel getLblIp() {
+		return lblIp;
 	}
-	
+	public void setLblIp(JLabel lblIp) {
+		this.lblIp = lblIp;
+	}
+	public JLabel getLblPorta() {
+		return lblPorta;
+	}
+	public void setLblPorta(JLabel lblPorta) {
+		this.lblPorta = lblPorta;
+	}
+	public JLabel getLblLeitura1() {
+		return lblLeitura1;
+	}
+	public void setLblLeitura1(JLabel lblLeitura1) {
+		this.lblLeitura1 = lblLeitura1;
+	}
+	public JLabel getLblLeitura2() {
+		return lblLeitura2;
+	}
+	public void setLblLeitura2(JLabel lblLeitura2) {
+		this.lblLeitura2 = lblLeitura2;
+	}
+	public JLabel getLblEscrita() {
+		return lblEscrita;
+	}
+	public void setLblEscrita(JLabel lblEscrita) {
+		this.lblEscrita = lblEscrita;
+	}
 	public String getTextLeitura1(){
 		if(leitura1 == null){
 			return leitura1.getSelectedItem() + "";

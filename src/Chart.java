@@ -18,6 +18,10 @@ public class Chart{
 	public LinkedList<Ponto> filaDeErroP = new LinkedList<Ponto>();
 	public LinkedList<Ponto> filaDeErroI = new LinkedList<Ponto>();
 	public LinkedList<Ponto> filaDeErroD = new LinkedList<Ponto>();
+	public LinkedList<Ponto> filaDeErroP_c2 = new LinkedList<Ponto>();
+	public LinkedList<Ponto> filaDeErroI_c2 = new LinkedList<Ponto>();
+	public LinkedList<Ponto> filaDeErroD_c2 = new LinkedList<Ponto>();
+	public LinkedList<Ponto> sinalCascata = new LinkedList<Ponto>();
 	
 	
 	
@@ -81,6 +85,37 @@ public class Chart{
 	
 	}
 	
+	public void atualizarFilaDeErroP_c2(Ponto ponto){
+		
+		filaDeErroP_c2.addLast(ponto);
+		
+		if (filaDeErroP_c2.size() > 600) filaDeErroP_c2.removeFirst();
+	
+	}
+
+	public void atualizarFilaDeErroI_c2(Ponto ponto){
+		
+		filaDeErroI_c2.addLast(ponto);
+		
+		if (filaDeErroI_c2.size() > 600) filaDeErroI_c2.removeFirst();
+	
+	}
+
+	public void atualizarFilaDeErroD_c2(Ponto ponto){
+		
+		filaDeErroD_c2.addLast(ponto);
+		
+		if (filaDeErroD_c2.size() > 600) filaDeErroD_c2.removeFirst();
+	
+	}
+	
+	public void atualizarFilaDeSinalCascata(Ponto ponto){
+		
+		sinalCascata.addLast(ponto);
+		
+		if (sinalCascata.size() > 600) sinalCascata	.removeFirst();
+	
+	}
 	
 	
 	public void limparFilaDeVP(){
@@ -119,6 +154,11 @@ public class Chart{
 		XYSeries serieErroP = new XYSeries("Erro Proporcional");
 		XYSeries serieErroI = new XYSeries("Erro Integral");
 		XYSeries serieErroD = new XYSeries("Erro Derivativo");
+		
+		XYSeries serieErroP_c2 = new XYSeries("Erro Proporcional escravo");
+		XYSeries serieErroI_c2 = new XYSeries("Erro Integral escravo");
+		XYSeries serieErroD_c2 = new XYSeries("Erro Derivativo escravo");
+		XYSeries serieSinalCascata = new XYSeries("Sinal Casccata escravo");
 
 		
 		for (int i = 0; i < filaDeVP.size(); i++)
@@ -135,6 +175,21 @@ public class Chart{
 		
 		for (int i = 0; i < filaDeErroD.size(); i++)
 			serieErroD.add(filaDeErroD.get(i).getX(), filaDeErroD.get(i).getY());
+		
+		
+		for (int i = 0; i < filaDeErroP_c2.size(); i++)
+			serieErroP_c2.add(filaDeErroP_c2.get(i).getX(), filaDeErroP_c2.get(i).getY());
+		
+		for (int i = 0; i < filaDeErroI_c2.size(); i++)
+			serieErroI_c2.add(filaDeErroI_c2.get(i).getX(), filaDeErroI_c2.get(i).getY());
+		
+		for (int i = 0; i < filaDeErroD_c2.size(); i++)
+			serieErroD_c2.add(filaDeErroD_c2.get(i).getX(), filaDeErroD_c2.get(i).getY());
+		
+		for (int i = 0; i < sinalCascata.size(); i++)
+			serieSinalCascata.add(sinalCascata.get(i).getX(), sinalCascata.get(i).getY());
+		
+		
 				
 		XYSeriesCollection dataset= new XYSeriesCollection();
 		dataset.addSeries(serieTensaoCalc);
@@ -142,6 +197,11 @@ public class Chart{
 		dataset.addSeries(serieErroP);
 		dataset.addSeries(serieErroI);
 		dataset.addSeries(serieErroD);
+		
+		dataset.addSeries(serieErroP_c2);
+		dataset.addSeries(serieErroI_c2);
+		dataset.addSeries(serieErroD_c2);
+		dataset.addSeries(serieSinalCascata);
 		
 		return dataset;
 	}
@@ -205,6 +265,37 @@ public class Chart{
 		else{renderer.setSeriesLinesVisible(4, false);}
 		renderer.setSeriesPaint(4, Color.GRAY);
 		
+		
+		
+		//ErroP
+		renderer.setSeriesShapesVisible(5, false);
+		if(dados.isProporcional_c2())
+			renderer.setSeriesLinesVisible(5, true);
+		else{renderer.setSeriesLinesVisible(5, false);}
+		renderer.setSeriesPaint(5, Color.CYAN);
+		
+		//ErroI
+		renderer.setSeriesShapesVisible(6, false);
+		if(dados.isIntegral_c2())
+			renderer.setSeriesLinesVisible(6, true);
+		else{renderer.setSeriesLinesVisible(6, false);}
+		renderer.setSeriesPaint(6, Color.BLACK);
+		
+		//ERROD	
+		renderer.setSeriesShapesVisible(7, false);
+		
+		if(dados.isDerivativo_c2())
+			renderer.setSeriesLinesVisible(7, true);
+		else{renderer.setSeriesLinesVisible(7, false);}
+		renderer.setSeriesPaint(7, Color.GREEN);
+		
+		//sinalCascata C1 to C2
+		renderer.setSeriesShapesVisible(8, false);
+		
+		if(dados.isSinalCascata())
+			renderer.setSeriesLinesVisible(8, true);
+		else{renderer.setSeriesLinesVisible(8, false);}
+		renderer.setSeriesPaint(8, Color.PINK);
 		
 		
 	

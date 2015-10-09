@@ -17,6 +17,7 @@ public class ChartNivel {
 	public LinkedList<Ponto> filaDeNivelDois = new LinkedList<Ponto>();
 	public LinkedList<Ponto> filaDeErroMesmo = new LinkedList<Ponto>();
 	public LinkedList<Ponto> filaDeSetPoint = new LinkedList<Ponto>();
+	public LinkedList<Ponto> filaDeErro_c1 = new LinkedList<Ponto>();
 	
 	Ponto ponto = new Ponto();
 	public ChartPanel  painelG2;
@@ -69,6 +70,14 @@ public class ChartNivel {
 	
 	}
 	
+	public void atualizarFilaDeErro_c1(Ponto ponto){
+		
+		filaDeErro_c1.addLast(ponto);
+		
+		if (filaDeErro_c1.size() > 600) filaDeErro_c1.removeFirst();
+	
+	}
+	
 	public void limparFilaDeNivelDois(){
 		
 		while(!filaDeNivelDois.isEmpty())
@@ -106,6 +115,7 @@ public class ChartNivel {
 		XYSeries serieNivelDois = new XYSeries("Nivel 2");
 		XYSeries serieErroMesmo = new XYSeries("Erro");
 		XYSeries serieSetPoint = new XYSeries("SetPoint");
+		XYSeries serieErro_c1 = new XYSeries("Erro controlador 2");
 		
 		
 		for (int i = 0; i < filaDeNivelUm.size(); i++)
@@ -121,12 +131,15 @@ public class ChartNivel {
 		for (int i = 0; i < filaDeSetPoint.size(); i++)
 			serieSetPoint.add(filaDeSetPoint.get(i).getX(), filaDeSetPoint.get(i).getY());
 		
+		for (int i = 0; i < filaDeErro_c1.size(); i++)
+			serieErro_c1.add(filaDeErro_c1.get(i).getX(), filaDeErro_c1.get(i).getY());
 		
 		XYSeriesCollection dataset= new XYSeriesCollection();
 		dataset.addSeries(serieNivelUm);
 		dataset.addSeries(serieNivelDois);
 		dataset.addSeries(serieErroMesmo);
 		dataset.addSeries(serieSetPoint);
+		dataset.addSeries(serieErro_c1);
 		
 		
 		return dataset;
@@ -171,6 +184,16 @@ public class ChartNivel {
 			renderer.setSeriesLinesVisible(3, true);
 		else{renderer.setSeriesLinesVisible(3, false);}
 		renderer.setSeriesPaint(3, Color.RED);
+		
+        graph.getXYPlot().setRenderer(renderer);
+        
+        //Erro_c1
+        
+        renderer.setSeriesShapesVisible(4, false);
+		if(dados.isErro_c1())
+			renderer.setSeriesLinesVisible(4, true);
+		else{renderer.setSeriesLinesVisible(4, false);}
+		renderer.setSeriesPaint(4, Color.ORANGE);
 		
         graph.getXYPlot().setRenderer(renderer);
         

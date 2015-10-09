@@ -26,8 +26,14 @@ public class TelaGeral {
 		return tiposOnda;
 	}
 	
-	protected Object[] getItensComboTiposControle() {
+	protected Object[] getItensComboTiposControlador() {
 		String[] tiposControle = {"Selecione", "P", "PI", "PD", "PID", "PI-D", "Sem Controle"};
+		
+		return tiposControle;
+	}
+	
+	protected Object[] getItensComboTiposControle() {
+		String[] tiposControle = {"Selecione", "Simples", "Cascata", "Sem Controle"};
 		
 		return tiposControle;
 	}

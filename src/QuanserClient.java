@@ -1,4 +1,8 @@
-
+/*
+ * QuanserClient.java
+ *
+ * Created on 27 de Novembro de 2007, 22:35
+ */
 
 
 

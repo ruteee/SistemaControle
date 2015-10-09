@@ -40,14 +40,24 @@ public class Controlador {
 	}
 	
 	double calcularAcao(double erro, double PV){
-		if(PV != 0){
+		if(PV == 0){
 			acaoP(erro); acaoI(erro); acaoD(erro);
+			System.out.println("Derivada: ");
+			System.out.println(getDerivada());
+			System.out.println("erro: ");
+			System.out.println(erro);
+			System.out.println("erro ant: ");
+			System.out.println(erroAnterior);
+			
 		}
 		else{
 			acaoP(erro); acaoI(erro); acaoD(PV);
+			System.out.println(getDerivada());
 		}
 			
 		return (getProporcional() + getIntegral() + getDerivada());
+		
+		
 	}
 
 	public double getKI() {

@@ -1,4 +1,3 @@
-
 /*
  * QuanserClientException.java
  *

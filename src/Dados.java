@@ -20,15 +20,21 @@ public class Dados {
 	private String tipoMalha;
 	private String tipoDeControle;
 	private String tipoDeControlador;
+	private String tipoDeControladorEscravo;
 	
-	private boolean windUP, tensao, tensaoSat, nivel1, nivel2, setPoint, proporcional, integral, derivativo, erroMesmo;
+	private boolean windUP, windUpEscravo, tensao, tensaoSat, nivel1, nivel2, setPoint, proporcional, integral, derivativo, erroMesmo;
 	private boolean faixa2, faixa5, faixa7, faixa10, tanque1, tanque2;
+	private boolean proporcional_c2, integral_c2, derivativo_c2, sinalCascata, Erro_c1, tanque_Seco = true;
 	
-
 	private double KP;
 	private double KI;
 	private double KD;	
 	private double Tt;
+	
+	private double KpEscravo;
+	private double KiEscravo;
+	private double KdEscravo;	
+	private double TtEscravo;
 	
 	private double PV;
 	private double PV_two;
@@ -56,7 +62,6 @@ public class Dados {
 	public double getVP() {
 		return VP;
 	}
-
 	public void setVP(double VP) {
 		this.VP = VP;
 	}
@@ -345,14 +350,6 @@ public class Dados {
 		this.settleTempo = settleTempo;
 	}
 
-	public double getVp() {
-		return VP;
-	}
-
-	public void setVp(double vp) {
-		this.VP = vp;
-	}
-
 	public JLabel gettPico() {
 		return tPico;
 	}
@@ -441,4 +438,101 @@ public class Dados {
 	public void setTipoDeControlador(String tipoDeControlador) {
 		this.tipoDeControlador = tipoDeControlador;
 	}
+
+	public boolean isWindUpEscravo() {
+		return windUpEscravo;
+	}
+
+	public void setWindUpEscravo(boolean windUpEscravo) {
+		this.windUpEscravo = windUpEscravo;
+	}
+
+	public String getTipoDeControladorEscravo() {
+		return tipoDeControladorEscravo;
+	}
+
+	public void setTipoDeControladorEscravo(String tipoDeControladorEscravo) {
+		this.tipoDeControladorEscravo = tipoDeControladorEscravo;
+	}
+
+	public double getKpEscravo() {
+		return KpEscravo;
+	}
+
+	public void setKpEscravo(double kpEscravo) {
+		KpEscravo = kpEscravo;
+	}
+
+	public double getKiEscravo() {
+		return KiEscravo;
+	}
+
+	public void setKiEscravo(double kiEscravo) {
+		KiEscravo = kiEscravo;
+	}
+
+	public double getKdEscravo() {
+		return KdEscravo;
+	}
+
+	public void setKdEscravo(double kdEscravo) {
+		KdEscravo = kdEscravo;
+	}
+
+	public double getTtEscravo() {
+		return TtEscravo;
+	}
+
+	public void setTtEscravo(double ttEscravo) {
+		TtEscravo = ttEscravo;
+	}
+
+	public boolean isProporcional_c2() {
+		return proporcional_c2;
+	}
+
+	public void setProporcional_c2(boolean proporcional_c2) {
+		this.proporcional_c2 = proporcional_c2;
+	}
+
+	public boolean isIntegral_c2() {
+		return integral_c2;
+	}
+
+	public void setIntegral_c2(boolean integral_c2) {
+		this.integral_c2 = integral_c2;
+	}
+
+	public boolean isDerivativo_c2() {
+		return derivativo_c2;
+	}
+
+	public void setDerivativo_c2(boolean derivativo_c2) {
+		this.derivativo_c2 = derivativo_c2;
+	}
+
+	public boolean isSinalCascata() {
+		return sinalCascata;
+	}
+
+	public void setSinalCascata(boolean sinalCascata) {
+		this.sinalCascata = sinalCascata;
+	}
+
+	public boolean isErro_c1() {
+		return Erro_c1;
+	}
+
+	public void setErro_c1(boolean Erro_c1) {
+		this.Erro_c1 = Erro_c1;
+	}
+
+	public boolean isTanque_Seco() {
+		return tanque_Seco;
+	}
+
+	public void setTanque_Seco(boolean tanque_Seco) {
+		this.tanque_Seco = tanque_Seco;
+	}
+
 }

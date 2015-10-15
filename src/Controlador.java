@@ -20,6 +20,14 @@ public class Controlador {
 	
 	}
 	
+	public void reset(){
+		
+		this.integral = 0;
+		this.derivada = 0;
+		this.proporcional = 0;
+		this.erroAnterior = 0;
+	}
+	
 	public void acaoP(double erro){
 		this.proporcional = KP*erro;
 	}

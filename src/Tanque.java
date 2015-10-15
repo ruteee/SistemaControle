@@ -154,10 +154,14 @@ public class Tanque extends Thread{
 				{
 					quanserclient.write(0, 0);
 					nivel_um = quanserclient.read(0);
-					nivel_dois = quanserclient.read(0);
+					nivel_dois = quanserclient.read(1);
 					if(nivel_um == 0 && nivel_dois == 0){
 						dados.setTanque_Seco(true);
 					}
+					
+					
+					controladorUm.reset();
+					controladorDois.reset();
 				}
 				
 				if(dados.isTanque1()){

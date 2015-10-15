@@ -299,7 +299,7 @@ public class Tanque extends Thread{
 							
 					}else if(dados.getTipoDeControle().equals("Cascata")){
 						
-						double erro_tanque_dois = grafico_nivel.filaDeSetPoint.getFirst().getY() - nivel_tanque_dois;
+						double erro_tanque_dois = grafico_nivel.filaDeSetPoint.getLast().getY() - nivel_tanque_dois;
 						if(dados.getTipoDeControlador().equals("PI-D")){
 							erro_controlador_dois = controladorUm.calcularAcao(erro_tanque_dois, nivel_tanque_dois) - nivel_tanque_um;
 							dados.setVP(controladorDois.calcularAcao(erro_controlador_dois, nivel_tanque_um));

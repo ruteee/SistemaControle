@@ -25,11 +25,11 @@ public class Controlador {
 	}
 	
 	public void acaoI(double erro){
-		if(!windUP)
+		//if(!windUP)
 			this.integral = this.integral + KI*erro*0.1;
-		else{
-			this.integral = this.integral + KI*erro*0.1 + 0.1*(1/(Tt)*(this.controleAnteriorSaturado - this.controleNaoSaturado));
-		}	
+		//else{
+			//this.integral = this.integral + KI*erro*0.1 + 0.1*(1/(Tt)*(this.controleAnteriorSaturado - this.controleNaoSaturado));
+		//}	
 	}
 	
 	public void acaoD(double erro){

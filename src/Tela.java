@@ -703,7 +703,7 @@ public class Tela extends TelaGeral{
 				
 				return false;
 			}else{
-				dados.setTipoDeControlador(comboTipoControladorMestre.getSelectedItem().toString());
+				dados.setTipoDeControlador(tipoControlador.getSelectedItem().toString());
 				
 				if(textFieldKp.getText().equals("")){
 					JOptionPane.showMessageDialog(frame, "Informe o valor de Kp do mestre.");
@@ -712,25 +712,25 @@ public class Tela extends TelaGeral{
 				}else{
 					dados.setKP(Double.parseDouble(textFieldKp.getText()));
 					
-					if((comboTipoControladorMestre.getSelectedItem().equals("PI") || comboTipoControladorMestre.getSelectedItem().equals("PID") || tipoControlador.getSelectedItem().equals("PI-D"))
+					if((tipoControlador.getSelectedItem().equals("PI") || tipoControlador.getSelectedItem().equals("PID") || tipoControlador.getSelectedItem().equals("PI-D"))
 							&& (textFieldKi.getText().equals("") || textFieldTali.getText().equals(""))){
 						
 						JOptionPane.showMessageDialog(frame, "Informe todos os parâmetros do controlador integrativo (Ki e Ti) do mestre.");
 						
 						return false;
-					}else if((comboTipoControladorMestre.getSelectedItem().equals("PI") || comboTipoControladorMestre.getSelectedItem().equals("PID") || tipoControlador.getSelectedItem().equals("PI-D"))
+					}else if((tipoControlador.getSelectedItem().equals("PI") || tipoControlador.getSelectedItem().equals("PID") || tipoControlador.getSelectedItem().equals("PI-D"))
 							&& !(textFieldKi.getText().equals("") || textFieldTali.getText().equals(""))){
 				
 						dados.setKI(Double.parseDouble(textFieldKi.getText()));
 					}
 					
-					if((comboTipoControladorMestre.getSelectedItem().equals("PD") || comboTipoControladorMestre.getSelectedItem().equals("PID") || tipoControlador.getSelectedItem().equals("PI-D"))
+					if((tipoControlador.getSelectedItem().equals("PD") || tipoControlador.getSelectedItem().equals("PID") || tipoControlador.getSelectedItem().equals("PI-D"))
 							&& (textFieldKd.getText().equals("") || textFieldTald.getText().equals(""))){
 						
 						JOptionPane.showMessageDialog(frame, "Informe todos os parâmetros do controlador derivativo (Kd e Td) do mestre.");
 						
 						return false;
-					}else if((comboTipoControladorMestre.getSelectedItem().equals("PD") || comboTipoControladorMestre.getSelectedItem().equals("PID") || tipoControlador.getSelectedItem().equals("PI-D"))
+					}else if((tipoControlador.getSelectedItem().equals("PD") || tipoControlador.getSelectedItem().equals("PID") || tipoControlador.getSelectedItem().equals("PI-D"))
 							&& !(textFieldKd.getText().equals("") || textFieldTald.getText().equals(""))){
 						
 						dados.setKD(Double.parseDouble(textFieldKd.getText()));
@@ -750,7 +750,7 @@ public class Tela extends TelaGeral{
 				
 				return false;
 			}else{
-				dados.setTipoDeControladorEscravo(comboTipoControladorEscravo.getSelectedItem().toString());
+				dados.setTipoDeControladorEscravo(tipoControlador.getSelectedItem().toString());
 				
 				if(textFieldKp.getText().equals("")){
 					JOptionPane.showMessageDialog(frame, "Informe o valor de Kp do escravo.");
@@ -759,28 +759,28 @@ public class Tela extends TelaGeral{
 				}else{
 					dados.setKpEscravo(Double.parseDouble(textFieldKpEscravo.getText()));
 					
-					if((comboTipoControladorEscravo.getSelectedItem().equals("PI") || comboTipoControladorEscravo.getSelectedItem().equals("PID") || comboTipoControladorEscravo.getSelectedItem().equals("PI-D"))
+					if((tipoControlador.getSelectedItem().equals("PI") || tipoControlador.getSelectedItem().equals("PID") || tipoControlador.getSelectedItem().equals("PI-D"))
 							&& (textFieldKiEscravo.getText().equals("") || textFieldTaliEscravo.getText().equals(""))){
 						
 						JOptionPane.showMessageDialog(frame, "Informe todos os parâmetros do controlador integrativo (Ki e Ti) do escravo.");
 						
 						return false;
-					}else if((comboTipoControladorEscravo.getSelectedItem().equals("PI") || comboTipoControladorEscravo.getSelectedItem().equals("PID") || comboTipoControladorMestre.getSelectedItem().equals("PI-D"))
+					}else if((tipoControlador.getSelectedItem().equals("PI") || tipoControlador.getSelectedItem().equals("PID") || tipoControlador.getSelectedItem().equals("PI-D"))
 							&& !(textFieldKiEscravo.getText().equals("") || textFieldTaliEscravo.getText().equals(""))){
 				
 						dados.setKiEscravo(Double.parseDouble(textFieldKiEscravo.getText()));
 					}
 					
-					if((comboTipoControladorEscravo.getSelectedItem().equals("PD") || comboTipoControladorEscravo.getSelectedItem().equals("PID") || comboTipoControladorMestre.getSelectedItem().equals("PI-D"))
+					if((tipoControlador.getSelectedItem().equals("PD") || tipoControlador.getSelectedItem().equals("PID") || tipoControlador.getSelectedItem().equals("PI-D"))
 							&& (textFieldKdEscravo.getText().equals("") || textFieldTaldEscravo.getText().equals(""))){
 						
 						JOptionPane.showMessageDialog(frame, "Informe todos os parâmetros do controlador derivativo (Kd e Td) do escravo.");
 						
 						return false;
-					}else if((comboTipoControladorEscravo.getSelectedItem().equals("PD") || comboTipoControladorEscravo.getSelectedItem().equals("PID") || comboTipoControladorMestre.getSelectedItem().equals("PI-D"))
+					}else if((tipoControlador.getSelectedItem().equals("PD") || tipoControlador.getSelectedItem().equals("PID") || tipoControlador.getSelectedItem().equals("PI-D"))
 							&& !(textFieldKdEscravo.getText().equals("") || textFieldTaldEscravo.getText().equals(""))){
 						
-						dados.setKdEscravo(Double.parseDouble(textFieldKd.getText()));
+						dados.setKdEscravo(Double.parseDouble(textFieldKdEscravo.getText()));
 					}
 				}
 			}
@@ -931,15 +931,15 @@ public class Tela extends TelaGeral{
 				if(comboTipoControle.getSelectedItem().equals("Cascata")){
 					comboTipoControladorMestre.setEnabled(true);
 					comboTipoControladorEscravo.setEnabled(true);
-					dados.setTipoDeControle("Cascata");
+					//dados.setTipoDeControle("Cascata");
 				}else if(comboTipoControle.getSelectedItem().equals("Simples")){					
 					comboTipoControladorMestre.setEnabled(true);
 					comboTipoControladorEscravo.setEnabled(false);
-					dados.setTipoDeControle("Simples");
+					//dados.setTipoDeControle("Simples");
 				}else{
 					comboTipoControladorMestre.setEnabled(false);
 					comboTipoControladorEscravo.setEnabled(false);
-					dados.setTipoDeControle("Sem Controle");
+					//dados.setTipoDeControle("Sem Controle");
 				}
 			}
 		});

@@ -123,7 +123,7 @@ public class Tela extends TelaGeral{
 	private JComboBox comboTipoControladorMestre;
 	
 	private JPanel panelDadosServidor;
-	private JTextField textFieldTalt;
+	private JTextField textFieldTt;
 	
 	private JPanel panelMp, panelTs, panelValores;
 	
@@ -438,7 +438,9 @@ public class Tela extends TelaGeral{
 			public void actionPerformed(ActionEvent arg0) { 
 				dados = new Dados();					
 				
-				if(validaTela()){				
+				if(validaDadosDeIO() && validaTipoMalha() && validaOnda() && validaParamsControlador(comboTipoControladorMestre)){
+					
+					validaParamsControladorEscravo(comboTipoControladorEscravo);
 					//dados.setComControle(chckbxComControle.isSelected());
 					
 					/*thread.graficoAltura.limparFilaDeErroMesmo();
@@ -450,6 +452,17 @@ public class Tela extends TelaGeral{
 					thread.grafico.limparFilaDeI();
 					thread.grafico.limparFilaDeD();*/
 					
+					if(comboTipoControle.getSelectedItem().equals("Cascata")){
+						dados.setTipoDeControle("Cascata");
+					}
+					
+					if(comboTipoControle.getSelectedItem().equals("Simples")){
+						dados.setTipoDeControle("Simples");
+					}
+					
+					if(comboTipoControle.getSelectedItem().equals("Sem Controle")){
+						dados.setTipoDeControle("Sem Controle");
+					}
 					// Setar na dados os checkBox dos gráficos
 					dados.setTensao(chckbxTensCalc.isSelected());
 					dados.setTensaoSat(chckbxTensaoSat.isSelected());
@@ -493,7 +506,7 @@ public class Tela extends TelaGeral{
 						dados.setFatSup(0.9);
 					}
 					if(chckbxWindUpMestre.isSelected()){
-						dados.setTt(Double.parseDouble(textFieldTalt.getText()));
+						dados.setTt(Double.parseDouble(textFieldTt.getText()));
 					}
 					
 					dados.setTanque1(rdbtnTanque1.isSelected());
@@ -536,29 +549,6 @@ public class Tela extends TelaGeral{
 				}
 			}
 		});
-	}
-	
-	private boolean validaTela(){
-		boolean sucesso = false;
-		
-		//Validando painel de dados de entradas e saídas		
-		sucesso = validaDadosDeIO();
-
-		//Validando painel de escolha do tipo de malha
-		sucesso = sucesso && validaTipoMalha();
-
-		//Validando painel de escolha do tipo de onda
-		sucesso = sucesso && validaOnda();
-
-		//Validando painel de escolha dos parametros do controlador mestre
-		if(comboTipoControle.getSelectedItem().equals("Simples") || comboTipoControle.getSelectedItem().equals("Cascata"))
-			sucesso = sucesso && validaParamsControlador(comboTipoControladorMestre);
-
-		//Validando painel de escolha dos parametros do controlador mestre
-		if(comboTipoControle.getSelectedItem().equals("Cascata"))
-			sucesso = sucesso && validaParamsControladorEscravo(comboTipoControladorEscravo);
-		
-		return sucesso;
 	}
 	
 	/** 
@@ -707,7 +697,7 @@ public class Tela extends TelaGeral{
 		
 	@SuppressWarnings("rawtypes")
 	private boolean validaParamsControlador(JComboBox tipoControlador){
-		if(rdbtnFechada.isSelected()){
+		if(!rdbtnAberta.isSelected()){
 			if(tipoControlador.getSelectedIndex() == 0){
 				JOptionPane.showMessageDialog(frame, "Informe o tipo de controlador do mestre!");
 				
@@ -754,7 +744,7 @@ public class Tela extends TelaGeral{
 	
 	@SuppressWarnings("rawtypes")
 	private boolean validaParamsControladorEscravo(JComboBox tipoControlador){
-		if(rdbtnFechada.isSelected()){
+		if(!rdbtnAberta.isSelected()){
 			if(tipoControlador.getSelectedIndex() == 0){
 				JOptionPane.showMessageDialog(frame, "Informe o tipo de controlador do escravo!");
 				
@@ -762,7 +752,7 @@ public class Tela extends TelaGeral{
 			}else{
 				dados.setTipoDeControladorEscravo(tipoControlador.getSelectedItem().toString());
 				
-				if(textFieldKpEscravo.getText().equals("")){
+				if(textFieldKp.getText().equals("")){
 					JOptionPane.showMessageDialog(frame, "Informe o valor de Kp do escravo.");
 					
 					return false;
@@ -861,17 +851,14 @@ public class Tela extends TelaGeral{
 		chckbxWindUpMestre.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(chckbxWindUpMestre.isSelected()){
-					textFieldTalt.setEnabled(true);
-				}else{ 
-					textFieldTalt.setEnabled(false);
-					textFieldTalt.setText("");
-				}
+					textFieldTt.setEnabled(true);
+				}else{ textFieldTt.setEnabled(false);}
 				
 			}
 		});
 		comboTipoControladorMestre.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if(comboTipoControladorMestre.getSelectedItem().equals("Selecione") || comboTipoControladorMestre.getSelectedItem().equals("Sem Controle")){
+				if(comboTipoControladorMestre.getSelectedItem().equals("Selecione")){
 					textFieldKp.setEnabled(false);
 					textFieldKp.setText("");
 					textFieldKi.setEnabled(false);
@@ -882,10 +869,6 @@ public class Tela extends TelaGeral{
 					textFieldTali.setText("");
 					textFieldTald.setEnabled(false);
 					textFieldTald.setText("");
-					textFieldTalt.setEnabled(false);
-					textFieldTalt.setText("");
-					
-					chckbxWindUpMestre.setSelected(false);
 				}else if(comboTipoControladorMestre.getSelectedItem().equals("P")){
 					textFieldKp.setEnabled(true);
 					textFieldKi.setEnabled(false);
@@ -948,38 +931,15 @@ public class Tela extends TelaGeral{
 				if(comboTipoControle.getSelectedItem().equals("Cascata")){
 					comboTipoControladorMestre.setEnabled(true);
 					comboTipoControladorEscravo.setEnabled(true);
-					
-					chckbxWindUpMestre.setEnabled(true);
-					chckbxWindUpEscravo.setEnabled(true);
-					
-					dados.setTipoDeControle("Cascata");
+					//dados.setTipoDeControle("Cascata");
 				}else if(comboTipoControle.getSelectedItem().equals("Simples")){					
 					comboTipoControladorMestre.setEnabled(true);
 					comboTipoControladorEscravo.setEnabled(false);
-					comboTipoControladorEscravo.setSelectedIndex(0);
-					dados.setTipoDeControle("Simples");
-					
-					chckbxWindUpMestre.setEnabled(true);
-					
-					chckbxWindUpEscravo.setEnabled(false);
-					chckbxWindUpEscravo.setSelected(false);
-					
-					desabilitarParamsControladorEscravo(true, true);
+					//dados.setTipoDeControle("Simples");
 				}else{
 					comboTipoControladorMestre.setEnabled(false);
-					comboTipoControladorMestre.setSelectedIndex(0);
 					comboTipoControladorEscravo.setEnabled(false);
-					comboTipoControladorEscravo.setSelectedIndex(0);
-					dados.setTipoDeControle("Sem Controle");
-					
-					chckbxWindUpMestre.setEnabled(false);
-					chckbxWindUpMestre.setSelected(false);
-					
-					chckbxWindUpEscravo.setEnabled(false);
-					chckbxWindUpEscravo.setSelected(false);
-					
-					desabilitarParamsControladorMestre(true, true);
-					desabilitarParamsControladorEscravo(true, true);
+					//dados.setTipoDeControle("Sem Controle");
 				}
 			}
 		});
@@ -1099,7 +1059,7 @@ public class Tela extends TelaGeral{
 		comboTipoControladorEscravo = new JComboBox(getItensComboTiposControlador());
 		comboTipoControladorEscravo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if(comboTipoControladorEscravo.getSelectedItem().equals("Selecione") || comboTipoControladorEscravo.getSelectedItem().equals("Sem Controle")){
+				if(comboTipoControladorEscravo.getSelectedItem().equals("Selecione")){
 					textFieldKpEscravo.setEnabled(false);
 					textFieldKpEscravo.setText("");
 					textFieldKiEscravo.setEnabled(false);
@@ -1110,11 +1070,6 @@ public class Tela extends TelaGeral{
 					textFieldTaliEscravo.setText("");
 					textFieldTaldEscravo.setEnabled(false);
 					textFieldTaldEscravo.setText("");
-					textFieldTaltEscravo.setEnabled(false);
-					textFieldTaltEscravo.setText("");
-					
-					chckbxWindUpEscravo.setSelected(false);
-					
 				}else if(comboTipoControladorEscravo.getSelectedItem().equals("P")){
 					textFieldKpEscravo.setEnabled(true);
 					textFieldKiEscravo.setEnabled(false);
@@ -1168,10 +1123,7 @@ public class Tela extends TelaGeral{
 			public void actionPerformed(ActionEvent arg0) {
 				if(chckbxWindUpEscravo.isSelected()){
 					textFieldTaltEscravo.setEnabled(true);
-				}else{ 
-					textFieldTaltEscravo.setEnabled(false);
-					textFieldTaltEscravo.setText("");
-				}
+				}else{ textFieldTaltEscravo.setEnabled(false);}
 			}
 		});
 		chckbxWindUpEscravo.setToolTipText("Acionar Wind Up");
@@ -1238,8 +1190,7 @@ public class Tela extends TelaGeral{
 				chckbxWindUpEscravo.setEnabled(false);
 				chckbxWindUpEscravo.setSelected(false);
 				
-				desabilitarParamsControladorMestre(true, true);
-				desabilitarParamsControladorEscravo(true, true);
+				desabilitarParamsControle();
 			}
 		});
 		panelTipoMalha.add(rdbtnAberta);
@@ -1407,11 +1358,11 @@ public class Tela extends TelaGeral{
 		});
 		panelParamsControladorMestre.add(textFieldTald);
 		
-		textFieldTalt = new JTextField();
-		textFieldTalt.setEnabled(false);
-		textFieldTalt.setBounds(145, 52, 66, 18);
-		panelParamsControladorMestre.add(textFieldTalt);
-		textFieldTalt.setColumns(10);
+		textFieldTt = new JTextField();
+		textFieldTt.setEnabled(false);
+		textFieldTt.setBounds(145, 52, 66, 18);
+		panelParamsControladorMestre.add(textFieldTt);
+		textFieldTt.setColumns(10);
 		
 		JLabel lblTt = new JLabel("Tt:");
 		lblTt.setBounds(113, 52, 22, 18);
@@ -1619,7 +1570,6 @@ public class Tela extends TelaGeral{
 			leitura2.setSelectedItem("Selecione");
 			
 			comboTipoControle.setEnabled(false);
-			comboTipoControle.setSelectedIndex(0);
 			
 	//		rdbtnTanque1.setEnabled(false);
 		//	rdbtnTanque1.setSelected(false);
@@ -1632,8 +1582,7 @@ public class Tela extends TelaGeral{
 			comboTipoControladorMestre.setEnabled(false);
 			comboTipoControladorMestre.setSelectedIndex(0);
 			
-			comboTipoControladorEscravo.setEnabled(false);
-			comboTipoControladorEscravo.setSelectedIndex(0);
+			/*chckbxComControle = false;*/
 			
 			chckbxWindUpMestre.setEnabled(false);
 			chckbxWindUpMestre.setSelected(false);
@@ -1677,8 +1626,19 @@ public class Tela extends TelaGeral{
 			
 			habilitarComponentesPainelTipoMalha(false);
 			
-			desabilitarParamsControladorMestre(true, true);
-			desabilitarParamsControladorEscravo(true, true);
+			desabilitarParamsControle();
+			
+//			rdbtnAleatorio.setSelected(false);
+//			rdbtnDenteSerra.setSelected(false);
+//			rdbtnDegrau.setSelected(false);
+//			rdbtnQuadrada.setSelected(false);
+//			rdbtnSenoidal.setSelected(false);
+
+//			rdbtnAleatorio.setEnabled(false);
+//			rdbtnDegrau.setEnabled(false);
+//			rdbtnDenteSerra.setEnabled(false);
+//			rdbtnQuadrada.setEnabled(false);
+//			rdbtnSenoidal.setEnabled(false);						
 		}
 	}
 	
@@ -2011,46 +1971,30 @@ public class Tela extends TelaGeral{
 		});
 	}
 	
-	private void desabilitarParamsControladorMestre(boolean limparCampos, boolean desabCampos){		
+	private void desabilitarParamsControle(){		
+		textFieldKp.setText("");
+		textFieldKi.setText("");
+		textFieldKd.setText("");
+		textFieldTali.setText("");
+		textFieldTald.setText("");
 		
-		if(limparCampos){
-			textFieldKp.setText("");
-			textFieldKi.setText("");
-			textFieldKd.setText("");
-			textFieldTali.setText("");
-			textFieldTald.setText("");
-			textFieldTalt.setText("");
-		}
+		textFieldKp.setEnabled(false);
+		textFieldKi.setEnabled(false);
+		textFieldKd.setEnabled(false);
+		textFieldTali.setEnabled(false);
+		textFieldTald.setEnabled(false);
 		
-		if(desabCampos){
-			textFieldKp.setEnabled(!desabCampos);
-			textFieldKi.setEnabled(!desabCampos);
-			textFieldKd.setEnabled(!desabCampos);
-			textFieldTali.setEnabled(!desabCampos);
-			textFieldTald.setEnabled(!desabCampos);
-			textFieldTalt.setEnabled(!desabCampos);
-		}
-	}
-	
-	private void desabilitarParamsControladorEscravo(boolean limparCampos, boolean desabCampos){		
-		
-		if(limparCampos){
-			textFieldKpEscravo.setText("");
-			textFieldKiEscravo.setText("");
-			textFieldKdEscravo.setText("");
-			textFieldTaliEscravo.setText("");
-			textFieldTaldEscravo.setText("");
-			textFieldTaltEscravo.setText("");
-		}
-		
-		if(desabCampos){
-			textFieldKpEscravo.setEnabled(!desabCampos);
-			textFieldKiEscravo.setEnabled(!desabCampos);
-			textFieldKdEscravo.setEnabled(!desabCampos);
-			textFieldTaliEscravo.setEnabled(!desabCampos);
-			textFieldTaldEscravo.setEnabled(!desabCampos);
-			textFieldTaltEscravo.setEnabled(!desabCampos);
-		}
+//		rdbtnControladorP.setEnabled(false);
+//		rdbtnControladorPI.setEnabled(false);
+//		rdbtnControladorPD.setEnabled(false);
+//		rdbtnControladorPID.setEnabled(false);
+//		rdbtnControladorPITracoD.setEnabled(false);
+//		
+//		rdbtnControladorP.setSelected(false);
+//		rdbtnControladorPI.setSelected(false);
+//		rdbtnControladorPD.setSelected(false);
+//		rdbtnControladorPID.setSelected(false);
+//		rdbtnControladorPITracoD.setSelected(false);
 	}
 	
 	private void habilitarComponentesPainelTipoMalha(Boolean bool){

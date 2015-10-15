@@ -45,7 +45,7 @@ public class Chart{
 		
 		filaDeVPSaturado.addLast(ponto);
 		
-		if (filaDeVPSaturado.size() > 600) filaDeVPSaturado.removeFirst();
+		if (filaDeVPSaturado.size() > 1200) filaDeVPSaturado.removeFirst();
 	
 	}
 	
@@ -56,7 +56,7 @@ public class Chart{
 		
 			filaDeVP.addLast(ponto);
 			
-			if (filaDeVP.size() > 600) filaDeVP.removeFirst();
+			if (filaDeVP.size() > 1200) filaDeVP.removeFirst();
 		
 	}
 	
@@ -65,7 +65,7 @@ public class Chart{
 			
 			filaDeErroP.addLast(ponto);
 			
-			if (filaDeErroP.size() > 600) filaDeErroP.removeFirst();
+			if (filaDeErroP.size() > 1200) filaDeErroP.removeFirst();
 		
 	}
 
@@ -73,7 +73,7 @@ public class Chart{
 		
 		filaDeErroI.addLast(ponto);
 		
-		if (filaDeErroI.size() > 600) filaDeErroI.removeFirst();
+		if (filaDeErroI.size() > 1200) filaDeErroI.removeFirst();
 	
 	}
 	
@@ -81,7 +81,7 @@ public class Chart{
 		
 		filaDeErroD.addLast(ponto);
 		
-		if (filaDeErroD.size() > 600) filaDeErroD.removeFirst();
+		if (filaDeErroD.size() > 1200) filaDeErroD.removeFirst();
 	
 	}
 	
@@ -89,7 +89,7 @@ public class Chart{
 		
 		filaDeErroP_c2.addLast(ponto);
 		
-		if (filaDeErroP_c2.size() > 600) filaDeErroP_c2.removeFirst();
+		if (filaDeErroP_c2.size() > 1200) filaDeErroP_c2.removeFirst();
 	
 	}
 
@@ -97,7 +97,7 @@ public class Chart{
 		
 		filaDeErroI_c2.addLast(ponto);
 		
-		if (filaDeErroI_c2.size() > 600) filaDeErroI_c2.removeFirst();
+		if (filaDeErroI_c2.size() > 1200) filaDeErroI_c2.removeFirst();
 	
 	}
 
@@ -105,7 +105,7 @@ public class Chart{
 		
 		filaDeErroD_c2.addLast(ponto);
 		
-		if (filaDeErroD_c2.size() > 600) filaDeErroD_c2.removeFirst();
+		if (filaDeErroD_c2.size() > 1200) filaDeErroD_c2.removeFirst();
 	
 	}
 	

@@ -42,7 +42,7 @@ public class ChartNivel {
 		
 			filaDeNivelUm.addLast(ponto);
 			
-			if (filaDeNivelUm.size() > 600) filaDeNivelUm.removeFirst();
+			if (filaDeNivelUm.size() > 1200) filaDeNivelUm.removeFirst();
 		
 	}
 	
@@ -50,7 +50,7 @@ public class ChartNivel {
 		
 		filaDeSetPoint.addLast(ponto);
 		
-		if (filaDeSetPoint.size() > 600) filaDeSetPoint.removeFirst();
+		if (filaDeSetPoint.size() > 1200) filaDeSetPoint.removeFirst();
 	
 	}
 	
@@ -58,7 +58,7 @@ public class ChartNivel {
 		
 		filaDeNivelDois.addLast(ponto);
 		
-		if (filaDeNivelDois.size() > 600) filaDeNivelDois.removeFirst();
+		if (filaDeNivelDois.size() > 1200) filaDeNivelDois.removeFirst();
 	
     }
 	
@@ -66,7 +66,7 @@ public class ChartNivel {
 		
 		filaDeErroMesmo.addLast(ponto);
 		
-		if (filaDeErroMesmo.size() > 600) filaDeErroMesmo.removeFirst();
+		if (filaDeErroMesmo.size() > 1200) filaDeErroMesmo.removeFirst();
 	
 	}
 	
@@ -74,7 +74,7 @@ public class ChartNivel {
 		
 		filaDeErro_c1.addLast(ponto);
 		
-		if (filaDeErro_c1.size() > 600) filaDeErro_c1.removeFirst();
+		if (filaDeErro_c1.size() > 1200) filaDeErro_c1.removeFirst();
 	
 	}
 	

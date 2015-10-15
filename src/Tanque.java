@@ -144,11 +144,6 @@ public class Tanque extends Thread{
 				
 			
 				
-				dados.setPV(quanserclient.read(dados.getPinoDeLeitura1()));
-				dados.setPV_two(quanserclient.read(dados.getPinoDeLeitura2()));
-				
-				nivel_tanque_um = 6.25*dados.getPV();
-				nivel_tanque_dois = 6.25*dados.getPV_two();
 				
 				while(!dados.isTanque_Seco())
 				{
@@ -160,9 +155,22 @@ public class Tanque extends Thread{
 					}
 					
 					
+					sinal.resetTempo();
 					controladorUm.reset();
 					controladorDois.reset();
+					sp_mudou();
+					
+					
+					
 				}
+				
+				dados.setPV(quanserclient.read(dados.getPinoDeLeitura1()));
+				dados.setPV_two(quanserclient.read(dados.getPinoDeLeitura2()));
+				
+				nivel_tanque_um = 6.25*dados.getPV();
+				nivel_tanque_dois = 6.25*dados.getPV_two();
+				
+				System.out.println(nivel_tanque_um);
 				
 				if(dados.isTanque1()){
 					nivel_coringa = nivel_tanque_um;
@@ -497,35 +505,36 @@ public class Tanque extends Thread{
 	void tempoPico(){
 		
 		if(!flagPico){
-		if (setPoint - oldSetPoint > 0){
-			if (nivel_coringa < nivel_passado && nivel_coringa > setPoint)
-			{
-				t_pico = sinal.getTempo() - tSetPoint- 0.2;
-				dados.gettPico().setText(String.valueOf(t_pico));
-				nivel_pico = nivel_passado;
-				
-				
-				if (dados.isPicoAbs())
-					dados.getNivelPico().setText(String.valueOf((nivel_pico - setPoint)));
-				else
-					dados.getNivelPico().setText(String.valueOf(100 * (nivel_pico - setPoint)/(setPoint - oldSetPoint)));
-				flagPico = true;
-			}
-		}
-		else
-		{
-			/*System.out.println("outro");*/
-			if (nivel_coringa > nivel_passado && nivel_coringa < setPoint)
-			{
-				t_pico = sinal.getTempo() - 0.2 - tSetPoint;
-				nivel_pico = nivel_passado;
-				if (dados.isPicoAbs())
-					dados.getNivelPico().setText(String.valueOf(100 * (nivel_pico - setPoint)/(setPoint - oldSetPoint)));
-				else
+			if (setPoint - oldSetPoint > 0){
+				if (nivel_coringa < nivel_passado && nivel_coringa > setPoint)
+				{
+					t_pico = sinal.getTempo() - tSetPoint - 0.2;
 					dados.gettPico().setText(String.valueOf(t_pico));
-				flagPico = true;
+					nivel_pico = nivel_passado;
+					
+					if (dados.isPicoAbs())
+						dados.getNivelPico().setText(String.valueOf((nivel_pico - setPoint)));
+					else
+						dados.getNivelPico().setText(String.valueOf(100 * (nivel_pico - setPoint)/(setPoint - oldSetPoint)));
+					flagPico = true;
+				}
 			}
-		}
+			else
+			{
+				//System.out.println("outro");
+				if (nivel_coringa > nivel_passado && nivel_coringa < setPoint)
+				{
+					t_pico = sinal.getTempo() - 0.2 - tSetPoint;
+					dados.gettPico().setText(String.valueOf(t_pico));
+					nivel_pico = nivel_passado;
+					if (dados.isPicoAbs())
+						dados.gettPico().setText(String.valueOf(t_pico));
+					else
+						dados.getNivelPico().setText(String.valueOf(100 * (nivel_pico - setPoint)/(setPoint - oldSetPoint)));
+						
+					flagPico = true;
+				}
+			}
 		}else{
 			if (setPoint - oldSetPoint > 0){
 				if (nivel_coringa > nivel_passado && nivel_coringa > setPoint && nivel_coringa > nivel_pico){

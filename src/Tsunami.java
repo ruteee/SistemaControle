@@ -120,4 +120,8 @@ public class Tsunami {
 	public double getTempo() {
 		return tempo;
 	}
+	
+	public void resetTempo() {
+		tempo = 0;
+	}
 }

@@ -431,7 +431,7 @@ public class Tela extends TelaGeral{
 				//amplitude_limpa_tanque = 0;
 				
 				thread.limparTela();
-				dados.setTanque_Seco(false);
+				//dados.setTanque_Seco(false);
 			}
 		});
 		botaoAtualizar.addActionListener(new ActionListener() {

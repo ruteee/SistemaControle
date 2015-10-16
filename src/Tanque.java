@@ -9,6 +9,8 @@ public class Tanque extends Thread{
 	private Chart grafico_controle = new Chart(dados);;
 	private Tsunami sinal = new Tsunami(dados.getPeriodo(), dados.getPeriodoMinino(),dados.getOffset(),dados.getAmplitude(),dados.getAmplitudeMinima(),dados.getTipoSinal());
 	QuanserClient quanserclient;
+	Controlador controladorUm;
+	Controlador controladorDois;
 
 	private double vp_sat;
 	public double nivel_tanque_um;
@@ -125,50 +127,48 @@ public class Tanque extends Thread{
 	}
 	public void run(){
 		
-		Controlador  controladorUm = new Controlador(dados.getKP(), dados.getKI(),
-				dados.getKD(), dados.getTt(), dados.isWindUP()); 
 		
-		Controlador  controladorDois = new Controlador(dados.getKpEscravo(), dados.getKiEscravo(),
-				dados.getKdEscravo(), dados.getTt(), dados.isWindUpEscravo()); 
 		//setServer("10.13.99.69", 20081);
 		//test();
 
-		getConexao();
+		//getConexao();
 		
 		while(true){
 
-			try {
-				System.out.println("Ininicio");
+		try {
+				
 				//System.out.println(dados.getTipoDeControle());
 				//System.out.println(dados.getTipoDeControlador());		
 				
 			
 				
 				
-				while(!dados.isTanque_Seco())
+			/*	while(!dados.isTanque_Seco())
 				{
-					quanserclient.write(0, 0);
-					nivel_um = quanserclient.read(0);
-					nivel_dois = quanserclient.read(1);
+					//quanserclient.write(0, 0);
+					//nivel_um = quanserclient.read(0);
+					//nivel_dois = quanserclient.read(1);
 					if(nivel_um == 0 && nivel_dois == 0){
 						dados.setTanque_Seco(true);
-					}
+					}*/
 					
 					
-					sinal.resetTempo();
+					/*sinal.resetTempo();
 					controladorUm.reset();
 					controladorDois.reset();
-					sp_mudou();
+					sp_mudou();*/
 					
 					
 					
-				}
+				//}
 				
-				dados.setPV(quanserclient.read(dados.getPinoDeLeitura1()));
-				dados.setPV_two(quanserclient.read(dados.getPinoDeLeitura2()));
+				//dados.setPV(quanserclient.read(dados.getPinoDeLeitura1()));
+				//dados.setPV_two(quanserclient.read(dados.getPinoDeLeitura2()));
 				
-				nivel_tanque_um = 6.25*dados.getPV();
-				nivel_tanque_dois = 6.25*dados.getPV_two();
+				//nivel_tanque_um = 6.25*dados.getPV();
+				//nivel_tanque_dois = 6.25*dados.getPV_two();
+					
+					nivel_tanque_um = 2;
 				
 				System.out.println(nivel_tanque_um);
 				
@@ -403,10 +403,10 @@ public class Tanque extends Thread{
 				
 				//para calculo de windUP
 			
-				quanserclient.write(dados.getPinoDeEscrita(), dados.getVP());
+				//quanserclient.write(dados.getPinoDeEscrita(), dados.getVP());
 				
 				sleep(100);
-			} catch (QuanserClientException | InterruptedException e) {e.printStackTrace();}
+			} catch (/*QuanserClientException |*/ InterruptedException e) {e.printStackTrace();}
 		}
 	}
 
@@ -438,6 +438,12 @@ public class Tanque extends Thread{
 		this.sinal = new Tsunami(this.dados.getPeriodo(), this.dados.getPeriodoMinino(),this.dados.getOffset(),this.dados.getAmplitude(),this.dados.getAmplitudeMinima(),this.dados.getTipoSinal());
 		this.grafico_controle.dados = dados;
 		this.grafico_nivel.dados = dados;
+		
+		controladorUm = new Controlador(dados.getKP(), dados.getKI(),
+				dados.getKD(), dados.getTt(), dados.isWindUP()); 
+		
+		controladorDois = new Controlador(dados.getKpEscravo(), dados.getKiEscravo(),
+				dados.getKdEscravo(), dados.getTt(), dados.isWindUpEscravo()); 
 	}
 	
 	public void setDadosGrafico(Dados dados) {
